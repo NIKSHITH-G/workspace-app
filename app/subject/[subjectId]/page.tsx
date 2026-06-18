@@ -1,11 +1,14 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
 
 export default async function SubjectPage(props: PageProps<"/subject/[subjectId]">) {
   await connection()
   const { subjectId } = await props.params
+  const { userId } = await auth()
+  const studentId = userId ?? "default"
 
   const subject = await db.subject.findUnique({
     where: { id: subjectId },
@@ -13,7 +16,7 @@ export default async function SubjectPage(props: PageProps<"/subject/[subjectId]
       sessions: {
         include: {
           concepts: {
-            include: { masteryScores: { where: { studentId: "default" } } },
+            include: { masteryScores: { where: { studentId } } },
           },
         },
         orderBy: { index: "asc" },

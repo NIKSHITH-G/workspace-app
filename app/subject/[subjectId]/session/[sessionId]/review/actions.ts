@@ -1,6 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { sm2 } from "@/lib/sm2"
 
@@ -11,11 +12,14 @@ export async function submitAttempt(
   subjectId: string,
   sessionId: string,
 ) {
+  const { userId } = await auth()
+  const studentId = userId ?? "default"
+
   const exercise = await db.exercise.findUnique({
     where: { id: exerciseId },
     include: {
       concept: {
-        include: { masteryScores: { where: { studentId: "default" } } },
+        include: { masteryScores: { where: { studentId } } },
       },
     },
   })
@@ -23,30 +27,20 @@ export async function submitAttempt(
 
   const existing = exercise.concept.masteryScores[0]
   const state = existing
-    ? {
-        repetitions: existing.repetitions,
-        easeFactor: existing.easeFactor,
-        interval: existing.interval,
-      }
+    ? { repetitions: existing.repetitions, easeFactor: existing.easeFactor, interval: existing.interval }
     : { repetitions: 0, easeFactor: 2.5, interval: 1 }
 
   const result = sm2(quality, state)
 
   await db.$transaction([
     db.attempt.create({
-      data: {
-        exerciseId,
-        studentId: "default",
-        quality,
-        confidence,
-        correct: quality >= 3,
-      },
+      data: { exerciseId, studentId, quality, confidence, correct: quality >= 3 },
     }),
     db.masteryScore.upsert({
-      where: { conceptId_studentId: { conceptId: exercise.conceptId, studentId: "default" } },
+      where: { conceptId_studentId: { conceptId: exercise.conceptId, studentId } },
       create: {
         conceptId: exercise.conceptId,
-        studentId: "default",
+        studentId,
         score: result.score,
         repetitions: result.repetitions,
         easeFactor: result.easeFactor,

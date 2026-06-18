@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
 
@@ -8,6 +9,8 @@ export default async function SessionPage(
 ) {
   await connection()
   const { subjectId, sessionId } = await props.params
+  const { userId } = await auth()
+  const studentId = userId ?? "default"
 
   const session = await db.session.findUnique({
     where: { id: sessionId },
@@ -16,7 +19,7 @@ export default async function SessionPage(
       concepts: {
         orderBy: { orderIndex: "asc" },
         include: {
-          masteryScores: { where: { studentId: "default" } },
+          masteryScores: { where: { studentId } },
           exercises: true,
         },
       },
