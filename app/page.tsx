@@ -137,7 +137,24 @@ export default async function Home() {
             Sign in to save progress
           </Link>
         ) : (
-          <span />
+          <Link
+            href="/settings"
+            className="group flex items-center gap-2.5"
+            style={{ textDecoration: "none" }}
+          >
+            <div
+              className="flex items-center justify-center transition-transform duration-200 group-hover:scale-105"
+              style={{ width: 38, height: 38, borderRadius: 10, fontSize: 20, flexShrink: 0, background: `${theme.primaryHex}18`, border: `1px solid ${theme.primaryHex}33` }}
+            >
+              {emoji}
+            </div>
+            <div className="flex flex-col" style={{ gap: 3 }}>
+              <span className="text-xs font-bold text-white leading-none">Set up your profile</span>
+              <span className="font-mono leading-none opacity-80" style={{ fontSize: 9, letterSpacing: "0.12em", color: theme.primaryHex }}>
+                PICK USERNAME &amp; STYLE →
+              </span>
+            </div>
+          </Link>
         )}
 
         {/* right: leaderboard + user */}
