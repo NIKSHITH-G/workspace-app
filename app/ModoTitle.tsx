@@ -39,7 +39,7 @@ export default function ModoTitle() {
             animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
             exit={{ y: "-40%", opacity: 0, filter: "blur(10px)" }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="font-black tracking-tight leading-none text-white whitespace-nowrap"
+            className="font-black tracking-tight leading-none whitespace-nowrap bg-gradient-to-br from-white via-white/90 to-indigo-400/70 bg-clip-text text-transparent"
             style={{ margin: 0 }}
           >
             {current.text}
