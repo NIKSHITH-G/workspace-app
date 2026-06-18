@@ -1,8 +1,96 @@
 @import "tailwindcss";
 
+/* Force Clerk components dark */
+.clerk-dark-override .cl-rootBox,
+.clerk-dark-override .cl-card {
+  background: #111116 !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.1), 0 25px 60px rgba(0,0,0,0.5) !important;
+  border-radius: 16px !important;
+}
+
+.clerk-dark-override .cl-headerTitle {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+.clerk-dark-override .cl-headerSubtitle {
+  color: #71717a !important;
+}
+.clerk-dark-override .cl-socialButtonsBlockButton {
+  background: #18181f !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: #e4e4e7 !important;
+  border-radius: 10px !important;
+}
+.clerk-dark-override .cl-socialButtonsBlockButton:hover {
+  background: #222230 !important;
+  border-color: rgba(99,102,241,0.4) !important;
+}
+.clerk-dark-override .cl-dividerLine {
+  background: rgba(255,255,255,0.08) !important;
+}
+.clerk-dark-override .cl-dividerText {
+  color: #52525b !important;
+}
+.clerk-dark-override .cl-formFieldLabel {
+  color: #a1a1aa !important;
+}
+.clerk-dark-override .cl-formFieldInput {
+  background: #18181f !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: #ffffff !important;
+  border-radius: 10px !important;
+}
+.clerk-dark-override .cl-formFieldInput:focus {
+  border-color: rgba(99,102,241,0.6) !important;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.15) !important;
+}
+.clerk-dark-override .cl-formButtonPrimary {
+  background: #6366f1 !important;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+}
+.clerk-dark-override .cl-formButtonPrimary:hover {
+  background: #5254cc !important;
+}
+.clerk-dark-override .cl-footerActionText {
+  color: #52525b !important;
+}
+.clerk-dark-override .cl-footerActionLink {
+  color: #818cf8 !important;
+}
+.clerk-dark-override .cl-footerActionLink:hover {
+  color: #a5b4fc !important;
+}
+.clerk-dark-override .cl-identityPreviewText {
+  color: #e4e4e7 !important;
+}
+.clerk-dark-override .cl-identityPreviewEditButton {
+  color: #818cf8 !important;
+}
+.clerk-dark-override .cl-internal-b3fm6y {
+  background: #080810 !important;
+}
+.clerk-dark-override [data-localization-key] {
+  color: inherit;
+}
+
+/* Hide Clerk's built-in footer (we render our own) */
+.clerk-dark-override .cl-footer {
+  display: none !important;
+}
+
+/* Hide the light card bottom that Clerk adds */
+.clerk-dark-override .cl-card {
+  overflow: hidden !important;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #080810;
+  --foreground: #ededed;
+  --theme-primary: #6366f1;
+  --theme-glow-rgb: 99,102,241;
 }
 
 @theme inline {
@@ -12,15 +100,54 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Pixel border utility — layered box-shadow creates the retro inset look */
+.pixel-border {
+  box-shadow:
+    0 0 0 2px var(--theme-primary),
+    0 0 0 4px #080810,
+    0 0 0 6px var(--theme-primary),
+    0 0 20px rgba(var(--theme-glow-rgb), 0.15);
+}
+
+/* Scanline overlay for retro CRT feel */
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Flicker animation for gaming feel */
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96% { opacity: 0.92; }
+  97% { opacity: 1; }
+  98% { opacity: 0.95; }
+}
+
+.flicker {
+  animation: flicker 6s infinite;
+}
+
+/* Pulse glow */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px var(--theme-primary), 0 0 0 4px #080810, 0 0 0 6px var(--theme-primary), 0 0 20px rgba(var(--theme-glow-rgb), 0.15); }
+  50%       { box-shadow: 0 0 0 2px var(--theme-primary), 0 0 0 4px #080810, 0 0 0 6px var(--theme-primary), 0 0 35px rgba(var(--theme-glow-rgb), 0.30); }
+}
+
+.pixel-border-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
 }
