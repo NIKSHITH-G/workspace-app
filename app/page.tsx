@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { UserButton } from "@clerk/nextjs"
 import { db } from "@/lib/db"
 import HomeKeyboard from "./HomeKeyboard"
 import ModoTitle from "./ModoTitle"
@@ -51,6 +52,11 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-[#080810] text-white flex flex-col items-center justify-center overflow-hidden px-6 py-12">
       <HomeKeyboard hrefs={tiles.map((t) => t.href)} />
+
+      {/* user button */}
+      <div className="absolute top-5 right-5 z-30">
+        <UserButton />
+      </div>
 
       {/* glow */}
       <div className="absolute top-[38%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-600/[0.08] rounded-full blur-[100px] pointer-events-none" />
