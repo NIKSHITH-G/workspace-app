@@ -1,11 +1,22 @@
 import "server-only"
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3"
 import { PrismaClient } from "./generated/prisma/client"
-import path from "node:path"
 
 function makeClient() {
-  const dbUrl = path.resolve(process.cwd(), "dev.db")
-  const adapter = new PrismaBetterSqlite3({ url: dbUrl })
+  if (process.env.TURSO_DATABASE_URL) {
+    // Production: Turso cloud SQLite
+    const { PrismaLibSql } = require("@prisma/adapter-libsql")
+    return new PrismaClient({
+      adapter: new PrismaLibSql({
+        url: process.env.TURSO_DATABASE_URL,
+        authToken: process.env.TURSO_AUTH_TOKEN,
+      }),
+    })
+  }
+
+  // Local: better-sqlite3 with dev.db
+  const path = require("node:path")
+  const { PrismaBetterSqlite3 } = require("@prisma/adapter-better-sqlite3")
+  const adapter = new PrismaBetterSqlite3({ url: path.resolve(process.cwd(), "dev.db") })
   return new PrismaClient({ adapter })
 }
 

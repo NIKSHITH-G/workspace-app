@@ -4,7 +4,6 @@
  */
 
 import path from "node:path"
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3"
 import { PrismaClient } from "../lib/generated/prisma/client"
 
 type Concept = {
@@ -2502,9 +2501,20 @@ reduce(getitem, ["a","b","c"], {"a":{"b":{"c":42}}})  # 42
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function main() {
-  const dbPath = path.resolve(process.cwd(), "dev.db")
-  const adapter = new PrismaBetterSqlite3({ url: dbPath })
-  const db = new PrismaClient({ adapter })
+  let db: PrismaClient
+  if (process.env.TURSO_DATABASE_URL) {
+    const { PrismaLibSql } = await import("@prisma/adapter-libsql")
+    db = new PrismaClient({
+      adapter: new PrismaLibSql({
+        url: process.env.TURSO_DATABASE_URL,
+        authToken: process.env.TURSO_AUTH_TOKEN,
+      }),
+    })
+  } else {
+    const { PrismaBetterSqlite3 } = await import("@prisma/adapter-better-sqlite3")
+    const dbPath = path.resolve(process.cwd(), "dev.db")
+    db = new PrismaClient({ adapter: new PrismaBetterSqlite3({ url: dbPath }) })
+  }
 
   const subjectConfig = {
     name: "Python for AI",
