@@ -1,19 +1,11 @@
 import Link from "next/link"
-import { currentUser } from "@clerk/nextjs/server"
-import { getTheme } from "@/lib/themes"
+import { getUserTheme } from "@/lib/currentUser"
 
 type Crumb = { label: string; href?: string }
 
 /** Shared top bar for inner pages — themed MODO wordmark links home, plus breadcrumbs. */
 export default async function TopNav({ crumbs = [] }: { crumbs?: Crumb[] }) {
-  let theme
-  try {
-    const user = await currentUser()
-    const meta = (user?.publicMetadata ?? {}) as Record<string, string>
-    theme = getTheme(meta.style)
-  } catch {
-    theme = getTheme()
-  }
+  const theme = await getUserTheme()
 
   return (
     <nav className="sticky top-0 z-30 flex items-center gap-2.5 px-5 py-3 border-b border-white/[0.05] bg-[#080810]/85 backdrop-blur-md">

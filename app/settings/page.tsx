@@ -1,10 +1,10 @@
-import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import { getTheme } from "@/lib/themes"
+import { getUser } from "@/lib/currentUser"
 import SettingsClient from "./SettingsClient"
 
 export default async function SettingsPage() {
-  const user = await currentUser()
+  const user = await getUser()
   if (!user) redirect("/sign-in")
 
   const meta = (user.publicMetadata ?? {}) as Record<string, string>

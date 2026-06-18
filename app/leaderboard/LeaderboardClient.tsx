@@ -49,12 +49,12 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
   return (
     <div className="space-y-5">
       {/* filter tabs */}
-      <div className="flex gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.05] w-fit">
+      <div className="flex gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.05] w-fit max-w-full overflow-x-auto no-scrollbar">
         {TABS.map((t) => (
           <button
             key={t.key}
             onClick={() => setSort(t.key)}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+            className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap shrink-0"
             style={{
               background: sort === t.key ? "rgba(255,255,255,0.08)" : "transparent",
               color: sort === t.key ? "#fff" : "#71717a",

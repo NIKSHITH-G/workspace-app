@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
-import { getTheme } from "@/lib/themes";
+import { getUserTheme } from "@/lib/currentUser";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,16 +28,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // Read user theme server-side so CSS vars are set before first paint
-  let themeVars: Record<string, string> = {}
-  try {
-    const user = await currentUser()
-    const meta = (user?.publicMetadata ?? {}) as Record<string, string>
-    const theme = getTheme(meta.style)
-    themeVars = {
-      "--theme-primary": theme.primaryHex,
-      "--theme-glow-rgb": theme.glowRgb,
-    }
-  } catch {}
+  const theme = await getUserTheme()
+  const themeVars: Record<string, string> = {
+    "--theme-primary": theme.primaryHex,
+    "--theme-glow-rgb": theme.glowRgb,
+  }
 
   return (
     <html

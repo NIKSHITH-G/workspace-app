@@ -167,3 +167,11 @@ body {
 .pixel-border-pulse {
   animation: glow-pulse 3s ease-in-out infinite;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

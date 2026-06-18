@@ -1,6 +1,6 @@
 import { UserButton } from "@clerk/nextjs"
 import Link from "next/link"
-import { currentUser } from "@clerk/nextjs/server"
+import { getUser } from "@/lib/currentUser"
 import { db } from "@/lib/db"
 import HomeKeyboard from "./HomeKeyboard"
 import ModoTitle from "./ModoTitle"
@@ -41,7 +41,7 @@ function TrophyIcon() {
 export default async function Home() {
   await connection()
 
-  const user = await currentUser()
+  const user = await getUser()
   const meta = (user?.publicMetadata ?? {}) as Record<string, string>
   const theme = getTheme(meta.style)
   const avatarId = meta.avatar ?? "owl"
@@ -81,7 +81,7 @@ export default async function Home() {
       >
         {/* left: character info */}
         {meta.onboardingComplete && user ? (
-          <Link href="/settings" className="group flex items-center gap-3" style={{ textDecoration: "none" }}>
+          <Link href="/settings" className="group flex items-center gap-3 min-w-0" style={{ textDecoration: "none" }}>
             {/* avatar */}
             <div
               className="flex items-center justify-center transition-transform duration-200 group-hover:scale-105"
@@ -100,9 +100,9 @@ export default async function Home() {
             {/* name + class + level */}
             <div className="flex flex-col" style={{ gap: 3 }}>
               <div className="flex items-center" style={{ gap: 7 }}>
-                <span className="text-xs font-bold text-white tracking-wide leading-none">{displayName}</span>
+                <span className="text-xs font-bold text-white tracking-wide leading-none truncate" style={{ maxWidth: 140 }}>{displayName}</span>
                 <span
-                  className="font-mono leading-none"
+                  className="font-mono leading-none shrink-0"
                   style={{ fontSize: 9, padding: "2px 5px", borderRadius: 4, color: theme.primaryHex, border: `1px solid ${theme.primaryHex}44`, background: `${theme.primaryHex}11` }}
                 >
                   LVL {level}
@@ -126,7 +126,7 @@ export default async function Home() {
                     style={{ height: "100%", width: `${progressPct}%`, borderRadius: 999, background: `linear-gradient(90deg, ${theme.primaryHex}88, ${theme.primaryHex})` }}
                   />
                 </div>
-                <span className="font-mono leading-none text-zinc-600" style={{ fontSize: 8.5 }}>
+                <span className="font-mono leading-none text-zinc-600 hidden sm:inline" style={{ fontSize: 8.5 }}>
                   {xp.total.toLocaleString()} XP
                 </span>
               </div>
