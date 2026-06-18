@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
+import TopNav from "@/app/TopNav"
 
 export default async function SubjectPage(props: PageProps<"/subject/[subjectId]">) {
   await connection()
@@ -27,13 +28,11 @@ export default async function SubjectPage(props: PageProps<"/subject/[subjectId]
   if (!subject) notFound()
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#080810] text-white">
+      <TopNav crumbs={[{ label: "Subjects", href: "/subject" }, { label: subject.name }]} />
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="mb-8">
-          <Link href="/subject" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
-            ← Subjects
-          </Link>
-          <h1 className="text-2xl font-semibold tracking-tight mt-3">{subject.name}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{subject.name}</h1>
         </div>
 
         {/* Session heatmap grid */}

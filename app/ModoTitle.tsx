@@ -16,7 +16,7 @@ const LABELS = [
   { text: "โมโด", lang: "th" },
 ]
 
-export default function ModoTitle({ titleGradient = "from-white via-white/90 to-indigo-400/70" }: { titleGradient?: string }) {
+export default function ModoTitle({ gradientCss = "linear-gradient(135deg,#fff 0%,rgba(255,255,255,0.9) 45%,rgba(99,102,241,0.75) 100%)" }: { gradientCss?: string }) {
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
@@ -39,8 +39,14 @@ export default function ModoTitle({ titleGradient = "from-white via-white/90 to-
             animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
             exit={{ y: "-40%", opacity: 0, filter: "blur(10px)" }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className={`font-black tracking-tight leading-none whitespace-nowrap bg-gradient-to-br ${titleGradient} bg-clip-text text-transparent`}
-            style={{ margin: 0 }}
+            className="font-black tracking-tight leading-none whitespace-nowrap"
+            style={{
+              margin: 0,
+              background: gradientCss,
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
           >
             {current.text}
           </motion.h1>

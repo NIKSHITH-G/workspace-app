@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
+import TopNav from "@/app/TopNav"
 
 export default async function SubjectsPage() {
   await connection()
@@ -16,19 +17,23 @@ export default async function SubjectsPage() {
 
   if (subjects.length === 0) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <div className="text-center space-y-3">
-          <p className="text-zinc-400 text-sm">No subjects yet.</p>
-          <p className="text-zinc-600 text-xs">
-            Run <code className="text-zinc-400">npm run seed</code> with a source file to get started.
-          </p>
+      <div className="min-h-screen bg-[#080810] text-white flex flex-col">
+        <TopNav crumbs={[{ label: "Subjects" }]} />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center space-y-3">
+            <p className="text-zinc-400 text-sm">No subjects yet.</p>
+            <p className="text-zinc-600 text-xs">
+              Run <code className="text-zinc-400">npm run seed</code> with a source file to get started.
+            </p>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#080810] text-white">
+      <TopNav crumbs={[{ label: "Subjects" }]} />
       <div className="max-w-4xl mx-auto px-6 py-12">
         <h1 className="text-2xl font-semibold tracking-tight mb-8">Subjects</h1>
 
@@ -60,8 +65,8 @@ export default async function SubjectsPage() {
                 {totalConcepts > 0 && (
                   <div className="mt-3 h-1 bg-zinc-800 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-emerald-600 rounded-full transition-all"
-                      style={{ width: `${(masteredConcepts / totalConcepts) * 100}%` }}
+                      className="h-full rounded-full transition-all"
+                      style={{ width: `${(masteredConcepts / totalConcepts) * 100}%`, background: "var(--theme-primary)" }}
                     />
                   </div>
                 )}

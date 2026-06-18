@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
+import TopNav from "@/app/TopNav"
 
 export default async function SessionPage(
   props: PageProps<"/subject/[subjectId]/session/[sessionId]">,
@@ -78,16 +79,17 @@ export default async function SessionPage(
   ]
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#080810] text-white">
+      <TopNav
+        crumbs={[
+          { label: "Subjects", href: "/subject" },
+          { label: session.subject.name, href: `/subject/${subjectId}` },
+          { label: `Session ${session.index}` },
+        ]}
+      />
       <div className="max-w-3xl mx-auto px-6 py-12">
         <div className="mb-8">
-          <Link
-            href={`/subject/${subjectId}`}
-            className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
-          >
-            ← {session.subject.name}
-          </Link>
-          <div className="flex items-baseline gap-3 mt-3">
+          <div className="flex items-baseline gap-3">
             <span className="text-xs text-zinc-600 font-mono">Session {session.index}</span>
             <h1 className="text-2xl font-semibold tracking-tight">{session.title}</h1>
           </div>
@@ -103,9 +105,10 @@ export default async function SessionPage(
             </div>
             <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
               <div
-                className="h-full bg-emerald-600 rounded-full transition-all"
+                className="h-full rounded-full transition-all"
                 style={{
                   width: `${totalConcepts > 0 ? (masteredConcepts / totalConcepts) * 100 : 0}%`,
+                  background: "var(--theme-primary)",
                 }}
               />
             </div>
@@ -120,7 +123,14 @@ export default async function SessionPage(
                   href={`/subject/${subjectId}/session/${sessionId}/${stage.href}`}
                   className="flex items-center gap-4 p-4 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-600 transition-colors group"
                 >
-                  <span className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs text-zinc-400 shrink-0">
+                  <span
+                    className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-mono shrink-0"
+                    style={{
+                      color: "var(--theme-primary)",
+                      background: "color-mix(in srgb, var(--theme-primary) 12%, transparent)",
+                      border: "1px solid color-mix(in srgb, var(--theme-primary) 35%, transparent)",
+                    }}
+                  >
                     {stage.num}
                   </span>
                   <div>

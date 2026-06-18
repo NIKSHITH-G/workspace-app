@@ -37,13 +37,28 @@
 }
 .clerk-dark-override .cl-formFieldInput {
   background: #18181f !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
   color: #ffffff !important;
   border-radius: 10px !important;
 }
 .clerk-dark-override .cl-formFieldInput:focus {
   border-color: rgba(99,102,241,0.6) !important;
   box-shadow: 0 0 0 2px rgba(99,102,241,0.15) !important;
+}
+
+/* OTP digit slots */
+.clerk-dark-override .cl-otpCodeFieldInput {
+  background: #18181f !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  border-radius: 10px !important;
+  color: #ffffff !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+}
+.clerk-dark-override .cl-otpCodeFieldInput:focus {
+  border-color: rgba(99,102,241,0.7) !important;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.2) !important;
+  outline: none !important;
 }
 .clerk-dark-override .cl-formButtonPrimary {
   background: #6366f1 !important;
@@ -85,6 +100,7 @@
 .clerk-dark-override .cl-card {
   overflow: hidden !important;
 }
+
 
 :root {
   --background: #080810;
