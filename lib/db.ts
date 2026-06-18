@@ -1,11 +1,13 @@
 import "server-only"
 import { PrismaClient } from "./generated/prisma/client"
-import { PrismaLibSql } from "@prisma/adapter-libsql"
 import path from "node:path"
 
 function makeClient() {
   if (process.env.TURSO_DATABASE_URL) {
     // Production (Vercel): Turso cloud SQLite
+    // Lazy-loaded so native libsql binary is resolved from node_modules at runtime
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { PrismaLibSql } = require("@prisma/adapter-libsql")
     return new PrismaClient({
       adapter: new PrismaLibSql({
         url: process.env.TURSO_DATABASE_URL,
@@ -14,8 +16,7 @@ function makeClient() {
     })
   }
 
-  // Local dev: better-sqlite3 — loaded lazily so native binary
-  // never touches the Vercel bundle
+  // Local dev: better-sqlite3
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { PrismaBetterSqlite3 } = require("@prisma/adapter-better-sqlite3")
   return new PrismaClient({
