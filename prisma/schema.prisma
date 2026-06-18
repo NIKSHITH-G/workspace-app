@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Subject {
+  id           String    @id @default(cuid())
+  name         String
+  slug         String    @unique
+  sessionCount Int       @default(15)
+  sessions     Session[]
+  createdAt    DateTime  @default(now())
+}
+
+model Session {
+  id          String    @id @default(cuid())
+  subjectId   String
+  subject     Subject   @relation(fields: [subjectId], references: [id])
+  index       Int
+  title       String
+  cheatSheet  String?
+  concepts    Concept[]
+  createdAt   DateTime  @default(now())
+
+  @@unique([subjectId, index])
+}
+
+model Concept {
+  id           String         @id @default(cuid())
+  sessionId    String
+  session      Session        @relation(fields: [sessionId], references: [id])
+  name         String
+  explanation  String?
+  orderIndex   Int            @default(0)
+  prerequisites ConceptPrereq[] @relation("ConceptDependsOn")
+  dependents    ConceptPrereq[] @relation("ConceptIsPrereqFor")
+  exercises    Exercise[]
+  masteryScores MasteryScore[]
+  createdAt    DateTime       @default(now())
+}
+
+model ConceptPrereq {
+  conceptId String
+  concept   Concept @relation("ConceptDependsOn", fields: [conceptId], references: [id])
+  prereqId  String
+  prereq    Concept @relation("ConceptIsPrereqFor", fields: [prereqId], references: [id])
+
+  @@id([conceptId, prereqId])
+}
+
+model Exercise {
+  id        String       @id @default(cuid())
+  conceptId String
+  concept   Concept      @relation(fields: [conceptId], references: [id])
+  type      String       // FLASHCARD | QUIZ | DERIVATION | CODE_CHECK | SOCRATIC | VIVA
+  front     String?
+  back      String?
+  content   String       @default("{}")
+  attempts  Attempt[]
+  createdAt DateTime     @default(now())
+}
+
+model Attempt {
+  id         String   @id @default(cuid())
+  exerciseId String
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  studentId  String   @default("default")
+  quality    Int      // SM-2 quality: 0-5
+  confidence Float?   // Brier score input: 0-1 student self-rating
+  correct    Boolean
+  createdAt  DateTime @default(now())
+}
+
+model MasteryScore {
+  id          String   @id @default(cuid())
+  conceptId   String
+  concept     Concept  @relation(fields: [conceptId], references: [id])
+  studentId   String   @default("default")
+  score       Float    @default(0)
+  repetitions Int      @default(0)
+  easeFactor  Float    @default(2.5)
+  interval    Int      @default(1)
+  nextReview  DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([conceptId, studentId])
+}

@@ -1,85 +1,106 @@
-"use client";
+import Link from "next/link"
+import { db } from "@/lib/db"
+import BackgroundBoxes from "@/components/Boxes"
+import HomeKeyboard from "./HomeKeyboard"
+import { connection } from "next/server"
 
-import { useRouter } from "next/navigation";
-import BackgroundBoxes from "@/components/Boxes";
-import { useEffect } from "react";
+const SUBJECTS = [
+  {
+    slug: "python",
+    name: "Python for AI",
+    desc: "Programming foundations for ML",
+  },
+  {
+    slug: "database",
+    name: "Database Systems",
+    desc: "Relational & query fundamentals",
+  },
+  {
+    slug: "architecture",
+    name: "Computer Architecture & Networks",
+    desc: "Systems from silicon to protocol",
+  },
+  {
+    slug: "maths",
+    name: "Mathematical Foundations",
+    desc: "Linear algebra, probability, statistics",
+  },
+]
 
-export default function Home() {
-  const router = useRouter();
+export default async function Home() {
+  await connection()
+  const rows = await db.subject.findMany({
+    select: { id: true, slug: true },
+  })
+  const idBySlug = Object.fromEntries(rows.map((s) => [s.slug, s.id]))
 
-  const actions = [
-    { title: "Write", desc: "Notes & writing", route: "/write" },
-    { title: "Code", desc: "Live playground", route: "/code" },
-    { title: "Typing", desc: "Speed test", route: "/type" },
-    { title: "Workspace", desc: "Saved work", route: "/workspace" },
-  ];
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "1") router.push("/write");
-      if (e.key === "2") router.push("/code");
-      if (e.key === "3") router.push("/type");
-      if (e.key === "4") router.push("/workspace");
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [router]);
+  const tiles = SUBJECTS.map((s) => ({
+    ...s,
+    href: idBySlug[s.slug] ? `/subject/${idBySlug[s.slug]}` : null,
+  }))
 
   return (
     <div className="h-screen relative text-white flex items-center justify-center overflow-hidden">
-      
-      {/* Background */}
       <BackgroundBoxes />
 
-      {/* Glow center */}
+      <HomeKeyboard hrefs={tiles.map((t) => t.href)} />
+
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-1/2 left-1/2 w-[700px] h-[700px] 
-        bg-purple-500/10 rounded-full blur-3xl 
-        -translate-x-1/2 -translate-y-1/2" />
+        <div
+          className="absolute top-1/2 left-1/2 w-[700px] h-[700px]
+          bg-purple-500/10 rounded-full blur-3xl
+          -translate-x-1/2 -translate-y-1/2"
+        />
       </div>
 
-      {/* Content */}
-      <div className="relative z-20 w-full max-w-5xl px-6">
-        
-        {/* Title */}
-        <h1 className="text-4xl mb-12 text-center font-semibold tracking-tight">
-          What do you want to do?
-        </h1>
-
-        {/* Cards */}
-        <div className="grid grid-cols-2 gap-6">
-          {actions.map((item, i) => (
-            <div
-              key={i}
-              onClick={() => router.push(item.route)}
-              className="
-                group relative p-6 rounded-2xl cursor-pointer
-                bg-white/5 border border-white/10
-                hover:bg-white/10 hover:border-white/20
-                backdrop-blur-xl transition-all duration-300
-                hover:scale-[1.03]
-                active:scale-[0.98]
-              "
-            >
-              <div className="relative z-10">
-                <h2 className="text-xl font-medium mb-2">
-                  {item.title}
-                </h2>
-                <p className="text-sm text-zinc-400">
-                  {item.desc}
-                </p>
-              </div>
-            </div>
-          ))}
+      <div className="relative z-20 w-full max-w-2xl px-6">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-semibold tracking-tight">MODO</h1>
+          <p className="text-zinc-500 text-sm mt-2">AI masters study</p>
         </div>
 
-        {/* Hint */}
-        <p className="text-center text-xs text-zinc-500 mt-8">
-          Press 1–4 for quick access
-        </p>
+        <div className="grid grid-cols-2 gap-4">
+          {tiles.map((tile, i) => {
+            const inner = (
+              <>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs text-zinc-600 font-mono">{i + 1}</span>
+                  {!tile.href && (
+                    <span className="text-[10px] text-zinc-700 font-mono">seed to unlock</span>
+                  )}
+                </div>
+                <h2 className="text-base font-medium mb-1">{tile.name}</h2>
+                <p className="text-xs text-zinc-400">{tile.desc}</p>
+              </>
+            )
 
+            return tile.href ? (
+              <Link
+                key={tile.slug}
+                href={tile.href}
+                className="
+                  group p-5 rounded-2xl
+                  bg-white/5 border border-white/10
+                  hover:bg-white/10 hover:border-white/20
+                  backdrop-blur-xl transition-all duration-300
+                  hover:scale-[1.02] active:scale-[0.98]
+                "
+              >
+                {inner}
+              </Link>
+            ) : (
+              <div
+                key={tile.slug}
+                className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 opacity-50 cursor-default"
+              >
+                {inner}
+              </div>
+            )
+          })}
+        </div>
+
+        <p className="text-center text-xs text-zinc-600 mt-8">Press 1–4 for quick access</p>
       </div>
     </div>
-  );
+  )
 }

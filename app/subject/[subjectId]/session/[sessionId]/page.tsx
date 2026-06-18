@@ -1,0 +1,154 @@
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { db } from "@/lib/db"
+import { connection } from "next/server"
+
+export default async function SessionPage(
+  props: PageProps<"/subject/[subjectId]/session/[sessionId]">,
+) {
+  await connection()
+  const { subjectId, sessionId } = await props.params
+
+  const session = await db.session.findUnique({
+    where: { id: sessionId },
+    include: {
+      subject: true,
+      concepts: {
+        orderBy: { orderIndex: "asc" },
+        include: {
+          masteryScores: { where: { studentId: "default" } },
+          exercises: true,
+        },
+      },
+    },
+  })
+
+  if (!session || session.subject.id !== subjectId) notFound()
+
+  const totalConcepts = session.concepts.length
+  const masteredConcepts = session.concepts.filter(
+    (c) => (c.masteryScores[0]?.score ?? 0) >= 0.7,
+  ).length
+  const dueForReview = session.concepts.filter((c) => {
+    const ms = c.masteryScores[0]
+    if (!ms) return c.exercises.length > 0
+    return new Date(ms.nextReview) <= new Date()
+  }).length
+
+  const stages = [
+    {
+      num: 1,
+      label: "Concepts",
+      desc: "Explanations for each concept in this session",
+      href: `concepts`,
+      available: totalConcepts > 0,
+    },
+    {
+      num: 2,
+      label: "Cheat Sheet",
+      desc: "Quick-reference summary generated from the session skeleton",
+      href: `cheatsheet`,
+      available: !!session.cheatSheet,
+    },
+    {
+      num: 3,
+      label: "Concept Graph",
+      desc: "Prerequisite links between concepts",
+      href: `graph`,
+      available: false,
+      comingSoon: true,
+    },
+    {
+      num: 4,
+      label: "Review",
+      desc: `Flashcard review — ${dueForReview} due now`,
+      href: `review`,
+      available: totalConcepts > 0,
+    },
+    {
+      num: 5,
+      label: "Analytics",
+      desc: "Mastery scores per concept",
+      href: `analytics`,
+      available: totalConcepts > 0,
+    },
+  ]
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      <div className="max-w-3xl mx-auto px-6 py-12">
+        <div className="mb-8">
+          <Link
+            href={`/subject/${subjectId}`}
+            className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+          >
+            ← {session.subject.name}
+          </Link>
+          <div className="flex items-baseline gap-3 mt-3">
+            <span className="text-xs text-zinc-600 font-mono">Session {session.index}</span>
+            <h1 className="text-2xl font-semibold tracking-tight">{session.title}</h1>
+          </div>
+        </div>
+
+        {totalConcepts > 0 && (
+          <div className="mb-8 p-4 rounded-xl bg-zinc-900 border border-zinc-800">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs text-zinc-500">Mastery</span>
+              <span className="text-xs text-zinc-400">
+                {masteredConcepts}/{totalConcepts}
+              </span>
+            </div>
+            <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-emerald-600 rounded-full transition-all"
+                style={{
+                  width: `${totalConcepts > 0 ? (masteredConcepts / totalConcepts) * 100 : 0}%`,
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="space-y-3">
+          {stages.map((stage) => (
+            <div key={stage.num}>
+              {stage.available && !stage.comingSoon ? (
+                <Link
+                  href={`/subject/${subjectId}/session/${sessionId}/${stage.href}`}
+                  className="flex items-center gap-4 p-4 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-600 transition-colors group"
+                >
+                  <span className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs text-zinc-400 shrink-0">
+                    {stage.num}
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium text-zinc-200 group-hover:text-white transition-colors">
+                      {stage.label}
+                    </p>
+                    <p className="text-xs text-zinc-500 mt-0.5">{stage.desc}</p>
+                  </div>
+                </Link>
+              ) : (
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-zinc-950 border border-zinc-900 opacity-50">
+                  <span className="w-7 h-7 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-xs text-zinc-600 shrink-0">
+                    {stage.num}
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium text-zinc-500">
+                      {stage.label}
+                      {stage.comingSoon && (
+                        <span className="ml-2 text-[10px] text-zinc-600 font-mono">
+                          phase 2
+                        </span>
+                      )}
+                    </p>
+                    <p className="text-xs text-zinc-600 mt-0.5">{stage.desc}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
