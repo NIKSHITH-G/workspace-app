@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { db } from "@/lib/db"
-import BackgroundBoxes from "@/components/Boxes"
 import HomeKeyboard from "./HomeKeyboard"
+import ModoTitle from "./ModoTitle"
 import { connection } from "next/server"
 
 const SUBJECTS = [
@@ -40,67 +40,53 @@ export default async function Home() {
   }))
 
   return (
-    <div className="h-screen relative text-white flex items-center justify-center overflow-hidden">
-      <BackgroundBoxes />
-
+    <div className="min-h-screen bg-[#080810] text-white flex flex-col items-center justify-center overflow-hidden px-6">
       <HomeKeyboard hrefs={tiles.map((t) => t.href)} />
 
-      <div className="absolute inset-0 -z-10">
-        <div
-          className="absolute top-1/2 left-1/2 w-[700px] h-[700px]
-          bg-purple-500/10 rounded-full blur-3xl
-          -translate-x-1/2 -translate-y-1/2"
-        />
+      {/* subtle radial glow behind title */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* title */}
+      <div className="relative z-10 mb-16 text-center">
+        <ModoTitle />
       </div>
 
-      <div className="relative z-20 w-full max-w-2xl px-6">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-semibold tracking-tight">MODO</h1>
-          <p className="text-zinc-500 text-sm mt-2">AI masters study</p>
-        </div>
+      {/* subject grid */}
+      <div className="relative z-10 w-full max-w-xl grid grid-cols-2 gap-3">
+        {tiles.map((tile, i) => {
+          const inner = (
+            <>
+              <span className="text-[10px] text-zinc-600 font-mono mb-4 block">{i + 1}</span>
+              <h2 className="text-sm font-medium mb-1 text-zinc-200">{tile.name}</h2>
+              <p className="text-xs text-zinc-500 leading-relaxed">{tile.desc}</p>
+              {!tile.href && (
+                <span className="mt-3 inline-block text-[10px] text-zinc-700 font-mono">seed to unlock</span>
+              )}
+            </>
+          )
 
-        <div className="grid grid-cols-2 gap-4">
-          {tiles.map((tile, i) => {
-            const inner = (
-              <>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs text-zinc-600 font-mono">{i + 1}</span>
-                  {!tile.href && (
-                    <span className="text-[10px] text-zinc-700 font-mono">seed to unlock</span>
-                  )}
-                </div>
-                <h2 className="text-base font-medium mb-1">{tile.name}</h2>
-                <p className="text-xs text-zinc-400">{tile.desc}</p>
-              </>
-            )
-
-            return tile.href ? (
-              <Link
-                key={tile.slug}
-                href={tile.href}
-                className="
-                  group p-5 rounded-2xl
-                  bg-white/5 border border-white/10
-                  hover:bg-white/10 hover:border-white/20
-                  backdrop-blur-xl transition-all duration-300
-                  hover:scale-[1.02] active:scale-[0.98]
-                "
-              >
-                {inner}
-              </Link>
-            ) : (
-              <div
-                key={tile.slug}
-                className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 opacity-50 cursor-default"
-              >
-                {inner}
-              </div>
-            )
-          })}
-        </div>
-
-        <p className="text-center text-xs text-zinc-600 mt-8">Press 1–4 for quick access</p>
+          return tile.href ? (
+            <Link
+              key={tile.slug}
+              href={tile.href}
+              className="p-5 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.07] hover:border-white/[0.14] transition-all duration-200"
+            >
+              {inner}
+            </Link>
+          ) : (
+            <div
+              key={tile.slug}
+              className="p-5 rounded-xl bg-white/[0.02] border border-white/[0.04] opacity-40 cursor-default"
+            >
+              {inner}
+            </div>
+          )
+        })}
       </div>
+
+      <p className="relative z-10 mt-8 text-[11px] text-zinc-700 tracking-widest uppercase">
+        press 1–4 for quick access
+      </p>
     </div>
   )
 }
