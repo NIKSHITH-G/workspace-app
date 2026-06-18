@@ -1,12 +1,15 @@
 /**
- * Generates MCQ options for all FLASHCARD exercises using Claude.
+ * Generates MCQ options for all FLASHCARD exercises using Ollama (free, local).
  * Updates each exercise's `content` JSON with:
  *   { options: [correct, wrong1, wrong2, wrong3], correctOption: "correct answer" }
  *
- * Run: ANTHROPIC_API_KEY=... TURSO_DATABASE_URL=... TURSO_AUTH_TOKEN=... tsx scripts/generate-mcq.ts
+ * Requires Ollama running locally: https://ollama.ai
+ *
+ * Local:  tsx scripts/generate-mcq.ts
+ * Turso:  TURSO_DATABASE_URL=... TURSO_AUTH_TOKEN=... tsx scripts/generate-mcq.ts
  */
 
-import Anthropic from "@anthropic-ai/sdk"
+import { ollamaGenerate, MODEL } from "../lib/ollama"
 import { PrismaClient } from "../lib/generated/prisma/client"
 import path from "node:path"
 
@@ -27,7 +30,6 @@ async function makeDb() {
 }
 
 async function generateMCQ(
-  client: Anthropic,
   front: string,
   back: string,
 ): Promise<{ options: string[]; correctOption: string } | null> {
@@ -35,56 +37,58 @@ async function generateMCQ(
 
 Question: ${front}
 
-Full explanation (use this to understand the correct answer): ${back}
+Full explanation (read this to understand the correct answer): ${back}
 
-Task: Create a short correct answer (max 15 words) and exactly 3 plausible but WRONG distractors (max 15 words each).
+Task:
+1. Write a SHORT correct answer (max 12 words, plain text only)
+2. Write exactly 3 WRONG but plausible distractors (max 12 words each, plain text only)
 
 Rules:
-- The correct answer must be accurate and concise
-- Distractors must be plausible — things a confused student might believe
 - All 4 options must be similar in length and style
-- Do NOT include "All of the above" or "None of the above"
+- Distractors must be things a confused student might believe
+- No code, no markdown, no bullet points — plain short phrases only
 
-Respond with ONLY valid JSON, no explanation:
+Respond with ONLY this JSON and nothing else:
 {"correctOption": "...", "distractors": ["...", "...", "..."]}`
 
   try {
-    const msg = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 300,
-      messages: [{ role: "user", content: prompt }],
-    })
+    const raw = await ollamaGenerate(prompt)
 
-    const text = msg.content[0].type === "text" ? msg.content[0].text.trim() : ""
-    const parsed = JSON.parse(text)
+    // Extract JSON from response (model sometimes adds extra text)
+    const match = raw.match(/\{[\s\S]*\}/)
+    if (!match) return null
 
-    if (!parsed.correctOption || !Array.isArray(parsed.distractors) || parsed.distractors.length !== 3) {
-      return null
-    }
+    const parsed = JSON.parse(match[0])
+    if (
+      typeof parsed.correctOption !== "string" ||
+      !Array.isArray(parsed.distractors) ||
+      parsed.distractors.length !== 3
+    ) return null
 
     const options = [parsed.correctOption, ...parsed.distractors]
     return { options, correctOption: parsed.correctOption }
-  } catch (e) {
-    console.error("  Parse error:", e)
+  } catch {
     return null
   }
 }
 
 async function main() {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    console.error("ANTHROPIC_API_KEY is required")
-    process.exit(1)
-  }
-
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  console.log(`Using model: ${MODEL}`)
   const db = await makeDb()
 
   const exercises = await db.exercise.findMany({
     where: { type: "FLASHCARD" },
-    select: { id: true, front: true, back: true, content: true, concept: { select: { name: true } } },
+    select: {
+      id: true,
+      front: true,
+      back: true,
+      content: true,
+      concept: { select: { name: true } },
+    },
+    orderBy: { createdAt: "asc" },
   })
 
-  console.log(`Found ${exercises.length} flashcards. Generating MCQ options...\n`)
+  console.log(`Found ${exercises.length} flashcards.\n`)
 
   let success = 0
   let failed = 0
@@ -102,10 +106,10 @@ async function main() {
 
     process.stdout.write(`  Generating: ${ex.concept.name}... `)
 
-    const result = await generateMCQ(client, ex.front ?? ex.concept.name, ex.back ?? "")
+    const result = await generateMCQ(ex.front ?? ex.concept.name, ex.back ?? "")
 
     if (!result) {
-      console.log("FAILED")
+      console.log("✗ FAILED")
       failed++
       continue
     }
@@ -117,9 +121,6 @@ async function main() {
 
     console.log("✓")
     success++
-
-    // Small delay to avoid rate limiting
-    await new Promise((r) => setTimeout(r, 200))
   }
 
   console.log(`\nDone: ${success} succeeded, ${failed} failed`)
