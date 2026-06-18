@@ -34,12 +34,26 @@ export default async function ReviewPage(
     concept.exercises.map((ex) => {
       const ms = concept.masteryScores[0]
       const isDue = !ms || new Date(ms.nextReview) <= now
+
+      // Parse MCQ data from content JSON if present
+      let options: string[] | undefined
+      let correctOption: string | undefined
+      try {
+        const content = JSON.parse(ex.content)
+        if (Array.isArray(content.options) && content.options.length === 4 && content.correctOption) {
+          options = content.options
+          correctOption = content.correctOption
+        }
+      } catch {}
+
       return {
         exerciseId: ex.id,
         conceptName: concept.name,
         front: ex.front ?? concept.name,
         back: ex.back ?? "No answer stored.",
         isDue,
+        options,
+        correctOption,
       }
     }),
   )

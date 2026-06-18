@@ -11,6 +11,7 @@
     "seed": "tsx scripts/seed.ts",
     "seed:python": "bash scripts/seed-python.sh",
     "seed:python-static": "tsx scripts/seed-python-static.ts",
+    "generate:mcq": "tsx scripts/generate-mcq.ts",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio"
   },
