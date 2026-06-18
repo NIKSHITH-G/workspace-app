@@ -22,18 +22,37 @@ type Props = {
   sessionId: string
 }
 
-function shuffle<T>(arr: T[]): T[] {
+// Deterministic 32-bit string hash (FNV-ish) for seeding the shuffle.
+function hashString(str: string): number {
+  let h = 1779033703 ^ str.length
+  for (let i = 0; i < str.length; i++) {
+    h = Math.imul(h ^ str.charCodeAt(i), 3432918353)
+    h = (h << 13) | (h >>> 19)
+  }
+  return (h ^ (h >>> 16)) >>> 0
+}
+
+// Seeded Fisher–Yates (mulberry32 PRNG). Same seed → same order on server AND
+// client, so the MCQ options never cause a hydration mismatch.
+function seededShuffle<T>(arr: T[], seedStr: string): T[] {
   const a = [...arr]
+  let s = hashString(seedStr) || 1
+  const rand = () => {
+    s = (s + 0x6d2b79f5) | 0
+    let t = Math.imul(s ^ (s >>> 15), 1 | s)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
+    const j = Math.floor(rand() * (i + 1))
     ;[a[i], a[j]] = [a[j], a[i]]
   }
   return a
 }
 
-// Shuffled options memo — stable per card, re-shuffled on card change
-function useShuffledOptions(options: string[] | undefined) {
-  return useMemo(() => (options ? shuffle(options) : undefined), [options])
+// Shuffled options memo — deterministic per card (stable across SSR + hydration).
+function useShuffledOptions(options: string[] | undefined, seed: string) {
+  return useMemo(() => (options ? seededShuffle(options, seed) : undefined), [options, seed])
 }
 
 function MCQCard({
@@ -45,7 +64,7 @@ function MCQCard({
   onResult: (correct: boolean) => void
   isPending: boolean
 }) {
-  const shuffled = useShuffledOptions(card.options)
+  const shuffled = useShuffledOptions(card.options, card.exerciseId)
   const [selected, setSelected] = useState<string | null>(null)
   const revealed = selected !== null
 

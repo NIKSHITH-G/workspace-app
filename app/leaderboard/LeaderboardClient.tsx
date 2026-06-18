@@ -26,7 +26,35 @@ const TABS: { key: SortKey; label: string }[] = [
   { key: "streak", label: "Streak" },
 ]
 
-const MEDALS = ["#FFD700", "#C0C0C0", "#CD7F32"]
+const MEDALS = ["🥇", "🥈", "🥉"]
+
+function StatCell({
+  value,
+  label,
+  active,
+  accent,
+  alwaysShow,
+}: {
+  value: string | number
+  label: string
+  active: boolean
+  accent: string
+  alwaysShow?: boolean
+}) {
+  return (
+    <div
+      className={`px-2.5 py-1 rounded-lg text-center ${alwaysShow ? "" : "hidden sm:block"}`}
+      style={{ minWidth: 52, background: active ? `${accent}1a` : "transparent" }}
+    >
+      <p className="text-sm font-bold leading-none tabular-nums" style={{ color: active ? accent : "#fafafa" }}>
+        {value}
+      </p>
+      <p className="text-[8.5px] uppercase tracking-wide mt-1" style={{ color: active ? accent : "#52525b" }}>
+        {label}
+      </p>
+    </div>
+  )
+}
 
 export default function LeaderboardClient({ rows }: { rows: Row[] }) {
   const [sort, setSort] = useState<SortKey>("level")
@@ -49,12 +77,12 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
   return (
     <div className="space-y-5">
       {/* filter tabs */}
-      <div className="flex gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.05] w-fit max-w-full overflow-x-auto no-scrollbar">
+      <div className="flex gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.05] w-full">
         {TABS.map((t) => (
           <button
             key={t.key}
             onClick={() => setSort(t.key)}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap shrink-0"
+            className="flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap"
             style={{
               background: sort === t.key ? "rgba(255,255,255,0.08)" : "transparent",
               color: sort === t.key ? "#fff" : "#71717a",
@@ -70,32 +98,24 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
         {sorted.map((r, i) => {
           const rank = i + 1
           const medal = MEDALS[i]
-          const statValue =
-            sort === "level" ? `${r.xp.toLocaleString()}`
-            : sort === "solved" ? `${r.solved}`
-            : sort === "streak" ? `${r.streak}`
-            : `${r.mastered}`
-          const statLabel =
-            sort === "level" ? "XP"
-            : sort === "solved" ? "cards"
-            : sort === "streak" ? "🔥 days"
-            : "mastered"
 
           return (
             <div
               key={r.id}
-              className="flex items-center gap-3 px-3.5 py-3 rounded-xl border transition-colors"
+              className="flex items-center gap-3 px-3 sm:px-3.5 py-3 rounded-xl border transition-colors"
               style={{
                 background: r.isMe ? `${r.accent}10` : "rgba(255,255,255,0.02)",
                 borderColor: r.isMe ? `${r.accent}55` : "rgba(255,255,255,0.05)",
               }}
             >
               {/* rank */}
-              <div className="w-7 text-center shrink-0">
+              <div className="w-7 flex items-center justify-center shrink-0">
                 {medal ? (
-                  <span className="text-base" style={{ color: medal }}>●</span>
+                  <span className="text-lg leading-none">{medal}</span>
                 ) : (
-                  <span className="text-xs font-mono text-zinc-600">{rank}</span>
+                  <span className="w-6 h-6 rounded-full bg-white/[0.04] text-[11px] font-mono text-zinc-500 flex items-center justify-center">
+                    {rank}
+                  </span>
                 )}
               </div>
 
@@ -107,7 +127,7 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
                 {AVATAR_EMOJI[r.avatar] ?? "🦉"}
               </div>
 
-              {/* name + class */}
+              {/* name + class + level */}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-bold text-white truncate">{r.username}</span>
@@ -117,28 +137,37 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
                     </span>
                   )}
                 </div>
-                <span className="text-[10px] font-mono tracking-[0.15em] opacity-80" style={{ color: r.accent }}>
-                  {r.className}
-                </span>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className="text-[10px] font-mono tracking-[0.15em] opacity-80" style={{ color: r.accent }}>
+                    {r.className}
+                  </span>
+                  <span
+                    className="text-[9px] font-mono px-1.5 py-0.5 rounded shrink-0"
+                    style={{ color: r.accent, border: `1px solid ${r.accent}44`, background: `${r.accent}11` }}
+                  >
+                    LVL {r.level}
+                  </span>
+                </div>
               </div>
 
-              {/* level pill always visible */}
-              <span
-                className="text-[10px] font-mono px-2 py-1 rounded border shrink-0 hidden sm:inline"
-                style={{ color: r.accent, borderColor: `${r.accent}44`, background: `${r.accent}11` }}
-              >
-                LVL {r.level}
-              </span>
-
-              {/* active stat */}
-              <div className="text-right shrink-0 w-16">
-                <p className="text-sm font-bold text-white leading-none">{statValue}</p>
-                {statLabel && <p className="text-[9px] text-zinc-600 mt-0.5">{statLabel}</p>}
+              {/* selected metric only */}
+              <div className="shrink-0">
+                {sort === "level" && <StatCell value={r.xp.toLocaleString()} label="XP" active accent={r.accent} alwaysShow />}
+                {sort === "solved" && <StatCell value={r.solved} label="cards" active accent={r.accent} alwaysShow />}
+                {sort === "mastered" && <StatCell value={r.mastered} label="mastered" active accent={r.accent} alwaysShow />}
+                {sort === "streak" && <StatCell value={r.streak > 0 ? `🔥${r.streak}` : "0"} label="streak" active accent={r.accent} alwaysShow />}
               </div>
             </div>
           )
         })}
       </div>
+
+      {/* how XP works */}
+      <p className="text-[11px] text-zinc-700 text-center pt-4 leading-relaxed">
+        Earn XP by reviewing flashcards, mastering concepts, and keeping daily streaks.
+        <br className="hidden sm:block" />
+        Pick your username and style in <span className="text-zinc-500">Settings</span> to show up here.
+      </p>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { UserButton } from "@clerk/nextjs"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import { getUser } from "@/lib/currentUser"
 import { db } from "@/lib/db"
 import HomeKeyboard from "./HomeKeyboard"
@@ -43,6 +44,10 @@ export default async function Home() {
 
   const user = await getUser()
   const meta = (user?.publicMetadata ?? {}) as Record<string, string>
+
+  // Brand-new accounts must pick a username + style before reaching the app
+  if (user && !meta.onboardingComplete) redirect("/onboarding")
+
   const theme = getTheme(meta.style)
   const avatarId = meta.avatar ?? "owl"
   const displayName = meta.displayName ?? user?.firstName ?? "PLAYER"

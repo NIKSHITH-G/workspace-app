@@ -1,15 +1,14 @@
-import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
+import { getUser } from "@/lib/currentUser"
 import OnboardingClient from "./OnboardingClient"
 
 export default async function OnboardingPage() {
-  const { userId, sessionClaims } = await auth()
-  if (!userId) redirect("/sign-in")
+  const user = await getUser()
+  if (!user) redirect("/sign-in")
 
   // Already onboarded — go home
-  if ((sessionClaims?.metadata as Record<string, unknown>)?.onboardingComplete) {
-    redirect("/")
-  }
+  const meta = (user.publicMetadata ?? {}) as Record<string, unknown>
+  if (meta.onboardingComplete) redirect("/")
 
   return <OnboardingClient />
 }

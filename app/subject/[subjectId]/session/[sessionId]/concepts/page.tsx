@@ -1,9 +1,9 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
 import Markdown from "@/components/Markdown"
+import TopNav from "@/app/TopNav"
 
 export default async function ConceptsPage(
   props: PageProps<"/subject/[subjectId]/session/[sessionId]/concepts">,
@@ -30,16 +30,18 @@ export default async function ConceptsPage(
   if (!session || session.subject.id !== subjectId) notFound()
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#080810] text-white">
+      <TopNav
+        crumbs={[
+          { label: "Subjects", href: "/subject" },
+          { label: session.subject.name, href: `/subject/${subjectId}` },
+          { label: `Session ${session.index}`, href: `/subject/${subjectId}/session/${sessionId}` },
+          { label: "Concepts" },
+        ]}
+      />
       <div className="max-w-3xl mx-auto px-6 py-12">
         <div className="mb-8">
-          <Link
-            href={`/subject/${subjectId}/session/${sessionId}`}
-            className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
-          >
-            ← {session.title}
-          </Link>
-          <h1 className="text-xl font-semibold tracking-tight mt-3">Concepts</h1>
+          <h1 className="text-xl font-semibold tracking-tight">Concepts</h1>
         </div>
 
         <div className="space-y-6">

@@ -27,6 +27,7 @@ export default function SignUpPage() {
 
       <div className="relative z-10 w-full flex justify-center clerk-dark-override">
         <SignUp
+          forceRedirectUrl="/onboarding"
           appearance={{
             variables: {
               colorBackground: "#111116",
