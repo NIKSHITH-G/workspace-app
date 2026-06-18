@@ -2,6 +2,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
 import { getTheme } from "@/lib/themes"
+import { computeXp, levelFromXp, type AttemptLite } from "@/lib/xp"
 import TopNav from "@/app/TopNav"
 import LeaderboardClient, { type Row } from "./LeaderboardClient"
 
@@ -11,31 +12,30 @@ export default async function LeaderboardPage() {
   await connection()
   const { userId: currentUserId } = await auth()
 
-  // ── aggregate stats per student from the DB ──
-  const [solvedGroups, masteryRows] = await Promise.all([
-    db.attempt.groupBy({
-      by: ["studentId"],
-      where: { correct: true },
-      _count: { _all: true },
-    }),
+  // ── pull raw rows and aggregate per student in JS ──
+  const [attemptRows, masteryRows] = await Promise.all([
+    db.attempt.findMany({ select: { studentId: true, correct: true, quality: true, createdAt: true } }),
     db.masteryScore.findMany({ select: { studentId: true, score: true } }),
   ])
 
+  // attempts + correct-count per student
+  const attemptsByStudent = new Map<string, AttemptLite[]>()
   const solvedByStudent = new Map<string, number>()
-  for (const g of solvedGroups) solvedByStudent.set(g.studentId, g._count._all)
+  for (const a of attemptRows) {
+    const list = attemptsByStudent.get(a.studentId) ?? []
+    list.push({ correct: a.correct, quality: a.quality, createdAt: a.createdAt })
+    attemptsByStudent.set(a.studentId, list)
+    if (a.correct) solvedByStudent.set(a.studentId, (solvedByStudent.get(a.studentId) ?? 0) + 1)
+  }
 
-  // sum + mastered count per student
-  const masteryByStudent = new Map<string, { sum: number; count: number; mastered: number }>()
+  // mastered count per student
+  const masteredByStudent = new Map<string, number>()
   for (const r of masteryRows) {
-    const m = masteryByStudent.get(r.studentId) ?? { sum: 0, count: 0, mastered: 0 }
-    m.sum += r.score
-    m.count += 1
-    if (r.score >= 0.7) m.mastered += 1
-    masteryByStudent.set(r.studentId, m)
+    if (r.score >= 0.7) masteredByStudent.set(r.studentId, (masteredByStudent.get(r.studentId) ?? 0) + 1)
   }
 
   // every real student id that has any activity (exclude seed/guest "default")
-  const ids = Array.from(new Set([...solvedByStudent.keys(), ...masteryByStudent.keys()]))
+  const ids = Array.from(new Set([...attemptsByStudent.keys(), ...masteredByStudent.keys()]))
     .filter((id) => id && id !== "default")
 
   // ── map ids → Clerk users for username / avatar / style ──
@@ -58,9 +58,8 @@ export default async function LeaderboardPage() {
     .filter((id) => userById.has(id))
     .map((id) => {
       const u = userById.get(id)!
-      const m = masteryByStudent.get(id) ?? { sum: 0, count: 0, mastered: 0 }
-      const avgXP = m.count > 0 ? Math.round((m.sum / m.count) * 100) : 0
-      const level = Math.max(1, Math.floor(avgXP / 10) + 1)
+      const mastered = masteredByStudent.get(id) ?? 0
+      const xp = computeXp(attemptsByStudent.get(id) ?? [], mastered)
       const theme = getTheme(u.style)
       return {
         id,
@@ -68,10 +67,11 @@ export default async function LeaderboardPage() {
         avatar: u.avatar,
         accent: theme.primaryHex,
         className: theme.class,
-        level,
-        xp: avgXP,
+        level: levelFromXp(xp.total),
+        xp: xp.total,
+        streak: xp.currentStreak,
         solved: solvedByStudent.get(id) ?? 0,
-        mastered: m.mastered,
+        mastered,
         isMe: id === currentUserId,
       }
     })

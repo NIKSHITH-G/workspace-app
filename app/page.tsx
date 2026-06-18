@@ -7,6 +7,7 @@ import ModoTitle from "./ModoTitle"
 import SubjectTile from "./SubjectTile"
 import { connection } from "next/server"
 import { getTheme, AVATAR_EMOJI } from "@/lib/themes"
+import { computeXp, levelProgress } from "@/lib/xp"
 
 const SUBJECTS = [
   { slug: "python",       name: "Python for AI",                    desc: "Programming foundations for ML" },
@@ -47,10 +48,13 @@ export default async function Home() {
   const displayName = meta.displayName ?? user?.firstName ?? "PLAYER"
   const emoji = AVATAR_EMOJI[avatarId] ?? "🧙"
 
-  const [subjectRows, masteryRows] = await Promise.all([
+  const [subjectRows, masteryRows, attempts] = await Promise.all([
     db.subject.findMany({ select: { id: true, slug: true } }),
     user
       ? db.masteryScore.findMany({ where: { studentId: user.id }, select: { score: true } })
+      : Promise.resolve([]),
+    user
+      ? db.attempt.findMany({ where: { studentId: user.id }, select: { correct: true, quality: true, createdAt: true } })
       : Promise.resolve([]),
   ])
 
@@ -60,10 +64,11 @@ export default async function Home() {
     href: idBySlug[s.slug] ? `/subject/${idBySlug[s.slug]}` : null,
   }))
 
-  const avgXP = masteryRows.length > 0
-    ? Math.round((masteryRows.reduce((s, r) => s + r.score, 0) / masteryRows.length) * 100)
-    : 0
-  const level = Math.max(1, Math.floor(avgXP / 10) + 1)
+  const masteredCount = masteryRows.filter((r) => r.score >= 0.7).length
+  const xp = computeXp(attempts, masteredCount)
+  const progress = levelProgress(xp.total)
+  const level = progress.level
+  const progressPct = progress.pct
 
   return (
     <div className="min-h-screen bg-[#080810] text-white flex flex-col overflow-hidden">
@@ -102,17 +107,28 @@ export default async function Home() {
                 >
                   LVL {level}
                 </span>
+                {xp.currentStreak > 0 && (
+                  <span className="font-mono leading-none text-orange-400" style={{ fontSize: 9 }} title={`${xp.currentStreak}-day streak`}>
+                    🔥 {xp.currentStreak}
+                  </span>
+                )}
               </div>
               <div className="flex items-center" style={{ gap: 7 }}>
                 <span className="font-mono leading-none opacity-80" style={{ fontSize: 9, letterSpacing: "0.18em", color: theme.primaryHex }}>
                   {theme.class}
                 </span>
-                {/* XP bar */}
-                <div style={{ width: 64, height: 3, borderRadius: 999, overflow: "hidden", background: "rgba(255,255,255,0.08)" }}>
+                {/* XP bar — progress to next level */}
+                <div
+                  title={`${xp.total.toLocaleString()} XP · ${progress.toNext.toLocaleString()} to next level`}
+                  style={{ width: 64, height: 3, borderRadius: 999, overflow: "hidden", background: "rgba(255,255,255,0.08)" }}
+                >
                   <div
-                    style={{ height: "100%", width: `${avgXP}%`, borderRadius: 999, background: `linear-gradient(90deg, ${theme.primaryHex}88, ${theme.primaryHex})` }}
+                    style={{ height: "100%", width: `${progressPct}%`, borderRadius: 999, background: `linear-gradient(90deg, ${theme.primaryHex}88, ${theme.primaryHex})` }}
                   />
                 </div>
+                <span className="font-mono leading-none text-zinc-600" style={{ fontSize: 8.5 }}>
+                  {xp.total.toLocaleString()} XP
+                </span>
               </div>
             </div>
           </Link>

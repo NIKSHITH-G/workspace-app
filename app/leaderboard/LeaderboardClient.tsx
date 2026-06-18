@@ -11,17 +11,19 @@ export type Row = {
   className: string
   level: number
   xp: number
+  streak: number
   solved: number
   mastered: number
   isMe: boolean
 }
 
-type SortKey = "level" | "solved" | "mastered"
+type SortKey = "level" | "solved" | "mastered" | "streak"
 
 const TABS: { key: SortKey; label: string }[] = [
   { key: "level", label: "Level" },
   { key: "solved", label: "Cards Solved" },
-  { key: "mastered", label: "Concepts Mastered" },
+  { key: "mastered", label: "Mastered" },
+  { key: "streak", label: "Streak" },
 ]
 
 const MEDALS = ["#FFD700", "#C0C0C0", "#CD7F32"]
@@ -32,6 +34,7 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
   const sorted = [...rows].sort((a, b) => {
     if (sort === "level") return b.xp - a.xp || b.solved - a.solved
     if (sort === "solved") return b.solved - a.solved || b.xp - a.xp
+    if (sort === "streak") return b.streak - a.streak || b.xp - a.xp
     return b.mastered - a.mastered || b.xp - a.xp
   })
 
@@ -67,8 +70,16 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
         {sorted.map((r, i) => {
           const rank = i + 1
           const medal = MEDALS[i]
-          const statValue = sort === "level" ? `LVL ${r.level}` : sort === "solved" ? `${r.solved}` : `${r.mastered}`
-          const statLabel = sort === "level" ? "" : sort === "solved" ? "cards" : "mastered"
+          const statValue =
+            sort === "level" ? `${r.xp.toLocaleString()}`
+            : sort === "solved" ? `${r.solved}`
+            : sort === "streak" ? `${r.streak}`
+            : `${r.mastered}`
+          const statLabel =
+            sort === "level" ? "XP"
+            : sort === "solved" ? "cards"
+            : sort === "streak" ? "🔥 days"
+            : "mastered"
 
           return (
             <div
