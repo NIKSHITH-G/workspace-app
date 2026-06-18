@@ -30,24 +30,22 @@ export default function ModoTitle() {
 
   return (
     <div className="flex flex-col items-center select-none">
-      <div className="relative h-[1.1em] overflow-hidden" style={{ fontSize: "clamp(5rem, 14vw, 10rem)" }}>
+      <div className="relative" style={{ height: "1.15em", fontSize: "clamp(5rem, 14vw, 10rem)" }}>
         <AnimatePresence mode="wait">
-          <motion.span
+          <motion.h1
             key={current.text}
             lang={current.lang}
-            initial={{ y: "60%", opacity: 0, filter: "blur(8px)" }}
+            initial={{ y: "40%", opacity: 0, filter: "blur(10px)" }}
             animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
-            exit={{ y: "-60%", opacity: 0, filter: "blur(8px)" }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0 flex items-center justify-center font-black tracking-tight leading-none text-white"
+            exit={{ y: "-40%", opacity: 0, filter: "blur(10px)" }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="font-black tracking-tight leading-none text-white whitespace-nowrap"
+            style={{ margin: 0 }}
           >
             {current.text}
-          </motion.span>
+          </motion.h1>
         </AnimatePresence>
       </div>
-      <p className="text-zinc-500 text-sm tracking-[0.25em] uppercase mt-3 font-light">
-        AI masters study
-      </p>
     </div>
   )
 }

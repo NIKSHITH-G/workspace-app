@@ -47,8 +47,11 @@ export default async function Home() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none" />
 
       {/* title */}
-      <div className="relative z-10 mb-16 text-center">
+      <div className="relative z-10 mb-14 text-center">
         <ModoTitle />
+        <p className="text-zinc-600 text-xs tracking-[0.3em] uppercase mt-4 font-light">
+          master anything
+        </p>
       </div>
 
       {/* subject grid */}
