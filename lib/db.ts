@@ -6,8 +6,9 @@ function makeClient() {
   if (process.env.TURSO_DATABASE_URL) {
     // Production (Vercel): Turso cloud SQLite
     // Lazy-loaded so native libsql binary is resolved from node_modules at runtime
+    // Use the web (HTTP/WS) variant — no native Rust binary, works on Vercel Lambda
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { PrismaLibSql } = require("@prisma/adapter-libsql")
+    const { PrismaLibSql } = require("@prisma/adapter-libsql/web")
     return new PrismaClient({
       adapter: new PrismaLibSql({
         url: process.env.TURSO_DATABASE_URL,
