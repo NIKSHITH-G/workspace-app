@@ -13,11 +13,22 @@ export const metadata = { title: "Leaderboard" }
 // well above any realistic dataset — revisit (move aggregation DB-side) before it's hit.
 const MAX_ROWS = 100_000
 
-// The heavy work — full scan + per-student aggregation + Clerk lookup — is cached
-// across requests so this PUBLIC endpoint can't be used to hammer the DB on every hit.
-// `isMe` is applied per-request afterwards, outside the cache.
-const getRankedRows = unstable_cache(
-  async (): Promise<Row[]> => {
+// Per-student stats with no identity attached — safe to cache (no headers/auth).
+type StudentStat = {
+  id: string
+  xp: number
+  level: number
+  streak: number
+  solved: number
+  mastered: number
+}
+
+// The heavy work — full DB scan + per-student aggregation — is cached across requests
+// so this PUBLIC endpoint can't be used to hammer the DB on every hit. The Clerk user
+// lookup is deliberately NOT cached: it reads request headers, which is disallowed
+// inside `unstable_cache`, and it's cheap relative to the full-table scan.
+const getStudentStats = unstable_cache(
+  async (): Promise<StudentStat[]> => {
     const [attemptRows, masteryRows] = await Promise.all([
       db.attempt.findMany({
         select: { studentId: true, correct: true, quality: true, createdAt: true },
@@ -26,9 +37,9 @@ const getRankedRows = unstable_cache(
       }),
       db.masteryScore.findMany({ select: { studentId: true, score: true }, take: MAX_ROWS }),
     ])
-    return buildRows(attemptRows, masteryRows)
+    return computeStats(attemptRows, masteryRows)
   },
-  ["leaderboard-rows"],
+  ["leaderboard-stats"],
   { revalidate: 60, tags: ["leaderboard"] },
 )
 
@@ -36,16 +47,54 @@ export default async function LeaderboardPage() {
   await connection()
   const { userId: currentUserId } = await auth()
 
-  const rankedRows = await getRankedRows()
-  const rows: Row[] = rankedRows.map((r) => ({ ...r, isMe: r.id === currentUserId }))
+  const stats = await getStudentStats()
+
+  // ── map ids → Clerk users for username / avatar / style (dynamic, uncached) ──
+  const userById = new Map<string, { username: string; avatar: string; style: string }>()
+  if (stats.length > 0) {
+    try {
+      const client = await clerkClient()
+      const { data: users } = await client.users.getUserList({
+        userId: stats.map((s) => s.id),
+        limit: 200,
+      })
+      for (const u of users) {
+        const meta = (u.publicMetadata ?? {}) as Record<string, string>
+        const username = meta.displayName || u.username || u.firstName || "Anonymous"
+        userById.set(u.id, { username, avatar: meta.avatar ?? "owl", style: meta.style ?? "scholar" })
+      }
+    } catch (err) {
+      console.error("[leaderboard] clerk getUserList failed:", err)
+    }
+  }
+
+  const rows: Row[] = stats
+    .filter((s) => userById.has(s.id))
+    .map((s) => {
+      const u = userById.get(s.id)!
+      const theme = getTheme(u.style)
+      return {
+        id: s.id,
+        username: u.username,
+        avatar: u.avatar,
+        accent: theme.primaryHex,
+        className: theme.class,
+        level: s.level,
+        xp: s.xp,
+        streak: s.streak,
+        solved: s.solved,
+        mastered: s.mastered,
+        isMe: s.id === currentUserId,
+      }
+    })
 
   return renderPage(rows)
 }
 
-async function buildRows(
+function computeStats(
   attemptRows: { studentId: string; correct: boolean; quality: number; createdAt: Date }[],
   masteryRows: { studentId: string; score: number }[],
-): Promise<Row[]> {
+): StudentStat[] {
 
   // attempts + correct-count per student
   const attemptsByStudent = new Map<string, AttemptLite[]>()
@@ -67,45 +116,18 @@ async function buildRows(
   const ids = Array.from(new Set([...attemptsByStudent.keys(), ...masteredByStudent.keys()]))
     .filter((id) => id && id !== "default")
 
-  // ── map ids → Clerk users for username / avatar / style ──
-  const userById = new Map<string, { username: string; avatar: string; style: string }>()
-  if (ids.length > 0) {
-    try {
-      const client = await clerkClient()
-      const { data: users } = await client.users.getUserList({ userId: ids, limit: 200 })
-      for (const u of users) {
-        const meta = (u.publicMetadata ?? {}) as Record<string, string>
-        const username = meta.displayName || u.username || u.firstName || "Anonymous"
-        userById.set(u.id, { username, avatar: meta.avatar ?? "owl", style: meta.style ?? "scholar" })
-      }
-    } catch {
-      // Clerk unavailable — leaderboard will just be empty
+  return ids.map((id) => {
+    const mastered = masteredByStudent.get(id) ?? 0
+    const xp = computeXp(attemptsByStudent.get(id) ?? [], mastered)
+    return {
+      id,
+      xp: xp.total,
+      level: levelFromXp(xp.total),
+      streak: xp.currentStreak,
+      solved: solvedByStudent.get(id) ?? 0,
+      mastered,
     }
-  }
-
-  const rows: Row[] = ids
-    .filter((id) => userById.has(id))
-    .map((id) => {
-      const u = userById.get(id)!
-      const mastered = masteredByStudent.get(id) ?? 0
-      const xp = computeXp(attemptsByStudent.get(id) ?? [], mastered)
-      const theme = getTheme(u.style)
-      return {
-        id,
-        username: u.username,
-        avatar: u.avatar,
-        accent: theme.primaryHex,
-        className: theme.class,
-        level: levelFromXp(xp.total),
-        xp: xp.total,
-        streak: xp.currentStreak,
-        solved: solvedByStudent.get(id) ?? 0,
-        mastered,
-        isMe: false, // applied per-request in the page, outside the cache
-      }
-    })
-
-  return rows
+  })
 }
 
 function renderPage(rows: Row[]) {

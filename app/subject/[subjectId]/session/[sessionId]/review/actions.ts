@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { sm2 } from "@/lib/sm2"
@@ -68,4 +68,7 @@ export async function submitAttempt(
   ])
 
   revalidatePath(`/subject/${subjectId}/session/${sessionId}`)
+  // bust the cached leaderboard aggregation so new XP shows up immediately
+  // (updateTag = read-your-writes: next leaderboard visit waits for fresh data)
+  updateTag("leaderboard")
 }
