@@ -1,0 +1,84 @@
+// Idempotent production schema sync for Turso, run during the Vercel build
+// (where TURSO_DATABASE_URL / TURSO_AUTH_TOKEN are present even though they're
+// "Sensitive" and can't be pulled locally). Locally — where those vars are
+// absent — this is a no-op, so `next build` against the file DB is unaffected.
+//
+// Keep every statement additive + idempotent: it runs on every deploy.
+
+import { createClient, type Client } from "@libsql/client/web"
+import { randomUUID } from "node:crypto"
+
+const NEW_SUBJECT_COLUMNS: { name: string; ddl: string }[] = [
+  { name: "description", ddl: `ALTER TABLE "Subject" ADD COLUMN "description" TEXT` },
+  { name: "category", ddl: `ALTER TABLE "Subject" ADD COLUMN "category" TEXT` },
+  { name: "emoji", ddl: `ALTER TABLE "Subject" ADD COLUMN "emoji" TEXT` },
+  { name: "status", ddl: `ALTER TABLE "Subject" ADD COLUMN "status" TEXT NOT NULL DEFAULT 'published'` },
+  { name: "order", ddl: `ALTER TABLE "Subject" ADD COLUMN "order" INTEGER NOT NULL DEFAULT 0` },
+]
+
+const CATALOG = [
+  { slug: "python", name: "Python for AI", description: "Programming foundations for ML", category: "Programming", emoji: "🐍", status: "published", order: 1 },
+  { slug: "database", name: "Database Systems", description: "Relational & query fundamentals", category: "Systems", emoji: "🗄️", status: "coming_soon", order: 2 },
+  { slug: "architecture", name: "Computer Architecture & Networks", description: "Systems from silicon to protocol", category: "Systems", emoji: "🖥️", status: "coming_soon", order: 3 },
+  { slug: "maths", name: "Mathematical Foundations", description: "Linear algebra, probability, statistics", category: "Math", emoji: "📐", status: "coming_soon", order: 4 },
+]
+
+async function addMissingSubjectColumns(db: Client) {
+  const info = await db.execute(`PRAGMA table_info("Subject")`)
+  const existing = new Set(info.rows.map((r) => String(r.name)))
+  for (const col of NEW_SUBJECT_COLUMNS) {
+    if (existing.has(col.name)) continue
+    await db.execute(col.ddl)
+    console.log(`  + Subject.${col.name}`)
+  }
+}
+
+async function ensureContentTranslation(db: Client) {
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS "ContentTranslation" (
+      "id" TEXT NOT NULL PRIMARY KEY,
+      "entity" TEXT NOT NULL,
+      "entityId" TEXT NOT NULL,
+      "field" TEXT NOT NULL,
+      "locale" TEXT NOT NULL,
+      "text" TEXT NOT NULL,
+      "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )`)
+  await db.execute(`
+    CREATE UNIQUE INDEX IF NOT EXISTS "ContentTranslation_entity_entityId_field_locale_key"
+      ON "ContentTranslation"("entity","entityId","field","locale")`)
+  console.log("  ✓ ContentTranslation table + unique index")
+}
+
+async function seedCatalog(db: Client) {
+  for (const s of CATALOG) {
+    await db.execute({
+      sql: `INSERT INTO "Subject" ("id","name","slug","sessionCount","description","category","emoji","status","order","createdAt")
+            VALUES (?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)
+            ON CONFLICT("slug") DO UPDATE SET
+              "description"=excluded."description","category"=excluded."category",
+              "emoji"=excluded."emoji","status"=excluded."status","order"=excluded."order"`,
+      args: [randomUUID(), s.name, s.slug, 15, s.description, s.category, s.emoji, s.status, s.order],
+    })
+    console.log(`  ✓ catalog: ${s.slug} (${s.status})`)
+  }
+}
+
+async function main() {
+  const url = process.env.TURSO_DATABASE_URL
+  if (!url) {
+    console.log("[migrate-prod] no TURSO_DATABASE_URL — skipping (local build).")
+    return
+  }
+  console.log("[migrate-prod] syncing Turso schema…")
+  const db = createClient({ url, authToken: process.env.TURSO_AUTH_TOKEN })
+  await addMissingSubjectColumns(db)
+  await ensureContentTranslation(db)
+  await seedCatalog(db)
+  console.log("[migrate-prod] done.")
+}
+
+main().catch((err) => {
+  console.error("[migrate-prod] FAILED:", err)
+  process.exit(1)
+})
