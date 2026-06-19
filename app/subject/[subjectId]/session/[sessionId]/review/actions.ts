@@ -13,7 +13,17 @@ export async function submitAttempt(
   sessionId: string,
 ) {
   const { userId } = await auth()
-  const studentId = userId ?? "default"
+  if (!userId) throw new Error("Not authenticated")
+  const studentId = userId
+
+  // Validate client-supplied grading inputs — these drive SM-2 + XP/leaderboard,
+  // so out-of-range or inflated values must be rejected, not trusted.
+  if (!Number.isInteger(quality) || quality < 0 || quality > 5) {
+    throw new Error("Invalid quality")
+  }
+  if (confidence !== null && (typeof confidence !== "number" || confidence < 0 || confidence > 1)) {
+    throw new Error("Invalid confidence")
+  }
 
   const exercise = await db.exercise.findUnique({
     where: { id: exerciseId },

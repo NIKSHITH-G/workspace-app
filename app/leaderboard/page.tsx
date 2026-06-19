@@ -1,4 +1,5 @@
 import { auth, clerkClient } from "@clerk/nextjs/server"
+import { unstable_cache } from "next/cache"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
 import { getTheme } from "@/lib/themes"
@@ -8,15 +9,43 @@ import LeaderboardClient, { type Row } from "./LeaderboardClient"
 
 export const metadata = { title: "Leaderboard" }
 
+// Safety ceiling so a flood of attempts can't OOM the lambda. Ordered newest-first;
+// well above any realistic dataset — revisit (move aggregation DB-side) before it's hit.
+const MAX_ROWS = 100_000
+
+// The heavy work — full scan + per-student aggregation + Clerk lookup — is cached
+// across requests so this PUBLIC endpoint can't be used to hammer the DB on every hit.
+// `isMe` is applied per-request afterwards, outside the cache.
+const getRankedRows = unstable_cache(
+  async (): Promise<Row[]> => {
+    const [attemptRows, masteryRows] = await Promise.all([
+      db.attempt.findMany({
+        select: { studentId: true, correct: true, quality: true, createdAt: true },
+        orderBy: { createdAt: "desc" },
+        take: MAX_ROWS,
+      }),
+      db.masteryScore.findMany({ select: { studentId: true, score: true }, take: MAX_ROWS }),
+    ])
+    return buildRows(attemptRows, masteryRows)
+  },
+  ["leaderboard-rows"],
+  { revalidate: 60, tags: ["leaderboard"] },
+)
+
 export default async function LeaderboardPage() {
   await connection()
   const { userId: currentUserId } = await auth()
 
-  // ── pull raw rows and aggregate per student in JS ──
-  const [attemptRows, masteryRows] = await Promise.all([
-    db.attempt.findMany({ select: { studentId: true, correct: true, quality: true, createdAt: true } }),
-    db.masteryScore.findMany({ select: { studentId: true, score: true } }),
-  ])
+  const rankedRows = await getRankedRows()
+  const rows: Row[] = rankedRows.map((r) => ({ ...r, isMe: r.id === currentUserId }))
+
+  return renderPage(rows)
+}
+
+async function buildRows(
+  attemptRows: { studentId: string; correct: boolean; quality: number; createdAt: Date }[],
+  masteryRows: { studentId: string; score: number }[],
+): Promise<Row[]> {
 
   // attempts + correct-count per student
   const attemptsByStudent = new Map<string, AttemptLite[]>()
@@ -72,10 +101,14 @@ export default async function LeaderboardPage() {
         streak: xp.currentStreak,
         solved: solvedByStudent.get(id) ?? 0,
         mastered,
-        isMe: id === currentUserId,
+        isMe: false, // applied per-request in the page, outside the cache
       }
     })
 
+  return rows
+}
+
+function renderPage(rows: Row[]) {
   return (
     <div className="min-h-screen bg-[#080810] text-white">
       <TopNav crumbs={[{ label: "Leaderboard" }]} />

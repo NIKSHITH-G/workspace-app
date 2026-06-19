@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
@@ -9,7 +9,8 @@ export default async function SubjectPage(props: PageProps<"/subject/[subjectId]
   await connection()
   const { subjectId } = await props.params
   const { userId } = await auth()
-  const studentId = userId ?? "default"
+  if (!userId) redirect("/sign-in")
+  const studentId = userId
 
   const subject = await db.subject.findUnique({
     where: { id: subjectId },

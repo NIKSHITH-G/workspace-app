@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import FlashcardReview from "./FlashcardReview"
@@ -11,7 +11,8 @@ export default async function ReviewPage(
   await connection()
   const { subjectId, sessionId } = await props.params
   const { userId } = await auth()
-  const studentId = userId ?? "default"
+  if (!userId) redirect("/sign-in")
+  const studentId = userId
 
   const session = await db.session.findUnique({
     where: { id: sessionId },
