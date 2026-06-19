@@ -18,7 +18,11 @@
     "setupProfile": "프로필 설정",
     "pickUsernameStyle": "사용자 이름 및 스타일 선택 →",
     "ranks": "순위",
-    "quickAccess": "빠른 액세스를 원하시면 1~4번을 누르세요"
+    "quickAccess": "빠른 액세스를 원하시면 1~4번을 누르세요",
+    "searchPlaceholder": "강좌 검색…",
+    "comingSoon": "곧 온다",
+    "noResults": "\"{query}\"과(와) 일치하는 강좌가 없습니다.",
+    "searchHint": "검색하려면 /를 누르세요."
   },
   "settings": {
     "title": "설정",

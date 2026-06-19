@@ -18,7 +18,11 @@
     "setupProfile": "Настройте свой профиль",
     "pickUsernameStyle": "ВЫБЕРИТЕ ИМЯ ПОЛЬЗОВАТЕЛЯ И СТИЛЬ →",
     "ranks": "ЗВАНИЯ",
-    "quickAccess": "нажмите 1–4 для быстрого доступа"
+    "quickAccess": "нажмите 1–4 для быстрого доступа",
+    "searchPlaceholder": "Искать курсы…",
+    "comingSoon": "вскоре",
+    "noResults": "Нет курсов, соответствующих \"{query}\"",
+    "searchHint": "нажмите / для поиска"
   },
   "settings": {
     "title": "Настройки",

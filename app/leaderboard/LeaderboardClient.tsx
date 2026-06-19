@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { AVATAR_EMOJI } from "@/lib/themes"
 import { useT } from "@/lib/i18n/I18nProvider"
+import AvatarIcon from "@/components/AvatarIcon"
 
 export type Row = {
   id: string
@@ -123,10 +123,10 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
 
               {/* avatar */}
               <div
-                className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shrink-0"
+                className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
                 style={{ background: `${r.accent}18`, border: `1px solid ${r.accent}33` }}
               >
-                {AVATAR_EMOJI[r.avatar] ?? "🦉"}
+                <AvatarIcon id={r.avatar} size={20} style={{ color: r.accent }} />
               </div>
 
               {/* name + class + level */}

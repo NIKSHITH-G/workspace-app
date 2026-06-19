@@ -3,7 +3,7 @@ import { db } from "@/lib/db"
 import { translateText } from "@/lib/translate"
 import { DEFAULT_LOCALE, type Locale } from "./config"
 
-type Entity = "session" | "concept" | "exercise"
+type Entity = "subject" | "session" | "concept" | "exercise"
 
 /**
  * Return `source` translated into `locale`, cached in the ContentTranslation

@@ -18,7 +18,11 @@
     "setupProfile": "Set up your profile",
     "pickUsernameStyle": "PICK USERNAME & STYLE →",
     "ranks": "RANKS",
-    "quickAccess": "press 1–4 for quick access"
+    "quickAccess": "press 1–4 for quick access",
+    "searchPlaceholder": "Search courses…",
+    "comingSoon": "coming soon",
+    "noResults": "No courses match \"{query}\"",
+    "searchHint": "press / to search"
   },
   "settings": {
     "title": "Settings",

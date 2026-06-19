@@ -18,7 +18,11 @@
     "setupProfile": "قم بإعداد ملف التعريف الخاص بك",
     "pickUsernameStyle": "اختر اسم المستخدم والنمط →",
     "ranks": "الرتب",
-    "quickAccess": "اضغط 1–4 للوصول السريع"
+    "quickAccess": "اضغط 1–4 للوصول السريع",
+    "searchPlaceholder": "ابحث عن الدورات...",
+    "comingSoon": "قريباً",
+    "noResults": "لا توجد دورات تطابق \"{query}\"",
+    "searchHint": "اضغط / للبحث"
   },
   "settings": {
     "title": "إعدادات",
@@ -53,7 +57,7 @@
     "robot": "روبوت"
   },
   "styles": {
-    "scholarLabel": "العالم",
+    "scholarLabel": "الباحث",
     "scholarDesc": "هادئ ومنهجي وشامل",
     "warriorLabel": "المحارب",
     "warriorDesc": "جريئة، سريعة، لا هوادة فيها",

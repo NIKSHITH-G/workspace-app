@@ -18,7 +18,11 @@
     "setupProfile": "הגדר את הפרופיל שלך",
     "pickUsernameStyle": "בחר שם משתמש וסגנון ←",
     "ranks": "דרגות",
-    "quickAccess": "לחץ על 1-4 לגישה מהירה"
+    "quickAccess": "לחץ על 1-4 לגישה מהירה",
+    "searchPlaceholder": "חפש קורסים...",
+    "comingSoon": "בקרוב",
+    "noResults": "אין קורסים תואמים ל-\"{query}\"",
+    "searchHint": "לחץ על / כדי לחפש"
   },
   "settings": {
     "title": "הגדרות",
@@ -37,7 +41,7 @@
     "nameSubtitle": "השם שלך בתוך MODO",
     "namePlaceholder": "הכנס את שמך…",
     "avatarTitle": "בחר את הדמות שלך",
-    "avatarSubtitle": "זה מייצג אותך ב- MODO",
+    "avatarSubtitle": "זה מייצג אותך ב-MODO",
     "styleTitle": "בחר את הסגנון שלך",
     "styleSubtitle": "זה מעצב את חווית MODO שלך",
     "continue": "המשך →",
@@ -95,7 +99,7 @@
     "conceptsLabel": "מושגים",
     "conceptsDesc": "הסברים לכל מושג במפגש זה",
     "cheatsheetLabel": "Cheat Sheet",
-    "cheatsheetDesc": "סיכום עזר מהיר שנוצר משלד הפגישה",
+    "cheatsheetDesc": "סיכום עיון מהיר שנוצר משלד הפגישה",
     "graphLabel": "גרף מושגים",
     "graphDesc": "קשרים מוקדמים בין מושגים",
     "phase2": "שלב 2",

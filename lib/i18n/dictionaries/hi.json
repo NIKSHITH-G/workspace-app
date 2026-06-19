@@ -18,7 +18,11 @@
     "setupProfile": "अपना प्रोफ़ाइल सेट करें",
     "pickUsernameStyle": "उपयोक्तानाम और शैली चुनें →",
     "ranks": "रैंकों",
-    "quickAccess": "त्वरित पहुंच के लिए 1-4 दबाएँ"
+    "quickAccess": "त्वरित पहुंच के लिए 1-4 दबाएँ",
+    "searchPlaceholder": "खोज कोर्स…",
+    "comingSoon": "जल्द आ रहा है",
+    "noResults": "कोई भी पाठ्यक्रम \"{query}\" से मेल नहीं खाता",
+    "searchHint": "खोजने के लिए / दबाएँ"
   },
   "settings": {
     "title": "सेटिंग्स",

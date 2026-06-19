@@ -18,7 +18,11 @@
     "setupProfile": "设置您的个人资料",
     "pickUsernameStyle": "选择用户名和风格 →",
     "ranks": "等级",
-    "quickAccess": "按 1–4 快速访问"
+    "quickAccess": "按 1–4 快速访问",
+    "searchPlaceholder": "搜索课程...",
+    "comingSoon": "即将推出",
+    "noResults": "没有课程匹配“{query}”",
+    "searchHint": "按 / 进行搜索"
   },
   "settings": {
     "title": "设置",

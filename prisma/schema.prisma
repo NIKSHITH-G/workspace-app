@@ -12,6 +12,11 @@ model Subject {
   name         String
   slug         String    @unique
   sessionCount Int       @default(15)
+  description  String?
+  category     String?   // e.g. "Programming" | "Systems" | "Math"
+  emoji        String?
+  status       String    @default("published") // "published" | "coming_soon"
+  order        Int       @default(0)
   sessions     Session[]
   createdAt    DateTime  @default(now())
 }

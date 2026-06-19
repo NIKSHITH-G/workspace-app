@@ -18,7 +18,11 @@
     "setupProfile": "ตั้งค่าโปรไฟล์ของคุณ",
     "pickUsernameStyle": "เลือกชื่อผู้ใช้และสไตล์ →",
     "ranks": "อันดับ",
-    "quickAccess": "กด 1–4 เพื่อการเข้าถึงที่รวดเร็ว"
+    "quickAccess": "กด 1–4 เพื่อการเข้าถึงที่รวดเร็ว",
+    "searchPlaceholder": "ค้นหาหลักสูตร...",
+    "comingSoon": "เร็วๆ นี้",
+    "noResults": "ไม่มีหลักสูตรที่ตรงกับ \"{query}\"",
+    "searchHint": "กด / เพื่อค้นหา"
   },
   "settings": {
     "title": "การตั้งค่า",

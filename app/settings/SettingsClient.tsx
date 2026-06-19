@@ -6,14 +6,15 @@ import { saveSettings } from "./actions"
 import { type Theme } from "@/lib/themes"
 import { useT } from "@/lib/i18n/I18nProvider"
 import { LOCALE_META, LOCALES } from "@/lib/i18n/config"
+import AvatarIcon from "@/components/AvatarIcon"
 
 const AVATARS = [
-  { id: "owl",    emoji: "🦉", tKey: "avatars.owl" },
-  { id: "fox",    emoji: "🦊", tKey: "avatars.fox" },
-  { id: "wolf",   emoji: "🐺", tKey: "avatars.wolf" },
-  { id: "dragon", emoji: "🐉", tKey: "avatars.dragon" },
-  { id: "cat",    emoji: "🐱", tKey: "avatars.cat" },
-  { id: "robot",  emoji: "🤖", tKey: "avatars.robot" },
+  { id: "owl",    tKey: "avatars.owl" },
+  { id: "fox",    tKey: "avatars.fox" },
+  { id: "wolf",   tKey: "avatars.wolf" },
+  { id: "dragon", tKey: "avatars.dragon" },
+  { id: "cat",    tKey: "avatars.cat" },
+  { id: "robot",  tKey: "avatars.robot" },
 ]
 
 const STYLES = [
@@ -124,14 +125,15 @@ export default function SettingsClient({ theme, initialName, initialAvatar, init
               <button
                 key={a.id}
                 onClick={() => setAvatar(a.id)}
-                className="aspect-square rounded-xl border text-2xl flex items-center justify-center transition-all duration-150"
+                className="aspect-square rounded-xl border flex items-center justify-center transition-all duration-150"
                 style={{
                   borderColor: avatar === a.id ? `${accentHex}88` : "rgba(255,255,255,0.06)",
                   background: avatar === a.id ? `${accentHex}18` : "rgba(255,255,255,0.03)",
                   boxShadow: avatar === a.id ? `0 0 12px ${accentHex}33` : "none",
+                  color: avatar === a.id ? accentHex : "#a1a1aa",
                 }}
               >
-                {a.emoji}
+                <AvatarIcon id={a.id} size={26} />
               </button>
             ))}
           </div>

@@ -18,7 +18,11 @@
     "setupProfile": "プロフィールを設定する",
     "pickUsernameStyle": "ユーザー名とスタイルを選択 →",
     "ranks": "ランク",
-    "quickAccess": "1 ～ 4 を押してクイックアクセスします"
+    "quickAccess": "1 ～ 4 を押してクイックアクセスします",
+    "searchPlaceholder": "コースを検索…",
+    "comingSoon": "近日公開",
+    "noResults": "「{query}」に一致するコースはありません",
+    "searchHint": "/ を押して検索します"
   },
   "settings": {
     "title": "設定",

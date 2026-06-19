@@ -4,14 +4,15 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { completeOnboarding } from "./actions"
 import { useI18n } from "@/lib/i18n/I18nProvider"
+import AvatarIcon from "@/components/AvatarIcon"
 
 const AVATARS = [
-  { id: "owl", emoji: "🦉", tKey: "avatars.owl" },
-  { id: "fox", emoji: "🦊", tKey: "avatars.fox" },
-  { id: "wolf", emoji: "🐺", tKey: "avatars.wolf" },
-  { id: "dragon", emoji: "🐉", tKey: "avatars.dragon" },
-  { id: "cat", emoji: "🐱", tKey: "avatars.cat" },
-  { id: "robot", emoji: "🤖", tKey: "avatars.robot" },
+  { id: "owl", tKey: "avatars.owl" },
+  { id: "fox", tKey: "avatars.fox" },
+  { id: "wolf", tKey: "avatars.wolf" },
+  { id: "dragon", tKey: "avatars.dragon" },
+  { id: "cat", tKey: "avatars.cat" },
+  { id: "robot", tKey: "avatars.robot" },
 ]
 
 const STYLES = [
@@ -112,7 +113,7 @@ export default function OnboardingClient() {
                       : "border-zinc-800 bg-zinc-900 hover:border-zinc-600"
                   }`}
                 >
-                  <span className="text-4xl">{a.emoji}</span>
+                  <AvatarIcon id={a.id} size={36} className={avatar === a.id ? "text-indigo-300" : "text-zinc-400"} />
                   <span className="text-xs text-zinc-400">{t(a.tKey)}</span>
                 </button>
               ))}

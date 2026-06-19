@@ -1,6 +1,7 @@
 "use client"
 
-import { type Theme, AVATAR_EMOJI } from "@/lib/themes"
+import { type Theme } from "@/lib/themes"
+import AvatarIcon from "@/components/AvatarIcon"
 
 type Props = {
   theme: Theme
@@ -11,8 +12,6 @@ type Props = {
 }
 
 export default function CharacterCard({ theme, avatarId, displayName, xp, level }: Props) {
-  const emoji = AVATAR_EMOJI[avatarId] ?? "🧙"
-
   return (
     <div
       className="relative pixel-border-pulse rounded-lg p-4 bg-[#080810] select-none"
@@ -35,10 +34,10 @@ export default function CharacterCard({ theme, avatarId, displayName, xp, level 
       {/* avatar + name */}
       <div className="flex items-center gap-3 mb-3">
         <div
-          className="text-3xl w-12 h-12 flex items-center justify-center rounded-md border"
+          className="w-12 h-12 flex items-center justify-center rounded-md border"
           style={{ borderColor: `${theme.primaryHex}33`, background: `${theme.primaryHex}0d` }}
         >
-          {emoji}
+          <AvatarIcon id={avatarId} size={28} style={{ color: theme.primaryHex }} />
         </div>
         <div>
           <p className="font-black text-white text-sm tracking-wide leading-none">
