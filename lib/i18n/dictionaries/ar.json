@@ -1,0 +1,140 @@
+{
+  "common": {
+    "back": "خلف",
+    "saving": "توفير…",
+    "active": "نشيط",
+    "you": "أنت",
+    "home": "بيت"
+  },
+  "nav": {
+    "subjects": "المواضيع",
+    "concepts": "المفاهيم",
+    "session": "الجلسة {index}"
+  },
+  "home": {
+    "tagline": "إتقان أي شيء",
+    "signInToSave": "قم بتسجيل الدخول لحفظ التقدم",
+    "signIn": "تسجيل الدخول",
+    "setupProfile": "قم بإعداد ملف التعريف الخاص بك",
+    "pickUsernameStyle": "اختر اسم المستخدم والنمط →",
+    "ranks": "الرتب",
+    "quickAccess": "اضغط 1–4 للوصول السريع"
+  },
+  "settings": {
+    "title": "إعدادات",
+    "subtitle": "تخصيص هوية MODO الخاصة بك",
+    "username": "اسم المستخدم",
+    "usernamePlaceholder": "اختر المقبض الخاص بك",
+    "usernameHint": "هذا هو الاسم الموضح على لوحة المتصدرين.",
+    "avatar": "الصورة الرمزية",
+    "style": "أسلوب",
+    "language": "لغة",
+    "save": "حفظ التغييرات",
+    "saved": "✓ تم الحفظ - العودة..."
+  },
+  "onboarding": {
+    "nameTitle": "ماذا يجب أن نسميك؟",
+    "nameSubtitle": "اسمك داخل MODO",
+    "namePlaceholder": "أدخل اسمك...",
+    "avatarTitle": "اختر الصورة الرمزية الخاصة بك",
+    "avatarSubtitle": "هذا يمثلك في MODO",
+    "styleTitle": "اختر طريقتك",
+    "styleSubtitle": "هذا يشكل تجربة MODO الخاصة بك",
+    "continue": "متابعة →",
+    "entering": "جارٍ الدخول إلى MODO...",
+    "enter": "أدخل الوضع →"
+  },
+  "avatars": {
+    "owl": "بُومَة",
+    "fox": "فوكس",
+    "wolf": "ذئب",
+    "dragon": "التنين",
+    "cat": "قطة",
+    "robot": "روبوت"
+  },
+  "styles": {
+    "scholarLabel": "العالم",
+    "scholarDesc": "هادئ ومنهجي وشامل",
+    "warriorLabel": "المحارب",
+    "warriorDesc": "جريئة، سريعة، لا هوادة فيها",
+    "shadowLabel": "الظل",
+    "shadowDesc": "حاد، هادئ، دقيق",
+    "sageLabel": "الحكيم",
+    "sageDesc": "صبور، حكيم، مؤرض",
+    "maverickLabel": "المنشق",
+    "maverickDesc": "مبدع، جريء، غير تقليدي"
+  },
+  "leaderboard": {
+    "title": "المتصدرين",
+    "rankedOne": "{count} ترتيب المتعلم",
+    "rankedOther": "{count} ترتيب المتعلمين",
+    "empty": "لم يتم تصنيف المتعلمين بعد",
+    "emptyCta": "كن الأول - قم بحل بعض البطاقات التعليمية وستظهر هنا.",
+    "tabLevel": "مستوى",
+    "tabSolved": "بطاقات تم حلها",
+    "tabMastered": "يتقن",
+    "tabStreak": "أثَر",
+    "statXp": "XP",
+    "statCards": "بطاقات",
+    "statMastered": "يتقن",
+    "statStreak": "أثَر",
+    "howXp": "اربح XP من خلال مراجعة البطاقات التعليمية وإتقان المفاهيم والحفاظ على الخطوط اليومية.",
+    "pickToShow": "اختر اسم المستخدم والنمط الخاص بك في {settings} لتظهر هنا.",
+    "settingsLink": "إعدادات"
+  },
+  "subjects": {
+    "title": "المواضيع",
+    "empty": "لا توجد مواضيع حتى الآن.",
+    "emptyHint": "قم بتشغيل {cmd} باستخدام الملف المصدر للبدء.",
+    "sessionsCount": "{completed}/{total} الجلسات",
+    "conceptsMastered": "{mastered}/{total} إتقان المفاهيم",
+    "mastered": "{mastered}/{total} يتقن"
+  },
+  "session": {
+    "mastery": "إتقان",
+    "conceptsLabel": "المفاهيم",
+    "conceptsDesc": "شرح لكل مفهوم في هذه الجلسة",
+    "cheatsheetLabel": "ورقة الغش",
+    "cheatsheetDesc": "ملخص مرجعي سريع تم إنشاؤه من الهيكل العظمي للجلسة",
+    "graphLabel": "الرسم البياني للمفهوم",
+    "graphDesc": "الروابط المسبقة بين المفاهيم",
+    "phase2": "المرحلة 2",
+    "reviewLabel": "مراجعة",
+    "reviewDesc": "مراجعة البطاقات التعليمية — {due} مستحقة الآن",
+    "analyticsLabel": "التحليلات",
+    "analyticsDesc": "درجات الإتقان لكل مفهوم"
+  },
+  "cheatsheet": {
+    "title": "ورقة الغش",
+    "empty": "لا توجد ورقة غش حتى الآن لهذه الجلسة."
+  },
+  "concepts": {
+    "title": "المفاهيم",
+    "requires": "يتطلب: {names}",
+    "noExplanation": "لم يتم إنشاء أي تفسير حتى الآن.",
+    "unseen": "غير مرئي"
+  },
+  "review": {
+    "title": "مراجعة",
+    "noCards": "لا توجد بطاقات تعليمية حتى الآن. قم بتشغيل البرنامج النصي الأولي لإنشاء التمارين.",
+    "chooseAnswer": "اختر إجابة",
+    "next": "التالي →",
+    "tapReveal": "انقر للكشف عن · الفضاء",
+    "tapRevealHint": "اضغط على البطاقة أو اضغط على مسافة للكشف",
+    "sessionComplete": "اكتملت الجلسة ✓",
+    "noCardsDue": "لا توجد بطاقات مستحقة الآن.",
+    "practiceAhead": "تدرب على بطاقات {count} قبل الموعد المحدد",
+    "again": "مرة أخرى",
+    "hard": "صعب",
+    "good": "جيد",
+    "easy": "سهل"
+  },
+  "analytics": {
+    "title": "التحليلات",
+    "attempts": "{count} محاولات",
+    "correct": "{pct}% صحيح",
+    "dueNow": "مستحق الآن",
+    "nextReview": "المراجعة التالية في {days}d",
+    "notReviewed": "لم تتم مراجعتها بعد"
+  }
+}

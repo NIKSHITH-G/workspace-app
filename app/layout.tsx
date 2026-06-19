@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { getUserTheme } from "@/lib/currentUser";
+import { getLocale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { dirFor } from "@/lib/i18n/config";
+import { I18nProvider } from "@/lib/i18n/I18nProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,8 +31,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Read user theme server-side so CSS vars are set before first paint
-  const theme = await getUserTheme()
+  // Read user theme + locale server-side so CSS vars and language are set before first paint
+  const [theme, locale] = await Promise.all([getUserTheme(), getLocale()])
+  const dict = await getDictionary(locale)
   const themeVars: Record<string, string> = {
     "--theme-primary": theme.primaryHex,
     "--theme-glow-rgb": theme.glowRgb,
@@ -36,12 +41,15 @@ export default async function RootLayout({
 
   return (
     <html
-      lang="en"
+      lang={locale}
+      dir={dirFor(locale)}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       style={themeVars as React.CSSProperties}
     >
       <body className="min-h-full flex flex-col bg-[#080810] text-white">
-        <ClerkProvider afterSignOutUrl="/sign-in">{children}</ClerkProvider>
+        <I18nProvider locale={locale} dict={dict}>
+          <ClerkProvider afterSignOutUrl="/sign-in">{children}</ClerkProvider>
+        </I18nProvider>
       </body>
     </html>
   );

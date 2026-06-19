@@ -1,0 +1,140 @@
+{
+  "common": {
+    "back": "后退",
+    "saving": "保存…",
+    "active": "积极的",
+    "you": "你",
+    "home": "家"
+  },
+  "nav": {
+    "subjects": "科目",
+    "concepts": "概念",
+    "session": "会话{index}"
+  },
+  "home": {
+    "tagline": "掌握一切",
+    "signInToSave": "登录以保存进度",
+    "signIn": "登入",
+    "setupProfile": "设置您的个人资料",
+    "pickUsernameStyle": "选择用户名和风格 →",
+    "ranks": "等级",
+    "quickAccess": "按 1–4 快速访问"
+  },
+  "settings": {
+    "title": "设置",
+    "subtitle": "定制您的 MODO 身份",
+    "username": "用户名",
+    "usernamePlaceholder": "选择你的手柄",
+    "usernameHint": "这是排行榜上显示的名称。",
+    "avatar": "阿凡达",
+    "style": "风格",
+    "language": "语言",
+    "save": "保存更改",
+    "saved": "✓ 已保存 — 返回..."
+  },
+  "onboarding": {
+    "nameTitle": "我们应该怎么称呼你？",
+    "nameSubtitle": "MODO 里你的名字",
+    "namePlaceholder": "输入你的名字...",
+    "avatarTitle": "选择你的头像",
+    "avatarSubtitle": "这代表您在 MODO 中",
+    "styleTitle": "选择你的风格",
+    "styleSubtitle": "这塑造了您的 MODO 体验",
+    "continue": "继续 →",
+    "entering": "进入MODO...",
+    "enter": "进入MODO →"
+  },
+  "avatars": {
+    "owl": "猫头鹰",
+    "fox": "狐狸",
+    "wolf": "狼",
+    "dragon": "龙",
+    "cat": "猫",
+    "robot": "机器人"
+  },
+  "styles": {
+    "scholarLabel": "学者",
+    "scholarDesc": "冷静、有条理、彻底",
+    "warriorLabel": "战士",
+    "warriorDesc": "大胆、快速、不懈",
+    "shadowLabel": "影子",
+    "shadowDesc": "锐利、安静、精确",
+    "sageLabel": "圣人",
+    "sageDesc": "耐心、明智、脚踏实地",
+    "maverickLabel": "特立独行者",
+    "maverickDesc": "创意、大胆、不落俗套"
+  },
+  "leaderboard": {
+    "title": "排行榜",
+    "rankedOne": "{count} 学习者排名",
+    "rankedOther": "{count} 学习者排名",
+    "empty": "还没有排名的学习者",
+    "emptyCta": "成为第一个 - 解决一些抽认卡，你就会出现在这里。",
+    "tabLevel": "等级",
+    "tabSolved": "卡牌解决",
+    "tabMastered": "掌握",
+    "tabStreak": "条纹",
+    "statXp": "XP",
+    "statCards": "牌",
+    "statMastered": "掌握了",
+    "statStreak": "条纹",
+    "howXp": "通过复习抽认卡、掌握概念和保持每日连续记录来赚取 XP。",
+    "pickToShow": "在 {settings} 中选择您的用户名和风格以显示在此处。",
+    "settingsLink": "设置"
+  },
+  "subjects": {
+    "title": "科目",
+    "empty": "还没有主题。",
+    "emptyHint": "使用源文件运行 {cmd} 即可开始。",
+    "sessionsCount": "{completed}/{total} 场次",
+    "conceptsMastered": "掌握 {mastered}/{total} 概念",
+    "mastered": "{mastered}/{total} 掌握"
+  },
+  "session": {
+    "mastery": "精通",
+    "conceptsLabel": "概念",
+    "conceptsDesc": "本节中每个概念的解释",
+    "cheatsheetLabel": "备忘单",
+    "cheatsheetDesc": "从会话框架生成的快速参考摘要",
+    "graphLabel": "概念图",
+    "graphDesc": "概念之间的先决联系",
+    "phase2": "第二阶段",
+    "reviewLabel": "审查",
+    "reviewDesc": "抽认卡复习 — {due} 现已到期",
+    "analyticsLabel": "分析",
+    "analyticsDesc": "每个概念的掌握分数"
+  },
+  "cheatsheet": {
+    "title": "备忘单",
+    "empty": "本次会议还没有备忘单。"
+  },
+  "concepts": {
+    "title": "概念",
+    "requires": "需要：{names}",
+    "noExplanation": "尚未生成任何解释。",
+    "unseen": "看不见"
+  },
+  "review": {
+    "title": "审查",
+    "noCards": "还没有抽认卡。运行种子脚本以生成练习。",
+    "chooseAnswer": "选择一个答案",
+    "next": "下一页 →",
+    "tapReveal": "点击显示·空间",
+    "tapRevealHint": "点击卡片或按空格键即可显示",
+    "sessionComplete": "会话完成 ✓",
+    "noCardsDue": "现在没有到期的卡。",
+    "practiceAhead": "提前练习 {count} 卡",
+    "again": "再次",
+    "hard": "难的",
+    "good": "好的",
+    "easy": "简单的"
+  },
+  "analytics": {
+    "title": "分析",
+    "attempts": "{count} 尝试",
+    "correct": "{pct}% 正确",
+    "dueNow": "现在到期",
+    "nextReview": "{days}d 的下一次评论",
+    "notReviewed": "尚未审核"
+  }
+}

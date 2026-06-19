@@ -75,6 +75,20 @@ model Attempt {
   createdAt  DateTime @default(now())
 }
 
+// Cache of machine-translated learning content. Each English source string is
+// translated at most once per locale and stored here (see lib/i18n/localizeContent.ts).
+model ContentTranslation {
+  id        String   @id @default(cuid())
+  entity    String   // "session" | "concept" | "exercise"
+  entityId  String
+  field     String   // "cheatSheet" | "name" | "explanation" | "front" | "back"
+  locale    String
+  text      String
+  createdAt DateTime @default(now())
+
+  @@unique([entity, entityId, field, locale])
+}
+
 model MasteryScore {
   id          String   @id @default(cuid())
   conceptId   String

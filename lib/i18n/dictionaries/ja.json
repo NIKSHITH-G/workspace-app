@@ -1,0 +1,140 @@
+{
+  "common": {
+    "back": "戻る",
+    "saving": "保存中…",
+    "active": "アクティブ",
+    "you": "あなた",
+    "home": "家"
+  },
+  "nav": {
+    "subjects": "科目",
+    "concepts": "コンセプト",
+    "session": "セッション{index}"
+  },
+  "home": {
+    "tagline": "何でもマスターする",
+    "signInToSave": "サインインして進行状況を保存する",
+    "signIn": "サインイン",
+    "setupProfile": "プロフィールを設定する",
+    "pickUsernameStyle": "ユーザー名とスタイルを選択 →",
+    "ranks": "ランク",
+    "quickAccess": "1 ～ 4 を押してクイックアクセスします"
+  },
+  "settings": {
+    "title": "設定",
+    "subtitle": "MODO アイデンティティをカスタマイズする",
+    "username": "ユーザー名",
+    "usernamePlaceholder": "ハンドルを選択してください",
+    "usernameHint": "これはリーダーボードに表示される名前です。",
+    "avatar": "アバター",
+    "style": "スタイル",
+    "language": "言語",
+    "save": "変更を保存",
+    "saved": "✓ 保存済み — 戻っています…"
+  },
+  "onboarding": {
+    "nameTitle": "あなたを何と呼べばいいでしょうか？",
+    "nameSubtitle": "MODO 内でのあなたの名前",
+    "namePlaceholder": "あなたの名前を入力してください…",
+    "avatarTitle": "アバターを選択してください",
+    "avatarSubtitle": "これは MODO におけるあなたを表します",
+    "styleTitle": "あなたのスタイルを選んでください",
+    "styleSubtitle": "これがあなたの MODO 体験を形作ります",
+    "continue": "続き→",
+    "entering": "MODOを入力中…",
+    "enter": "MODOを入力 →"
+  },
+  "avatars": {
+    "owl": "フクロウ",
+    "fox": "キツネ",
+    "wolf": "狼",
+    "dragon": "ドラゴン",
+    "cat": "猫",
+    "robot": "ロボット"
+  },
+  "styles": {
+    "scholarLabel": "学者",
+    "scholarDesc": "冷静、几帳面、綿密",
+    "warriorLabel": "戦士",
+    "warriorDesc": "大胆、迅速、容赦ない",
+    "shadowLabel": "影",
+    "shadowDesc": "シャープ、静か、正確",
+    "sageLabel": "賢者",
+    "sageDesc": "忍耐強く、賢明で、地に足がついた",
+    "maverickLabel": "マーベリック",
+    "maverickDesc": "創造的、大胆、型破り"
+  },
+  "leaderboard": {
+    "title": "リーダーボード",
+    "rankedOne": "{count} 人の学習者がランク付けされました",
+    "rankedOther": "{count} 人の学習者がランク付けされました",
+    "empty": "ランク付けされた学習者はまだいません",
+    "emptyCta": "最初になりましょう — いくつかのフラッシュカードを解くと、ここに表示されます。",
+    "tabLevel": "レベル",
+    "tabSolved": "解決されたカード",
+    "tabMastered": "マスター済み",
+    "tabStreak": "ストリーク",
+    "statXp": "XP",
+    "statCards": "カード",
+    "statMastered": "マスターした",
+    "statStreak": "縞模様",
+    "howXp": "フラッシュカードを見直し、概念をマスターし、毎日の連続記録を維持することで XP を獲得できます。",
+    "pickToShow": "ここに表示するには、{settings} でユーザー名とスタイルを選択してください。",
+    "settingsLink": "設定"
+  },
+  "subjects": {
+    "title": "科目",
+    "empty": "まだ科目がありません。",
+    "emptyHint": "まず、ソース ファイルを使用して {cmd} を実行します。",
+    "sessionsCount": "{completed}/{total} セッション",
+    "conceptsMastered": "{mastered}/{total} の概念を習得しました",
+    "mastered": "{mastered}/{total} をマスターしました"
+  },
+  "session": {
+    "mastery": "マスタリー",
+    "conceptsLabel": "コンセプト",
+    "conceptsDesc": "このセッションでの各コンセプトの説明",
+    "cheatsheetLabel": "チートシート",
+    "cheatsheetDesc": "セッションのスケルトンから生成されたクイックリファレンスの概要",
+    "graphLabel": "コンセプトグラフ",
+    "graphDesc": "概念間の前提条件のリンク",
+    "phase2": "フェーズ2",
+    "reviewLabel": "レビュー",
+    "reviewDesc": "フラッシュカードのレビュー — {due} が今期限",
+    "analyticsLabel": "分析",
+    "analyticsDesc": "コンセプトごとのマスタリースコア"
+  },
+  "cheatsheet": {
+    "title": "チートシート",
+    "empty": "このセッションにはまだチートシートがありません。"
+  },
+  "concepts": {
+    "title": "コンセプト",
+    "requires": "必要なもの: {names}",
+    "noExplanation": "まだ説明は生成されていません。",
+    "unseen": "見えない"
+  },
+  "review": {
+    "title": "レビュー",
+    "noCards": "フラッシュカードはまだありません。シード スクリプトを実行して演習を生成します。",
+    "chooseAnswer": "答えを選択してください",
+    "next": "次へ →",
+    "tapReveal": "タップしてスペースを表示します",
+    "tapRevealHint": "カードをタップするかスペースを押して表示します",
+    "sessionComplete": "セッション完了 ✓",
+    "noCardsDue": "現在期限切れのカードはありません。",
+    "practiceAhead": "予定より前に{count}枚のカードを練習する",
+    "again": "また",
+    "hard": "難しい",
+    "good": "良い",
+    "easy": "簡単"
+  },
+  "analytics": {
+    "title": "分析",
+    "attempts": "{count} 回の試行",
+    "correct": "{pct}% 正解",
+    "dueNow": "今期限",
+    "nextReview": "次のレビューは{days}日後",
+    "notReviewed": "まだレビューされていません"
+  }
+}

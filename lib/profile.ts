@@ -1,4 +1,5 @@
 import { THEMES, type ThemeId } from "./themes"
+import { LOCALES, DEFAULT_LOCALE, type Locale } from "./i18n/config"
 
 // Allow-lists for user-chosen profile fields. These come straight from the
 // client (FormData) and are written to Clerk publicMetadata + rendered on the
@@ -14,6 +15,7 @@ export function sanitizeProfile(input: {
   avatar?: string | null
   style?: string | null
   displayName?: string | null
+  language?: string | null
 }) {
   const avatar = (AVATAR_IDS as readonly string[]).includes(input.avatar ?? "")
     ? (input.avatar as string)
@@ -21,11 +23,14 @@ export function sanitizeProfile(input: {
   const style = (STYLE_IDS as string[]).includes(input.style ?? "")
     ? (input.style as ThemeId)
     : DEFAULT_STYLE
+  const language = (LOCALES as string[]).includes(input.language ?? "")
+    ? (input.language as Locale)
+    : DEFAULT_LOCALE
   const displayName = (input.displayName ?? "")
     // strip control chars (incl. newlines) before clamping length
     .replace(/[\x00-\x1F\x7F]/g, "")
     .trim()
     .slice(0, MAX_DISPLAY_NAME)
 
-  return { avatar, style, displayName }
+  return { avatar, style, language, displayName }
 }

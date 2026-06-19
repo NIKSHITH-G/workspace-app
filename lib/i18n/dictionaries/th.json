@@ -1,0 +1,140 @@
+{
+  "common": {
+    "back": "กลับ",
+    "saving": "ประหยัด…",
+    "active": "คล่องแคล่ว",
+    "you": "คุณ",
+    "home": "บ้าน"
+  },
+  "nav": {
+    "subjects": "วิชา",
+    "concepts": "แนวคิด",
+    "session": "เซสชั่น {index}"
+  },
+  "home": {
+    "tagline": "เชี่ยวชาญอะไรก็ได้",
+    "signInToSave": "ลงชื่อเข้าใช้เพื่อบันทึกความคืบหน้า",
+    "signIn": "เข้าสู่ระบบ",
+    "setupProfile": "ตั้งค่าโปรไฟล์ของคุณ",
+    "pickUsernameStyle": "เลือกชื่อผู้ใช้และสไตล์ →",
+    "ranks": "อันดับ",
+    "quickAccess": "กด 1–4 เพื่อการเข้าถึงที่รวดเร็ว"
+  },
+  "settings": {
+    "title": "การตั้งค่า",
+    "subtitle": "ปรับแต่งตัวตน MODO ของคุณ",
+    "username": "ชื่อผู้ใช้",
+    "usernamePlaceholder": "เลือกที่จับของคุณ",
+    "usernameHint": "นี่คือชื่อที่แสดงบนกระดานผู้นำ",
+    "avatar": "อวตาร",
+    "style": "สไตล์",
+    "language": "ภาษา",
+    "save": "บันทึกการเปลี่ยนแปลง",
+    "saved": "✓ บันทึกแล้ว — กำลังส่งคืน..."
+  },
+  "onboarding": {
+    "nameTitle": "เราควรเรียกคุณว่าอะไร?",
+    "nameSubtitle": "ชื่อของคุณภายใน MODO",
+    "namePlaceholder": "ใส่ชื่อของคุณ...",
+    "avatarTitle": "เลือกอวตารของคุณ",
+    "avatarSubtitle": "สิ่งนี้แสดงถึงคุณใน MODO",
+    "styleTitle": "เลือกสไตล์ของคุณ",
+    "styleSubtitle": "สิ่งนี้จะกำหนดประสบการณ์ MODO ของคุณ",
+    "continue": "ดำเนินการต่อ →",
+    "entering": "กำลังเข้าสู่ MODO...",
+    "enter": "เข้าสู่โหมด →"
+  },
+  "avatars": {
+    "owl": "นกฮูก",
+    "fox": "สุนัขจิ้งจอก",
+    "wolf": "หมาป่า",
+    "dragon": "มังกร",
+    "cat": "แมว",
+    "robot": "หุ่นยนต์"
+  },
+  "styles": {
+    "scholarLabel": "นักวิชาการ",
+    "scholarDesc": "สงบ มีระเบียบ ละเอียดถี่ถ้วน",
+    "warriorLabel": "นักรบ",
+    "warriorDesc": "กล้าหาญ รวดเร็ว ไม่หยุดยั้ง",
+    "shadowLabel": "เงา",
+    "shadowDesc": "คมชัด เงียบ แม่นยำ",
+    "sageLabel": "ปราชญ์",
+    "sageDesc": "อดทน ฉลาด มีพื้นฐาน",
+    "maverickLabel": "ผู้ไม่ฝักใฝ่ฝ่ายใด",
+    "maverickDesc": "สร้างสรรค์ กล้าหาญ แหวกแนว"
+  },
+  "leaderboard": {
+    "title": "ลีดเดอร์บอร์ด",
+    "rankedOne": "{count} อันดับผู้เรียน",
+    "rankedOther": "{count} ผู้เรียนอยู่ในอันดับ",
+    "empty": "ยังไม่มีผู้เรียนติดอันดับ",
+    "emptyCta": "เป็นคนแรก — ไขแฟลชการ์ดแล้วคุณจะปรากฏขึ้นที่นี่",
+    "tabLevel": "ระดับ",
+    "tabSolved": "การ์ดแก้ไขแล้ว",
+    "tabMastered": "เชี่ยวชาญ",
+    "tabStreak": "ริ้ว",
+    "statXp": "ประสบการณ์",
+    "statCards": "การ์ด",
+    "statMastered": "เชี่ยวชาญ",
+    "statStreak": "ริ้ว",
+    "howXp": "รับ XP จากการทบทวนแฟลชการ์ด ฝึกฝนแนวคิด และรักษาสถิติรายวัน",
+    "pickToShow": "เลือกชื่อผู้ใช้และสไตล์ของคุณใน {settings} เพื่อแสดงที่นี่",
+    "settingsLink": "การตั้งค่า"
+  },
+  "subjects": {
+    "title": "วิชา",
+    "empty": "ยังไม่มีวิชา.",
+    "emptyHint": "รัน {cmd} ด้วยไฟล์ต้นฉบับเพื่อเริ่มต้น",
+    "sessionsCount": "{completed}/{total} เซสชัน",
+    "conceptsMastered": "{mastered}/{total} เข้าใจแนวคิดแล้ว",
+    "mastered": "{mastered}/{total} เชี่ยวชาญ"
+  },
+  "session": {
+    "mastery": "ความเชี่ยวชาญ",
+    "conceptsLabel": "แนวคิด",
+    "conceptsDesc": "คำอธิบายสำหรับแต่ละแนวคิดในเซสชันนี้",
+    "cheatsheetLabel": "แผ่นโกง",
+    "cheatsheetDesc": "ข้อมูลสรุปอ้างอิงด่วนที่สร้างจากโครงกระดูกเซสชัน",
+    "graphLabel": "กราฟแนวคิด",
+    "graphDesc": "การเชื่อมโยงข้อกำหนดเบื้องต้นระหว่างแนวคิด",
+    "phase2": "เฟส 2",
+    "reviewLabel": "ทบทวน",
+    "reviewDesc": "การตรวจสอบ Flashcard — {due} เนื่องจากตอนนี้",
+    "analyticsLabel": "การวิเคราะห์",
+    "analyticsDesc": "คะแนนความเชี่ยวชาญต่อแนวคิด"
+  },
+  "cheatsheet": {
+    "title": "แผ่นโกง",
+    "empty": "ยังไม่มีเอกสารสรุปสำหรับเซสชั่นนี้"
+  },
+  "concepts": {
+    "title": "แนวคิด",
+    "requires": "ต้องการ: {names}",
+    "noExplanation": "ยังไม่มีการสร้างคำอธิบาย",
+    "unseen": "มองไม่เห็น"
+  },
+  "review": {
+    "title": "ทบทวน",
+    "noCards": "ยังไม่มีแฟลชการ์ด รันสคริปต์เริ่มต้นเพื่อสร้างแบบฝึกหัด",
+    "chooseAnswer": "เลือกคำตอบ",
+    "next": "ถัดไป →",
+    "tapReveal": "แตะเพื่อแสดง·ช่องว่าง",
+    "tapRevealHint": "แตะการ์ดหรือกดเว้นวรรคเพื่อแสดง",
+    "sessionComplete": "เซสชันเสร็จสมบูรณ์ ✓",
+    "noCardsDue": "ไม่มีบัตรที่ครบกำหนดในขณะนี้",
+    "practiceAhead": "ฝึกไพ่ {count} ก่อนกำหนด",
+    "again": "อีกครั้ง",
+    "hard": "แข็ง",
+    "good": "ดี",
+    "easy": "ง่าย"
+  },
+  "analytics": {
+    "title": "การวิเคราะห์",
+    "attempts": "{count} ความพยายาม",
+    "correct": "{pct}% ถูกต้อง",
+    "dueNow": "เนื่องจากตอนนี้",
+    "nextReview": "รีวิวครั้งต่อไปใน {days}d",
+    "notReviewed": "ยังไม่ได้ตรวจสอบ"
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "common": {
+    "back": "Πίσω",
+    "saving": "Οικονομία…",
+    "active": "ΕΝΕΡΓΟΣ",
+    "you": "ΕΣΕΙΣ",
+    "home": "Σπίτι"
+  },
+  "nav": {
+    "subjects": "Θέματα",
+    "concepts": "Έννοιες",
+    "session": "Συνεδρία {index}"
+  },
+  "home": {
+    "tagline": "κυριαρχήσει οτιδήποτε",
+    "signInToSave": "Συνδεθείτε για να αποθηκεύσετε την πρόοδο",
+    "signIn": "Συνδεθείτε",
+    "setupProfile": "Ρυθμίστε το προφίλ σας",
+    "pickUsernameStyle": "ΕΠΙΛΕΞΤΕ ΟΝΟΜΑ ΧΡΗΣΤΗ & ΣΤΥΛ →",
+    "ranks": "ΚΑΤΑΤΑΞΕΙΣ",
+    "quickAccess": "πατήστε 1–4 για γρήγορη πρόσβαση"
+  },
+  "settings": {
+    "title": "Ρυθμίσεις",
+    "subtitle": "Προσαρμόστε την ταυτότητά σας MODO",
+    "username": "Όνομα χρήστη",
+    "usernamePlaceholder": "Διάλεξε τη λαβή σου",
+    "usernameHint": "Αυτό είναι το όνομα που εμφανίζεται στον πίνακα κατάταξης.",
+    "avatar": "Avatar",
+    "style": "Στυλ",
+    "language": "Γλώσσα",
+    "save": "Αποθήκευση αλλαγών",
+    "saved": "✓ Αποθηκεύτηκε — επιστρέφει…"
+  },
+  "onboarding": {
+    "nameTitle": "Πώς να σε λέμε;",
+    "nameSubtitle": "Το όνομά σας μέσα στο MODO",
+    "namePlaceholder": "Εισαγάγετε το όνομά σας…",
+    "avatarTitle": "Επιλέξτε το avatar σας",
+    "avatarSubtitle": "Αυτό σας αντιπροσωπεύει στο MODO",
+    "styleTitle": "Επιλέξτε το στυλ σας",
+    "styleSubtitle": "Αυτό διαμορφώνει την εμπειρία σας στο MODO",
+    "continue": "Συνέχεια →",
+    "entering": "Είσοδος στο MODO…",
+    "enter": "Εισαγάγετε MODO →"
+  },
+  "avatars": {
+    "owl": "Κουκουβάγια",
+    "fox": "Αλεπού",
+    "wolf": "Λύκος",
+    "dragon": "Δράκων",
+    "cat": "Γάτα",
+    "robot": "Ρομπότ"
+  },
+  "styles": {
+    "scholarLabel": "Ο Μελετητής",
+    "scholarDesc": "Ήρεμος, μεθοδικός, εμπεριστατωμένος",
+    "warriorLabel": "Ο Πολεμιστής",
+    "warriorDesc": "Τολμηρό, γρήγορο, αδυσώπητο",
+    "shadowLabel": "Η Σκιά",
+    "shadowDesc": "Απότομη, ήσυχη, ακριβής",
+    "sageLabel": "Ο Σοφός",
+    "sageDesc": "Υπομονετικός, σοφός, προσγειωμένος",
+    "maverickLabel": "Ο Μάβερικ",
+    "maverickDesc": "Δημιουργικό, τολμηρό, αντισυμβατικό"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "rankedOne": "{count} μαθητής κατάταξη",
+    "rankedOther": "{count} μαθητές κατατάσσονται",
+    "empty": "Δεν υπάρχουν ακόμη βαθμολογημένοι μαθητές",
+    "emptyCta": "Γίνετε ο πρώτος — λύστε μερικά flashcards και θα εμφανιστείτε εδώ.",
+    "tabLevel": "Επίπεδο",
+    "tabSolved": "Λύθηκαν κάρτες",
+    "tabMastered": "Mastered",
+    "tabStreak": "Ράβδωση",
+    "statXp": "XP",
+    "statCards": "καρτέλλες",
+    "statMastered": "κατακτημένη",
+    "statStreak": "ράβδωση",
+    "howXp": "Κερδίστε XP ελέγχοντας κάρτες flash, κατακτώντας τις έννοιες και κρατώντας καθημερινές σειρές.",
+    "pickToShow": "Επιλέξτε το όνομα χρήστη και το στυλ σας στο {settings} για να εμφανιστείτε εδώ.",
+    "settingsLink": "Ρυθμίσεις"
+  },
+  "subjects": {
+    "title": "Θέματα",
+    "empty": "Δεν υπάρχουν ακόμη θέματα.",
+    "emptyHint": "Εκτελέστε {cmd} με ένα αρχείο προέλευσης για να ξεκινήσετε.",
+    "sessionsCount": "{completed}/{total} συνεδρίες",
+    "conceptsMastered": "Έννοιες {mastered}/{total} κατακτήθηκαν",
+    "mastered": "{mastered}/{total} mastered"
+  },
+  "session": {
+    "mastery": "Μαεστρία",
+    "conceptsLabel": "Έννοιες",
+    "conceptsDesc": "Επεξηγήσεις για κάθε έννοια αυτής της συνεδρίας",
+    "cheatsheetLabel": "Φύλλο εξαπάτησης",
+    "cheatsheetDesc": "Σύνοψη γρήγορης αναφοράς που δημιουργήθηκε από τον σκελετό της συνεδρίας",
+    "graphLabel": "Γράφημα έννοιας",
+    "graphDesc": "Προαπαιτούμενοι δεσμοί μεταξύ εννοιών",
+    "phase2": "φάση 2",
+    "reviewLabel": "Κριτική",
+    "reviewDesc": "Έλεγχος κάρτας Flashcard — {due} λήγει τώρα",
+    "analyticsLabel": "Analytics",
+    "analyticsDesc": "Βαθμολογίες μαεστρίας ανά έννοια"
+  },
+  "cheatsheet": {
+    "title": "Φύλλο εξαπάτησης",
+    "empty": "Δεν υπάρχει ακόμη φύλλο εξαπάτησης για αυτήν τη συνεδρία."
+  },
+  "concepts": {
+    "title": "Έννοιες",
+    "requires": "Απαιτείται: {names}",
+    "noExplanation": "Δεν έχει δημιουργηθεί ακόμη εξήγηση.",
+    "unseen": "αόρατος"
+  },
+  "review": {
+    "title": "Κριτική",
+    "noCards": "Δεν υπάρχουν ακόμα κάρτες flash. Εκτελέστε το αρχικό σενάριο για να δημιουργήσετε ασκήσεις.",
+    "chooseAnswer": "Επιλέξτε μια απάντηση",
+    "next": "Επόμενο →",
+    "tapReveal": "αγγίξτε για να αποκαλύψετε · χώρο",
+    "tapRevealHint": "πατήστε την κάρτα ή πατήστε το πλήκτρο διαστήματος για αποκάλυψη",
+    "sessionComplete": "Η συνεδρία ολοκληρώθηκε ✓",
+    "noCardsDue": "Δεν λήγουν κάρτες αυτήν τη στιγμή.",
+    "practiceAhead": "Εξασκηθείτε στις κάρτες {count} πριν από το χρονοδιάγραμμα",
+    "again": "Πάλι",
+    "hard": "Σκληρά",
+    "good": "Καλός",
+    "easy": "Εύκολος"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "attempts": "{count} προσπάθειες",
+    "correct": "{pct}% σωστό",
+    "dueNow": "οφειλεται τωρα",
+    "nextReview": "επόμενη κριτική σε {days}d",
+    "notReviewed": "δεν έχει αναθεωρηθεί ακόμα"
+  }
+}

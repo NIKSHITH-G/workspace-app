@@ -3,27 +3,29 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { completeOnboarding } from "./actions"
+import { useI18n } from "@/lib/i18n/I18nProvider"
 
 const AVATARS = [
-  { id: "owl", emoji: "🦉", label: "Owl" },
-  { id: "fox", emoji: "🦊", label: "Fox" },
-  { id: "wolf", emoji: "🐺", label: "Wolf" },
-  { id: "dragon", emoji: "🐉", label: "Dragon" },
-  { id: "cat", emoji: "🐱", label: "Cat" },
-  { id: "robot", emoji: "🤖", label: "Robot" },
+  { id: "owl", emoji: "🦉", tKey: "avatars.owl" },
+  { id: "fox", emoji: "🦊", tKey: "avatars.fox" },
+  { id: "wolf", emoji: "🐺", tKey: "avatars.wolf" },
+  { id: "dragon", emoji: "🐉", tKey: "avatars.dragon" },
+  { id: "cat", emoji: "🐱", tKey: "avatars.cat" },
+  { id: "robot", emoji: "🤖", tKey: "avatars.robot" },
 ]
 
 const STYLES = [
-  { id: "scholar", label: "The Scholar", desc: "Calm, methodical, thorough", color: "from-blue-500/20 to-indigo-500/20 border-blue-500/40" },
-  { id: "warrior", label: "The Warrior", desc: "Bold, fast, relentless", color: "from-orange-500/20 to-red-500/20 border-orange-500/40" },
-  { id: "shadow", label: "The Shadow", desc: "Sharp, quiet, precise", color: "from-purple-500/20 to-violet-900/20 border-purple-500/40" },
-  { id: "sage", label: "The Sage", desc: "Patient, wise, grounded", color: "from-emerald-500/20 to-teal-500/20 border-emerald-500/40" },
-  { id: "maverick", label: "The Maverick", desc: "Creative, bold, unconventional", color: "from-yellow-500/20 to-amber-500/20 border-yellow-500/40" },
+  { id: "scholar", labelKey: "styles.scholarLabel", descKey: "styles.scholarDesc", color: "from-blue-500/20 to-indigo-500/20 border-blue-500/40" },
+  { id: "warrior", labelKey: "styles.warriorLabel", descKey: "styles.warriorDesc", color: "from-orange-500/20 to-red-500/20 border-orange-500/40" },
+  { id: "shadow", labelKey: "styles.shadowLabel", descKey: "styles.shadowDesc", color: "from-purple-500/20 to-violet-900/20 border-purple-500/40" },
+  { id: "sage", labelKey: "styles.sageLabel", descKey: "styles.sageDesc", color: "from-emerald-500/20 to-teal-500/20 border-emerald-500/40" },
+  { id: "maverick", labelKey: "styles.maverickLabel", descKey: "styles.maverickDesc", color: "from-yellow-500/20 to-amber-500/20 border-yellow-500/40" },
 ]
 
 const STEP_COUNT = 3
 
 export default function OnboardingClient() {
+  const { t, locale } = useI18n()
   const [step, setStep] = useState(0)
   const [avatar, setAvatar] = useState("")
   const [style, setStyle] = useState("")
@@ -40,6 +42,9 @@ export default function OnboardingClient() {
     const fd = new FormData()
     fd.append("avatar", avatar)
     fd.append("style", style)
+    // Preserve the active (browser/detected) locale through onboarding so it
+    // isn't reset to the default on first save; changeable later in Settings.
+    fd.append("language", locale)
     fd.append("displayName", displayName.trim())
     await completeOnboarding(fd)
   }
@@ -68,14 +73,14 @@ export default function OnboardingClient() {
             className="w-full max-w-sm text-center space-y-8"
           >
             <div>
-              <h1 className="text-3xl font-black tracking-tight">What should we call you?</h1>
-              <p className="text-zinc-500 text-sm mt-2">Your name inside MODO</p>
+              <h1 className="text-3xl font-black tracking-tight">{t("onboarding.nameTitle")}</h1>
+              <p className="text-zinc-500 text-sm mt-2">{t("onboarding.nameSubtitle")}</p>
             </div>
             <input
               autoFocus
               type="text"
               maxLength={24}
-              placeholder="Enter your name…"
+              placeholder={t("onboarding.namePlaceholder")}
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && canNext && setStep(1)}
@@ -93,8 +98,8 @@ export default function OnboardingClient() {
             className="w-full max-w-sm text-center space-y-8"
           >
             <div>
-              <h1 className="text-3xl font-black tracking-tight">Choose your avatar</h1>
-              <p className="text-zinc-500 text-sm mt-2">This represents you in MODO</p>
+              <h1 className="text-3xl font-black tracking-tight">{t("onboarding.avatarTitle")}</h1>
+              <p className="text-zinc-500 text-sm mt-2">{t("onboarding.avatarSubtitle")}</p>
             </div>
             <div className="grid grid-cols-3 gap-3">
               {AVATARS.map((a) => (
@@ -108,7 +113,7 @@ export default function OnboardingClient() {
                   }`}
                 >
                   <span className="text-4xl">{a.emoji}</span>
-                  <span className="text-xs text-zinc-400">{a.label}</span>
+                  <span className="text-xs text-zinc-400">{t(a.tKey)}</span>
                 </button>
               ))}
             </div>
@@ -124,8 +129,8 @@ export default function OnboardingClient() {
             className="w-full max-w-sm text-center space-y-8"
           >
             <div>
-              <h1 className="text-3xl font-black tracking-tight">Pick your style</h1>
-              <p className="text-zinc-500 text-sm mt-2">This shapes your MODO experience</p>
+              <h1 className="text-3xl font-black tracking-tight">{t("onboarding.styleTitle")}</h1>
+              <p className="text-zinc-500 text-sm mt-2">{t("onboarding.styleSubtitle")}</p>
             </div>
             <div className="space-y-2.5">
               {STYLES.map((s) => (
@@ -136,8 +141,8 @@ export default function OnboardingClient() {
                     style === s.id ? "opacity-100 scale-[1.02]" : "opacity-60 hover:opacity-80"
                   }`}
                 >
-                  <p className="font-semibold text-sm">{s.label}</p>
-                  <p className="text-xs text-zinc-400 mt-0.5">{s.desc}</p>
+                  <p className="font-semibold text-sm">{t(s.labelKey)}</p>
+                  <p className="text-xs text-zinc-400 mt-0.5">{t(s.descKey)}</p>
                 </button>
               ))}
             </div>
@@ -152,7 +157,7 @@ export default function OnboardingClient() {
             onClick={() => setStep((s) => s - 1)}
             className="px-6 py-2.5 rounded-xl border border-zinc-700 text-zinc-400 text-sm hover:border-zinc-500 transition-colors"
           >
-            Back
+            {t("common.back")}
           </button>
         )}
         {step < STEP_COUNT - 1 ? (
@@ -161,7 +166,7 @@ export default function OnboardingClient() {
             disabled={!canNext}
             className="px-8 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
-            Continue →
+            {t("onboarding.continue")}
           </button>
         ) : (
           <button
@@ -169,7 +174,7 @@ export default function OnboardingClient() {
             disabled={!canNext || pending}
             className="px-8 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
-            {pending ? "Entering MODO…" : "Enter MODO →"}
+            {pending ? t("onboarding.entering") : t("onboarding.enter")}
           </button>
         )}
       </div>

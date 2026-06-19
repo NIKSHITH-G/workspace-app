@@ -9,6 +9,7 @@ import SubjectTile from "./SubjectTile"
 import { connection } from "next/server"
 import { getTheme, AVATAR_EMOJI } from "@/lib/themes"
 import { computeXp, levelProgress } from "@/lib/xp"
+import { getT } from "@/lib/i18n/server"
 
 const SUBJECTS = [
   { slug: "python",       name: "Python for AI",                    desc: "Programming foundations for ML" },
@@ -42,6 +43,7 @@ function TrophyIcon() {
 export default async function Home() {
   await connection()
 
+  const t = await getT()
   const user = await getUser()
   const meta = (user?.publicMetadata ?? {}) as Record<string, string>
 
@@ -139,7 +141,7 @@ export default async function Home() {
           </Link>
         ) : !user ? (
           <Link href="/sign-in" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
-            Sign in to save progress
+            {t("home.signInToSave")}
           </Link>
         ) : (
           <Link
@@ -154,9 +156,9 @@ export default async function Home() {
               {emoji}
             </div>
             <div className="flex flex-col" style={{ gap: 3 }}>
-              <span className="text-xs font-bold text-white leading-none">Set up your profile</span>
+              <span className="text-xs font-bold text-white leading-none">{t("home.setupProfile")}</span>
               <span className="font-mono leading-none opacity-80" style={{ fontSize: 9, letterSpacing: "0.12em", color: theme.primaryHex }}>
-                PICK USERNAME &amp; STYLE →
+                {t("home.pickUsernameStyle")}
               </span>
             </div>
           </Link>
@@ -170,13 +172,13 @@ export default async function Home() {
             title="Leaderboard"
           >
             <TrophyIcon />
-            <span className="text-[11px] font-mono tracking-wide hidden sm:inline">RANKS</span>
+            <span className="text-[11px] font-mono tracking-wide hidden sm:inline">{t("home.ranks")}</span>
           </Link>
           {user ? (
             <UserButton />
           ) : (
             <Link href="/sign-in" className="text-xs text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-600 px-3 py-1.5 rounded-lg transition-all">
-              Sign in
+              {t("home.signIn")}
             </Link>
           )}
         </div>
@@ -194,7 +196,7 @@ export default async function Home() {
         <div className="relative z-10 text-center mb-10">
           <ModoTitle gradientCss={theme.titleGradientCss} />
           <p className="text-zinc-600 text-[11px] tracking-[0.32em] uppercase mt-3 font-light">
-            master anything
+            {t("home.tagline")}
           </p>
         </div>
 
@@ -217,7 +219,7 @@ export default async function Home() {
         </div>
 
         <p className="relative z-10 mt-7 text-[10px] text-zinc-700 tracking-[0.25em] uppercase">
-          press 1–4 for quick access
+          {t("home.quickAccess")}
         </p>
       </main>
     </div>

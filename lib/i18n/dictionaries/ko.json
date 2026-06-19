@@ -1,0 +1,140 @@
+{
+  "common": {
+    "back": "뒤쪽에",
+    "saving": "절약…",
+    "active": "활동적인",
+    "you": "너",
+    "home": "집"
+  },
+  "nav": {
+    "subjects": "과목",
+    "concepts": "개념",
+    "session": "세션 {index}"
+  },
+  "home": {
+    "tagline": "무엇이든 마스터하세요",
+    "signInToSave": "진행 상황을 저장하려면 로그인하세요.",
+    "signIn": "로그인",
+    "setupProfile": "프로필 설정",
+    "pickUsernameStyle": "사용자 이름 및 스타일 선택 →",
+    "ranks": "순위",
+    "quickAccess": "빠른 액세스를 원하시면 1~4번을 누르세요"
+  },
+  "settings": {
+    "title": "설정",
+    "subtitle": "MODO 아이덴티티를 맞춤화하세요",
+    "username": "사용자 이름",
+    "usernamePlaceholder": "핸들을 선택하세요",
+    "usernameHint": "리더보드에 표시되는 이름입니다.",
+    "avatar": "화신",
+    "style": "스타일",
+    "language": "언어",
+    "save": "변경 사항 저장",
+    "saved": "✓ 저장됨 — 돌아가기…"
+  },
+  "onboarding": {
+    "nameTitle": "우리는 당신을 무엇이라고 불러야 할까요?",
+    "nameSubtitle": "MODO 안에 있는 당신의 이름",
+    "namePlaceholder": "이름을 입력하세요…",
+    "avatarTitle": "아바타를 선택하세요",
+    "avatarSubtitle": "이것은 MODO에서 당신을 나타냅니다.",
+    "styleTitle": "당신의 스타일을 선택하세요",
+    "styleSubtitle": "이것이 귀하의 MODO 경험을 형성합니다",
+    "continue": "계속 →",
+    "entering": "MODO에 진입 중…",
+    "enter": "MODO 입력 →"
+  },
+  "avatars": {
+    "owl": "올빼미",
+    "fox": "여우",
+    "wolf": "늑대",
+    "dragon": "용",
+    "cat": "고양이",
+    "robot": "기계 인간"
+  },
+  "styles": {
+    "scholarLabel": "학자",
+    "scholarDesc": "침착함, 체계적, 철저함",
+    "warriorLabel": "전사",
+    "warriorDesc": "대담하고, 빠르고, 가차없는",
+    "shadowLabel": "그림자",
+    "shadowDesc": "날카롭고 조용하며 정확함",
+    "sageLabel": "세이지",
+    "sageDesc": "참을성 있고, 현명하며, 근거가 있음",
+    "maverickLabel": "매버릭",
+    "maverickDesc": "창의적이고 대담하며 틀에 얽매이지 않는"
+  },
+  "leaderboard": {
+    "title": "리더보드",
+    "rankedOne": "{count} 학습자 순위",
+    "rankedOther": "{count} 학습자 순위",
+    "empty": "아직 순위가 매겨진 학습자가 없습니다.",
+    "emptyCta": "가장 먼저 - 플래시 카드를 풀면 여기에 나타날 것입니다.",
+    "tabLevel": "수준",
+    "tabSolved": "해결된 카드",
+    "tabMastered": "마스터",
+    "tabStreak": "줄",
+    "statXp": "XP",
+    "statCards": "카드",
+    "statMastered": "숙달된",
+    "statStreak": "줄",
+    "howXp": "플래시카드를 검토하고, 개념을 익히고, 일일 연속 기록을 유지하여 XP를 획득하세요.",
+    "pickToShow": "여기에 표시하려면 {settings}에서 사용자 이름과 스타일을 선택하세요.",
+    "settingsLink": "설정"
+  },
+  "subjects": {
+    "title": "과목",
+    "empty": "아직 과목이 없습니다.",
+    "emptyHint": "시작하려면 소스 파일로 {cmd}을 실행하세요.",
+    "sessionsCount": "{completed}/{total} 세션",
+    "conceptsMastered": "{mastered}/{total} 개념을 숙지했습니다",
+    "mastered": "{mastered}/{total} 마스터함"
+  },
+  "session": {
+    "mastery": "지배",
+    "conceptsLabel": "개념",
+    "conceptsDesc": "이 세션의 각 개념에 대한 설명",
+    "cheatsheetLabel": "치트 시트",
+    "cheatsheetDesc": "세션 뼈대에서 생성된 빠른 참조 요약",
+    "graphLabel": "컨셉 그래프",
+    "graphDesc": "개념 간의 필수 링크",
+    "phase2": "2단계",
+    "reviewLabel": "검토",
+    "reviewDesc": "플래시카드 검토 — {due} 마감일",
+    "analyticsLabel": "해석학",
+    "analyticsDesc": "개념당 숙달 점수"
+  },
+  "cheatsheet": {
+    "title": "치트 시트",
+    "empty": "이 세션에 대한 치트 시트가 아직 없습니다."
+  },
+  "concepts": {
+    "title": "개념",
+    "requires": "요구사항: {names}",
+    "noExplanation": "아직 생성된 설명이 없습니다.",
+    "unseen": "보이지 않는 것"
+  },
+  "review": {
+    "title": "검토",
+    "noCards": "아직 플래시카드가 없습니다. 연습문제를 생성하려면 시드 스크립트를 실행하세요.",
+    "chooseAnswer": "답변을 선택하세요",
+    "next": "다음 →",
+    "tapReveal": "탭하여 표시 · 공간",
+    "tapRevealHint": "공개하려면 카드를 탭하거나 스페이스바를 누르세요.",
+    "sessionComplete": "세션 완료 ✓",
+    "noCardsDue": "지금은 만기가 되는 카드가 없습니다.",
+    "practiceAhead": "일정보다 먼저 {count} 카드를 연습하세요",
+    "again": "다시",
+    "hard": "딱딱한",
+    "good": "좋은",
+    "easy": "쉬운"
+  },
+  "analytics": {
+    "title": "해석학",
+    "attempts": "{count} 시도",
+    "correct": "{pct}% 정확함",
+    "dueNow": "지금 마감",
+    "nextReview": "{days}d의 다음 리뷰",
+    "notReviewed": "아직 검토되지 않음"
+  }
+}

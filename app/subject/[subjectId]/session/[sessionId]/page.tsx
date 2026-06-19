@@ -4,11 +4,13 @@ import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
 import TopNav from "@/app/TopNav"
+import { getT } from "@/lib/i18n/server"
 
 export default async function SessionPage(
   props: PageProps<"/subject/[subjectId]/session/[sessionId]">,
 ) {
   await connection()
+  const t = await getT()
   const { subjectId, sessionId } = await props.params
   const { userId } = await auth()
   if (!userId) redirect("/sign-in")
@@ -43,37 +45,37 @@ export default async function SessionPage(
   const stages = [
     {
       num: 1,
-      label: "Concepts",
-      desc: "Explanations for each concept in this session",
+      label: t("session.conceptsLabel"),
+      desc: t("session.conceptsDesc"),
       href: `concepts`,
       available: totalConcepts > 0,
     },
     {
       num: 2,
-      label: "Cheat Sheet",
-      desc: "Quick-reference summary generated from the session skeleton",
+      label: t("session.cheatsheetLabel"),
+      desc: t("session.cheatsheetDesc"),
       href: `cheatsheet`,
       available: !!session.cheatSheet,
     },
     {
       num: 3,
-      label: "Concept Graph",
-      desc: "Prerequisite links between concepts",
+      label: t("session.graphLabel"),
+      desc: t("session.graphDesc"),
       href: `graph`,
       available: false,
       comingSoon: true,
     },
     {
       num: 4,
-      label: "Review",
-      desc: `Flashcard review — ${dueForReview} due now`,
+      label: t("session.reviewLabel"),
+      desc: t("session.reviewDesc", { due: dueForReview }),
       href: `review`,
       available: totalConcepts > 0,
     },
     {
       num: 5,
-      label: "Analytics",
-      desc: "Mastery scores per concept",
+      label: t("session.analyticsLabel"),
+      desc: t("session.analyticsDesc"),
       href: `analytics`,
       available: totalConcepts > 0,
     },
@@ -83,15 +85,15 @@ export default async function SessionPage(
     <div className="min-h-screen bg-[#080810] text-white">
       <TopNav
         crumbs={[
-          { label: "Subjects", href: "/subject" },
+          { label: t("nav.subjects"), href: "/subject" },
           { label: session.subject.name, href: `/subject/${subjectId}` },
-          { label: `Session ${session.index}` },
+          { label: t("nav.session", { index: session.index }) },
         ]}
       />
       <div className="max-w-3xl mx-auto px-6 py-12">
         <div className="mb-8">
           <div className="flex items-baseline gap-3">
-            <span className="text-xs text-zinc-600 font-mono">Session {session.index}</span>
+            <span className="text-xs text-zinc-600 font-mono">{t("nav.session", { index: session.index })}</span>
             <h1 className="text-2xl font-semibold tracking-tight">{session.title}</h1>
           </div>
         </div>
@@ -99,7 +101,7 @@ export default async function SessionPage(
         {totalConcepts > 0 && (
           <div className="mb-8 p-4 rounded-xl bg-zinc-900 border border-zinc-800">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-zinc-500">Mastery</span>
+              <span className="text-xs text-zinc-500">{t("session.mastery")}</span>
               <span className="text-xs text-zinc-400">
                 {masteredConcepts}/{totalConcepts}
               </span>
@@ -151,7 +153,7 @@ export default async function SessionPage(
                       {stage.label}
                       {stage.comingSoon && (
                         <span className="ml-2 text-[10px] text-zinc-600 font-mono">
-                          phase 2
+                          {t("session.phase2")}
                         </span>
                       )}
                     </p>

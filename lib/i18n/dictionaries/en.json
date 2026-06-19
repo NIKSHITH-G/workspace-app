@@ -1,0 +1,140 @@
+{
+  "common": {
+    "back": "Back",
+    "saving": "Saving…",
+    "active": "ACTIVE",
+    "you": "YOU",
+    "home": "Home"
+  },
+  "nav": {
+    "subjects": "Subjects",
+    "concepts": "Concepts",
+    "session": "Session {index}"
+  },
+  "home": {
+    "tagline": "master anything",
+    "signInToSave": "Sign in to save progress",
+    "signIn": "Sign in",
+    "setupProfile": "Set up your profile",
+    "pickUsernameStyle": "PICK USERNAME & STYLE →",
+    "ranks": "RANKS",
+    "quickAccess": "press 1–4 for quick access"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your MODO identity",
+    "username": "Username",
+    "usernamePlaceholder": "Pick your handle",
+    "usernameHint": "This is the name shown on the leaderboard.",
+    "avatar": "Avatar",
+    "style": "Style",
+    "language": "Language",
+    "save": "Save Changes",
+    "saved": "✓ Saved — returning…"
+  },
+  "onboarding": {
+    "nameTitle": "What should we call you?",
+    "nameSubtitle": "Your name inside MODO",
+    "namePlaceholder": "Enter your name…",
+    "avatarTitle": "Choose your avatar",
+    "avatarSubtitle": "This represents you in MODO",
+    "styleTitle": "Pick your style",
+    "styleSubtitle": "This shapes your MODO experience",
+    "continue": "Continue →",
+    "entering": "Entering MODO…",
+    "enter": "Enter MODO →"
+  },
+  "avatars": {
+    "owl": "Owl",
+    "fox": "Fox",
+    "wolf": "Wolf",
+    "dragon": "Dragon",
+    "cat": "Cat",
+    "robot": "Robot"
+  },
+  "styles": {
+    "scholarLabel": "The Scholar",
+    "scholarDesc": "Calm, methodical, thorough",
+    "warriorLabel": "The Warrior",
+    "warriorDesc": "Bold, fast, relentless",
+    "shadowLabel": "The Shadow",
+    "shadowDesc": "Sharp, quiet, precise",
+    "sageLabel": "The Sage",
+    "sageDesc": "Patient, wise, grounded",
+    "maverickLabel": "The Maverick",
+    "maverickDesc": "Creative, bold, unconventional"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "rankedOne": "{count} learner ranked",
+    "rankedOther": "{count} learners ranked",
+    "empty": "No ranked learners yet",
+    "emptyCta": "Be the first — solve some flashcards and you'll show up here.",
+    "tabLevel": "Level",
+    "tabSolved": "Cards Solved",
+    "tabMastered": "Mastered",
+    "tabStreak": "Streak",
+    "statXp": "XP",
+    "statCards": "cards",
+    "statMastered": "mastered",
+    "statStreak": "streak",
+    "howXp": "Earn XP by reviewing flashcards, mastering concepts, and keeping daily streaks.",
+    "pickToShow": "Pick your username and style in {settings} to show up here.",
+    "settingsLink": "Settings"
+  },
+  "subjects": {
+    "title": "Subjects",
+    "empty": "No subjects yet.",
+    "emptyHint": "Run {cmd} with a source file to get started.",
+    "sessionsCount": "{completed}/{total} sessions",
+    "conceptsMastered": "{mastered}/{total} concepts mastered",
+    "mastered": "{mastered}/{total} mastered"
+  },
+  "session": {
+    "mastery": "Mastery",
+    "conceptsLabel": "Concepts",
+    "conceptsDesc": "Explanations for each concept in this session",
+    "cheatsheetLabel": "Cheat Sheet",
+    "cheatsheetDesc": "Quick-reference summary generated from the session skeleton",
+    "graphLabel": "Concept Graph",
+    "graphDesc": "Prerequisite links between concepts",
+    "phase2": "phase 2",
+    "reviewLabel": "Review",
+    "reviewDesc": "Flashcard review — {due} due now",
+    "analyticsLabel": "Analytics",
+    "analyticsDesc": "Mastery scores per concept"
+  },
+  "cheatsheet": {
+    "title": "Cheat Sheet",
+    "empty": "No cheat sheet yet for this session."
+  },
+  "concepts": {
+    "title": "Concepts",
+    "requires": "Requires: {names}",
+    "noExplanation": "No explanation generated yet.",
+    "unseen": "unseen"
+  },
+  "review": {
+    "title": "Review",
+    "noCards": "No flashcards yet. Run the seed script to generate exercises.",
+    "chooseAnswer": "Choose an answer",
+    "next": "Next →",
+    "tapReveal": "tap to reveal · space",
+    "tapRevealHint": "tap card or press space to reveal",
+    "sessionComplete": "Session complete ✓",
+    "noCardsDue": "No cards due right now.",
+    "practiceAhead": "Practice {count} cards ahead of schedule",
+    "again": "Again",
+    "hard": "Hard",
+    "good": "Good",
+    "easy": "Easy"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "attempts": "{count} attempts",
+    "correct": "{pct}% correct",
+    "dueNow": "due now",
+    "nextReview": "next review in {days}d",
+    "notReviewed": "not reviewed yet"
+  }
+}

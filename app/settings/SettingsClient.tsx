@@ -4,22 +4,24 @@ import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { saveSettings } from "./actions"
 import { type Theme } from "@/lib/themes"
+import { useT } from "@/lib/i18n/I18nProvider"
+import { LOCALE_META, LOCALES } from "@/lib/i18n/config"
 
 const AVATARS = [
-  { id: "owl",    emoji: "🦉", label: "Owl" },
-  { id: "fox",    emoji: "🦊", label: "Fox" },
-  { id: "wolf",   emoji: "🐺", label: "Wolf" },
-  { id: "dragon", emoji: "🐉", label: "Dragon" },
-  { id: "cat",    emoji: "🐱", label: "Cat" },
-  { id: "robot",  emoji: "🤖", label: "Robot" },
+  { id: "owl",    emoji: "🦉", tKey: "avatars.owl" },
+  { id: "fox",    emoji: "🦊", tKey: "avatars.fox" },
+  { id: "wolf",   emoji: "🐺", tKey: "avatars.wolf" },
+  { id: "dragon", emoji: "🐉", tKey: "avatars.dragon" },
+  { id: "cat",    emoji: "🐱", tKey: "avatars.cat" },
+  { id: "robot",  emoji: "🤖", tKey: "avatars.robot" },
 ]
 
 const STYLES = [
-  { id: "scholar",  label: "The Scholar",  desc: "Calm, methodical, thorough",       hex: "#3B82F6" },
-  { id: "warrior",  label: "The Warrior",  desc: "Bold, fast, relentless",           hex: "#F97316" },
-  { id: "shadow",   label: "The Shadow",   desc: "Sharp, quiet, precise",            hex: "#A855F7" },
-  { id: "sage",     label: "The Sage",     desc: "Patient, wise, grounded",          hex: "#22C55E" },
-  { id: "maverick", label: "The Maverick", desc: "Creative, bold, unconventional",   hex: "#EAB308" },
+  { id: "scholar",  labelKey: "styles.scholarLabel",  descKey: "styles.scholarDesc",  hex: "#3B82F6" },
+  { id: "warrior",  labelKey: "styles.warriorLabel",  descKey: "styles.warriorDesc",  hex: "#F97316" },
+  { id: "shadow",   labelKey: "styles.shadowLabel",   descKey: "styles.shadowDesc",   hex: "#A855F7" },
+  { id: "sage",     labelKey: "styles.sageLabel",     descKey: "styles.sageDesc",     hex: "#22C55E" },
+  { id: "maverick", labelKey: "styles.maverickLabel", descKey: "styles.maverickDesc", hex: "#EAB308" },
 ]
 
 type Props = {
@@ -27,12 +29,15 @@ type Props = {
   initialName: string
   initialAvatar: string
   initialStyle: string
+  initialLanguage: string
 }
 
-export default function SettingsClient({ theme, initialName, initialAvatar, initialStyle }: Props) {
+export default function SettingsClient({ theme, initialName, initialAvatar, initialStyle, initialLanguage }: Props) {
+  const t = useT()
   const [displayName, setDisplayName] = useState(initialName)
   const [avatar, setAvatar] = useState(initialAvatar)
   const [style, setStyle] = useState(initialStyle)
+  const [language, setLanguage] = useState(initialLanguage)
   const [saved, setSaved] = useState(false)
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
@@ -45,6 +50,7 @@ export default function SettingsClient({ theme, initialName, initialAvatar, init
       const fd = new FormData()
       fd.append("avatar", avatar)
       fd.append("style", style)
+      fd.append("language", language)
       fd.append("displayName", displayName.trim() || initialName)
       await saveSettings(fd)
       setSaved(true)
@@ -64,35 +70,55 @@ export default function SettingsClient({ theme, initialName, initialAvatar, init
           onClick={() => router.back()}
           className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors flex items-center gap-1.5"
         >
-          ← Back
+          ← {t("common.back")}
         </button>
       </div>
 
       <div className="w-full max-w-md space-y-8">
         <div>
           <h1 className="text-2xl font-black tracking-tight" style={{ color: accentHex }}>
-            Settings
+            {t("settings.title")}
           </h1>
-          <p className="text-zinc-600 text-xs mt-1">Customize your MODO identity</p>
+          <p className="text-zinc-600 text-xs mt-1">{t("settings.subtitle")}</p>
         </div>
 
         {/* Username */}
         <section className="space-y-3">
-          <label className="text-xs text-zinc-500 tracking-widest uppercase font-mono">Username</label>
+          <label className="text-xs text-zinc-500 tracking-widest uppercase font-mono">{t("settings.username")}</label>
           <input
             type="text"
             maxLength={24}
             value={displayName}
             onChange={e => setDisplayName(e.target.value)}
             className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-700 focus:outline-none focus:border-indigo-500/60 transition-colors text-sm"
-            placeholder="Pick your handle"
+            placeholder={t("settings.usernamePlaceholder")}
           />
-          <p className="text-[11px] text-zinc-600">This is the name shown on the leaderboard.</p>
+          <p className="text-[11px] text-zinc-600">{t("settings.usernameHint")}</p>
+        </section>
+
+        {/* Language */}
+        <section className="space-y-3">
+          <label className="text-xs text-zinc-500 tracking-widest uppercase font-mono">{t("settings.language")}</label>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {LOCALES.map(code => (
+              <button
+                key={code}
+                onClick={() => setLanguage(code)}
+                className="px-3 py-2.5 rounded-xl border text-sm transition-all duration-150 text-left"
+                style={{
+                  borderColor: language === code ? `${accentHex}88` : "rgba(255,255,255,0.06)",
+                  background: language === code ? `${accentHex}18` : "rgba(255,255,255,0.03)",
+                }}
+              >
+                {LOCALE_META[code].nativeLabel}
+              </button>
+            ))}
+          </div>
         </section>
 
         {/* Avatar */}
         <section className="space-y-3">
-          <label className="text-xs text-zinc-500 tracking-widest uppercase font-mono">Avatar</label>
+          <label className="text-xs text-zinc-500 tracking-widest uppercase font-mono">{t("settings.avatar")}</label>
           <div className="grid grid-cols-6 gap-2">
             {AVATARS.map(a => (
               <button
@@ -113,7 +139,7 @@ export default function SettingsClient({ theme, initialName, initialAvatar, init
 
         {/* Style */}
         <section className="space-y-3">
-          <label className="text-xs text-zinc-500 tracking-widest uppercase font-mono">Style</label>
+          <label className="text-xs text-zinc-500 tracking-widest uppercase font-mono">{t("settings.style")}</label>
           <div className="space-y-2">
             {STYLES.map(s => (
               <button
@@ -130,12 +156,12 @@ export default function SettingsClient({ theme, initialName, initialAvatar, init
                   style={{ background: s.hex, boxShadow: style === s.id ? `0 0 8px ${s.hex}` : "none" }}
                 />
                 <div>
-                  <p className="text-sm font-semibold text-white">{s.label}</p>
-                  <p className="text-xs text-zinc-500 mt-0.5">{s.desc}</p>
+                  <p className="text-sm font-semibold text-white">{t(s.labelKey)}</p>
+                  <p className="text-xs text-zinc-500 mt-0.5">{t(s.descKey)}</p>
                 </div>
                 {style === s.id && (
                   <span className="ml-auto text-[10px] font-mono tracking-widest" style={{ color: s.hex }}>
-                    ACTIVE
+                    {t("common.active")}
                   </span>
                 )}
               </button>
@@ -153,7 +179,7 @@ export default function SettingsClient({ theme, initialName, initialAvatar, init
             opacity: isPending ? 0.7 : 1,
           }}
         >
-          {saved ? "✓ Saved — returning…" : isPending ? "Saving…" : "Save Changes"}
+          {saved ? t("settings.saved") : isPending ? t("common.saving") : t("settings.save")}
         </button>
       </div>
     </div>

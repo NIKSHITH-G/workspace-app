@@ -3,11 +3,13 @@ import { notFound, redirect } from "next/navigation"
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
+import { getT } from "@/lib/i18n/server"
 
 export default async function AnalyticsPage(
   props: PageProps<"/subject/[subjectId]/session/[sessionId]/analytics">,
 ) {
   await connection()
+  const t = await getT()
   const { subjectId, sessionId } = await props.params
   const { userId } = await auth()
   if (!userId) redirect("/sign-in")
@@ -48,7 +50,7 @@ export default async function AnalyticsPage(
           >
             ← {session.title}
           </Link>
-          <h1 className="text-xl font-semibold tracking-tight mt-3">Analytics</h1>
+          <h1 className="text-xl font-semibold tracking-tight mt-3">{t("analytics.title")}</h1>
         </div>
 
         <div className="space-y-3">
@@ -95,21 +97,21 @@ export default async function AnalyticsPage(
                 <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-600">
                   {totalAttempts > 0 && (
                     <>
-                      <span>{totalAttempts} attempts</span>
+                      <span>{t("analytics.attempts", { count: totalAttempts })}</span>
                       {accuracy !== null && (
-                        <span>{Math.round(accuracy * 100)}% correct</span>
+                        <span>{t("analytics.correct", { pct: Math.round(accuracy * 100) })}</span>
                       )}
                     </>
                   )}
                   {nextReview && (
                     <span className={isDue ? "text-yellow-600" : ""}>
                       {isDue
-                        ? "due now"
-                        : `next review in ${intervalDays}d`}
+                        ? t("analytics.dueNow")
+                        : t("analytics.nextReview", { days: intervalDays })}
                     </span>
                   )}
                   {totalAttempts === 0 && (
-                    <span className="text-zinc-700">not reviewed yet</span>
+                    <span className="text-zinc-700">{t("analytics.notReviewed")}</span>
                   )}
                 </div>
 

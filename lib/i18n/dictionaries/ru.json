@@ -1,0 +1,140 @@
+{
+  "common": {
+    "back": "Назад",
+    "saving": "Сохранение…",
+    "active": "АКТИВНЫЙ",
+    "you": "ТЫ",
+    "home": "Дом"
+  },
+  "nav": {
+    "subjects": "Предметы",
+    "concepts": "Концепции",
+    "session": "Сессия {index}"
+  },
+  "home": {
+    "tagline": "овладеть чем угодно",
+    "signInToSave": "Войдите, чтобы сохранить прогресс",
+    "signIn": "Войти",
+    "setupProfile": "Настройте свой профиль",
+    "pickUsernameStyle": "ВЫБЕРИТЕ ИМЯ ПОЛЬЗОВАТЕЛЯ И СТИЛЬ →",
+    "ranks": "ЗВАНИЯ",
+    "quickAccess": "нажмите 1–4 для быстрого доступа"
+  },
+  "settings": {
+    "title": "Настройки",
+    "subtitle": "Настройте свой имидж MODO",
+    "username": "Имя пользователя",
+    "usernamePlaceholder": "Выберите свой дескриптор",
+    "usernameHint": "Это имя отображается в таблице лидеров.",
+    "avatar": "Аватар",
+    "style": "Стиль",
+    "language": "Язык",
+    "save": "Сохранить изменения",
+    "saved": "✓ Сохранено — возвращение…"
+  },
+  "onboarding": {
+    "nameTitle": "Как нам следует тебя называть?",
+    "nameSubtitle": "Ваше имя внутри MODO",
+    "namePlaceholder": "Введите свое имя…",
+    "avatarTitle": "Выберите свой аватар",
+    "avatarSubtitle": "Это представляет вас в MODO",
+    "styleTitle": "Выберите свой стиль",
+    "styleSubtitle": "Это формирует ваш опыт MODO",
+    "continue": "Продолжить →",
+    "entering": "Входим в режим MODO…",
+    "enter": "Введите МОДО →"
+  },
+  "avatars": {
+    "owl": "Сова",
+    "fox": "Лиса",
+    "wolf": "Волк",
+    "dragon": "Дракон",
+    "cat": "Кот",
+    "robot": "Робот"
+  },
+  "styles": {
+    "scholarLabel": "Ученый",
+    "scholarDesc": "Спокойный, методичный, основательный",
+    "warriorLabel": "Воин",
+    "warriorDesc": "Смелый, быстрый, беспощадный",
+    "shadowLabel": "Тень",
+    "shadowDesc": "Резкий, тихий, точный",
+    "sageLabel": "Мудрец",
+    "sageDesc": "Терпеливый, мудрый, обоснованный",
+    "maverickLabel": "Маверик",
+    "maverickDesc": "Креативно, смело, нестандартно"
+  },
+  "leaderboard": {
+    "title": "Таблица лидеров",
+    "rankedOne": "{count} учащийся получил рейтинг",
+    "rankedOther": "{count} учащихся получили ранг",
+    "empty": "Учащихся, получивших рейтинг, пока нет",
+    "emptyCta": "Будьте первым — разгадайте несколько карточек, и вы окажетесь здесь.",
+    "tabLevel": "Уровень",
+    "tabSolved": "Карты решены",
+    "tabMastered": "Освоен",
+    "tabStreak": "Полоса",
+    "statXp": "XP",
+    "statCards": "карты",
+    "statMastered": "освоен",
+    "statStreak": "полоса",
+    "howXp": "Зарабатывайте XP, просматривая карточки, осваивая концепции и выполняя ежедневные серии.",
+    "pickToShow": "Выберите свое имя пользователя и стиль в {settings}, чтобы он появился здесь.",
+    "settingsLink": "Настройки"
+  },
+  "subjects": {
+    "title": "Предметы",
+    "empty": "Предметов пока нет.",
+    "emptyHint": "Для начала запустите {cmd} с исходным файлом.",
+    "sessionsCount": "{completed}/{total} сеансов",
+    "conceptsMastered": "Освоено {mastered}/{total} понятий",
+    "mastered": "{mastered}/{total} освоено"
+  },
+  "session": {
+    "mastery": "Мастерство",
+    "conceptsLabel": "Концепции",
+    "conceptsDesc": "Пояснения к каждому понятию в этом занятии",
+    "cheatsheetLabel": "Шпаргалка",
+    "cheatsheetDesc": "Краткая справка, созданная на основе скелета сеанса",
+    "graphLabel": "Концептуальный график",
+    "graphDesc": "Предварительные связи между понятиями",
+    "phase2": "фаза 2",
+    "reviewLabel": "Обзор",
+    "reviewDesc": "Обзор карточки – {due} должен быть завершен сейчас",
+    "analyticsLabel": "Аналитика",
+    "analyticsDesc": "Очки мастерства за концепцию"
+  },
+  "cheatsheet": {
+    "title": "Шпаргалка",
+    "empty": "Шпаргалки для этой сессии пока нет."
+  },
+  "concepts": {
+    "title": "Концепции",
+    "requires": "Требуется: {names}",
+    "noExplanation": "Объяснение пока не создано.",
+    "unseen": "невидимый"
+  },
+  "review": {
+    "title": "Обзор",
+    "noCards": "Карточек пока нет. Запустите начальный скрипт для создания упражнений.",
+    "chooseAnswer": "Выберите ответ",
+    "next": "Далее →",
+    "tapReveal": "нажмите, чтобы открыть · пробел",
+    "tapRevealHint": "коснитесь карты или нажмите пробел, чтобы открыть",
+    "sessionComplete": "Сессия завершена ✓",
+    "noCardsDue": "Карты сейчас не подлежат оплате.",
+    "practiceAhead": "Разработайте {count} карточек заранее",
+    "again": "Снова",
+    "hard": "Жесткий",
+    "good": "Хороший",
+    "easy": "Легкий"
+  },
+  "analytics": {
+    "title": "Аналитика",
+    "attempts": "{count} попыток",
+    "correct": "{pct}% верно",
+    "dueNow": "срок погашения сейчас",
+    "nextReview": "следующий обзор через {days}d",
+    "notReviewed": "еще не проверено"
+  }
+}

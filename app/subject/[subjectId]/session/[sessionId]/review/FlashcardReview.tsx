@@ -4,6 +4,7 @@ import { useState, useEffect, useTransition, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { submitAttempt } from "./actions"
 import Markdown from "@/components/Markdown"
+import { useT } from "@/lib/i18n/I18nProvider"
 
 type Card = {
   exerciseId: string
@@ -64,6 +65,7 @@ function MCQCard({
   onResult: (correct: boolean) => void
   isPending: boolean
 }) {
+  const t = useT()
   const shuffled = useShuffledOptions(card.options, card.exerciseId)
   const [selected, setSelected] = useState<string | null>(null)
   const revealed = selected !== null
@@ -131,14 +133,14 @@ function MCQCard({
             disabled={isPending}
             className="w-full py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-sm font-medium text-white transition-colors disabled:opacity-40"
           >
-            {isPending ? "Saving…" : "Next →"}
+            {isPending ? t("common.saving") : t("review.next")}
             <span className="text-zinc-500 text-xs ml-2 font-normal">Enter</span>
           </button>
         </motion.div>
       )}
 
       {!revealed && (
-        <p className="text-xs text-zinc-600 text-center">Choose an answer</p>
+        <p className="text-xs text-zinc-600 text-center">{t("review.chooseAnswer")}</p>
       )}
     </div>
   )
@@ -153,6 +155,7 @@ function FlipCard({
   onRate: (quality: number) => void
   isPending: boolean
 }) {
+  const t = useT()
   const [flipped, setFlipped] = useState(false)
 
   useEffect(() => {
@@ -198,7 +201,7 @@ function FlipCard({
             ) : (
               <>
                 <div className="text-center"><Markdown>{card.front}</Markdown></div>
-                <p className="text-xs text-zinc-600 mt-4">tap to reveal · space</p>
+                <p className="text-xs text-zinc-600 mt-4">{t("review.tapReveal")}</p>
               </>
             )}
           </motion.div>
@@ -208,10 +211,10 @@ function FlipCard({
       {flipped && (
         <div className="grid grid-cols-4 gap-2">
           {[
-            { quality: 1, label: "Again", key: "1" },
-            { quality: 3, label: "Hard", key: "2" },
-            { quality: 4, label: "Good", key: "3" },
-            { quality: 5, label: "Easy", key: "4" },
+            { quality: 1, label: t("review.again"), key: "1" },
+            { quality: 3, label: t("review.hard"), key: "2" },
+            { quality: 4, label: t("review.good"), key: "3" },
+            { quality: 5, label: t("review.easy"), key: "4" },
           ].map((btn) => (
             <button
               key={btn.quality}
@@ -226,7 +229,7 @@ function FlipCard({
         </div>
       )}
       {!flipped && (
-        <p className="text-xs text-zinc-600 text-center">tap card or press space to reveal</p>
+        <p className="text-xs text-zinc-600 text-center">{t("review.tapRevealHint")}</p>
       )}
     </div>
   )
@@ -236,6 +239,7 @@ export default function FlashcardReview({ cards, subjectId, sessionId }: Props) 
   const due = cards.filter((c) => c.isDue)
   const notDue = cards.filter((c) => !c.isDue)
 
+  const t = useT()
   const [queue, setQueue] = useState<Card[]>(due)
   const [current, setCurrent] = useState(0)
   const [done, setDone] = useState(false)
@@ -244,14 +248,14 @@ export default function FlashcardReview({ cards, subjectId, sessionId }: Props) 
   if (queue.length === 0 || done) {
     return (
       <div className="text-center space-y-4 mt-16">
-        {done && <p className="text-emerald-400 text-sm font-medium">Session complete ✓</p>}
-        {!done && <p className="text-zinc-400 text-sm">No cards due right now.</p>}
+        {done && <p className="text-emerald-400 text-sm font-medium">{t("review.sessionComplete")}</p>}
+        {!done && <p className="text-zinc-400 text-sm">{t("review.noCardsDue")}</p>}
         {notDue.length > 0 && (
           <button
             onClick={() => { setQueue(notDue); setCurrent(0); setDone(false) }}
             className="text-xs text-zinc-500 hover:text-zinc-300 underline underline-offset-4 transition-colors"
           >
-            Practice {notDue.length} cards ahead of schedule
+            {t("review.practiceAhead", { count: notDue.length })}
           </button>
         )}
       </div>

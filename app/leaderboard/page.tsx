@@ -6,6 +6,8 @@ import { getTheme } from "@/lib/themes"
 import { computeXp, levelFromXp, type AttemptLite } from "@/lib/xp"
 import TopNav from "@/app/TopNav"
 import LeaderboardClient, { type Row } from "./LeaderboardClient"
+import { getT } from "@/lib/i18n/server"
+import type { TFunc } from "@/lib/i18n/t"
 
 export const metadata = { title: "Leaderboard" }
 
@@ -88,7 +90,8 @@ export default async function LeaderboardPage() {
       }
     })
 
-  return renderPage(rows)
+  const t = await getT()
+  return renderPage(rows, t)
 }
 
 function computeStats(
@@ -130,15 +133,18 @@ function computeStats(
   })
 }
 
-function renderPage(rows: Row[]) {
+function renderPage(rows: Row[], t: TFunc) {
+  const count = rows.length
   return (
     <div className="min-h-screen bg-[#080810] text-white">
-      <TopNav crumbs={[{ label: "Leaderboard" }]} />
+      <TopNav crumbs={[{ label: t("leaderboard.title") }]} />
       <main className="max-w-2xl mx-auto px-5 py-10">
         <div className="mb-8">
-          <h1 className="text-2xl font-black tracking-tight">Leaderboard</h1>
+          <h1 className="text-2xl font-black tracking-tight">{t("leaderboard.title")}</h1>
           <p className="text-zinc-600 text-xs mt-1">
-            {rows.length > 0 ? `${rows.length} learner${rows.length === 1 ? "" : "s"} ranked` : "No ranked learners yet"}
+            {count > 0
+              ? t(count === 1 ? "leaderboard.rankedOne" : "leaderboard.rankedOther", { count })
+              : t("leaderboard.empty")}
           </p>
         </div>
         <LeaderboardClient rows={rows} />

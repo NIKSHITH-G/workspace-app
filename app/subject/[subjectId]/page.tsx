@@ -4,9 +4,11 @@ import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
 import TopNav from "@/app/TopNav"
+import { getT } from "@/lib/i18n/server"
 
 export default async function SubjectPage(props: PageProps<"/subject/[subjectId]">) {
   await connection()
+  const t = await getT()
   const { subjectId } = await props.params
   const { userId } = await auth()
   if (!userId) redirect("/sign-in")
@@ -30,7 +32,7 @@ export default async function SubjectPage(props: PageProps<"/subject/[subjectId]
 
   return (
     <div className="min-h-screen bg-[#080810] text-white">
-      <TopNav crumbs={[{ label: "Subjects", href: "/subject" }, { label: subject.name }]} />
+      <TopNav crumbs={[{ label: t("nav.subjects"), href: "/subject" }, { label: subject.name }]} />
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="mb-8">
           <h1 className="text-2xl font-semibold tracking-tight">{subject.name}</h1>
@@ -114,7 +116,7 @@ export default async function SubjectPage(props: PageProps<"/subject/[subjectId]
                 </div>
                 {totalC > 0 && (
                   <span className="text-xs text-zinc-500">
-                    {masteredC}/{totalC} mastered
+                    {t("subjects.mastered", { mastered: masteredC, total: totalC })}
                   </span>
                 )}
               </Link>

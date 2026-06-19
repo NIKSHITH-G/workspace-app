@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { AVATAR_EMOJI } from "@/lib/themes"
+import { useT } from "@/lib/i18n/I18nProvider"
 
 export type Row = {
   id: string
@@ -19,11 +20,11 @@ export type Row = {
 
 type SortKey = "level" | "solved" | "mastered" | "streak"
 
-const TABS: { key: SortKey; label: string }[] = [
-  { key: "level", label: "Level" },
-  { key: "solved", label: "Cards Solved" },
-  { key: "mastered", label: "Mastered" },
-  { key: "streak", label: "Streak" },
+const TABS: { key: SortKey; tKey: string }[] = [
+  { key: "level", tKey: "leaderboard.tabLevel" },
+  { key: "solved", tKey: "leaderboard.tabSolved" },
+  { key: "mastered", tKey: "leaderboard.tabMastered" },
+  { key: "streak", tKey: "leaderboard.tabStreak" },
 ]
 
 const MEDALS = ["🥇", "🥈", "🥉"]
@@ -57,6 +58,7 @@ function StatCell({
 }
 
 export default function LeaderboardClient({ rows }: { rows: Row[] }) {
+  const t = useT()
   const [sort, setSort] = useState<SortKey>("level")
 
   const sorted = [...rows].sort((a, b) => {
@@ -69,7 +71,7 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
   if (rows.length === 0) {
     return (
       <div className="text-center py-20 text-zinc-600 text-sm">
-        Be the first — solve some flashcards and you&apos;ll show up here.
+        {t("leaderboard.emptyCta")}
       </div>
     )
   }
@@ -78,17 +80,17 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
     <div className="space-y-5">
       {/* filter tabs */}
       <div className="flex gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.05] w-full">
-        {TABS.map((t) => (
+        {TABS.map((tab) => (
           <button
-            key={t.key}
-            onClick={() => setSort(t.key)}
+            key={tab.key}
+            onClick={() => setSort(tab.key)}
             className="flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap"
             style={{
-              background: sort === t.key ? "rgba(255,255,255,0.08)" : "transparent",
-              color: sort === t.key ? "#fff" : "#71717a",
+              background: sort === tab.key ? "rgba(255,255,255,0.08)" : "transparent",
+              color: sort === tab.key ? "#fff" : "#71717a",
             }}
           >
-            {t.label}
+            {t(tab.tKey)}
           </button>
         ))}
       </div>
@@ -152,10 +154,10 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
 
               {/* selected metric only */}
               <div className="shrink-0">
-                {sort === "level" && <StatCell value={r.xp.toLocaleString()} label="XP" active accent={r.accent} alwaysShow />}
-                {sort === "solved" && <StatCell value={r.solved} label="cards" active accent={r.accent} alwaysShow />}
-                {sort === "mastered" && <StatCell value={r.mastered} label="mastered" active accent={r.accent} alwaysShow />}
-                {sort === "streak" && <StatCell value={r.streak > 0 ? `🔥${r.streak}` : "0"} label="streak" active accent={r.accent} alwaysShow />}
+                {sort === "level" && <StatCell value={r.xp.toLocaleString()} label={t("leaderboard.statXp")} active accent={r.accent} alwaysShow />}
+                {sort === "solved" && <StatCell value={r.solved} label={t("leaderboard.statCards")} active accent={r.accent} alwaysShow />}
+                {sort === "mastered" && <StatCell value={r.mastered} label={t("leaderboard.statMastered")} active accent={r.accent} alwaysShow />}
+                {sort === "streak" && <StatCell value={r.streak > 0 ? `🔥${r.streak}` : "0"} label={t("leaderboard.statStreak")} active accent={r.accent} alwaysShow />}
               </div>
             </div>
           )
@@ -164,9 +166,9 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
 
       {/* how XP works */}
       <p className="text-[11px] text-zinc-700 text-center pt-4 leading-relaxed">
-        Earn XP by reviewing flashcards, mastering concepts, and keeping daily streaks.
+        {t("leaderboard.howXp")}
         <br className="hidden sm:block" />
-        Pick your username and style in <span className="text-zinc-500">Settings</span> to show up here.
+        {t("leaderboard.pickToShow", { settings: t("leaderboard.settingsLink") })}
       </p>
     </div>
   )

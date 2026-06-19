@@ -1,0 +1,140 @@
+{
+  "common": {
+    "back": "पीछे",
+    "saving": "सहेजा जा रहा है...",
+    "active": "सक्रिय",
+    "you": "आप",
+    "home": "घर"
+  },
+  "nav": {
+    "subjects": "विषयों",
+    "concepts": "अवधारणाओं",
+    "session": "सत्र {index}"
+  },
+  "home": {
+    "tagline": "किसी भी चीज़ में महारत हासिल करना",
+    "signInToSave": "प्रगति सहेजने के लिए साइन इन करें",
+    "signIn": "दाखिल करना",
+    "setupProfile": "अपना प्रोफ़ाइल सेट करें",
+    "pickUsernameStyle": "उपयोक्तानाम और शैली चुनें →",
+    "ranks": "रैंकों",
+    "quickAccess": "त्वरित पहुंच के लिए 1-4 दबाएँ"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "subtitle": "अपनी MODO पहचान अनुकूलित करें",
+    "username": "उपयोगकर्ता नाम",
+    "usernamePlaceholder": "अपना हैंडल उठाओ",
+    "usernameHint": "यह लीडरबोर्ड पर दिखाया गया नाम है.",
+    "avatar": "अवतार",
+    "style": "शैली",
+    "language": "भाषा",
+    "save": "परिवर्तनों को सुरक्षित करें",
+    "saved": "✓ सहेजा गया - लौट रहा हूँ..."
+  },
+  "onboarding": {
+    "nameTitle": "हमें आपको क्या कहकर पुकारना चाहिए?",
+    "nameSubtitle": "MODO के अंदर आपका नाम",
+    "namePlaceholder": "अपना नाम दर्ज करें…",
+    "avatarTitle": "अपना अवतार चुनें",
+    "avatarSubtitle": "यह MODO में आपका प्रतिनिधित्व करता है",
+    "styleTitle": "अपनी शैली चुनें",
+    "styleSubtitle": "यह आपके MODO अनुभव को आकार देता है",
+    "continue": "जारी रखें →",
+    "entering": "मोडो में प्रवेश कर रहा है...",
+    "enter": "मोडो दर्ज करें →"
+  },
+  "avatars": {
+    "owl": "उल्लू",
+    "fox": "लोमड़ी",
+    "wolf": "भेड़िया",
+    "dragon": "अजगर",
+    "cat": "बिल्ली",
+    "robot": "रोबोट"
+  },
+  "styles": {
+    "scholarLabel": "विद्वान",
+    "scholarDesc": "शांत, व्यवस्थित, संपूर्ण",
+    "warriorLabel": "योद्धा",
+    "warriorDesc": "साहसी, तेज, अथक",
+    "shadowLabel": "छाया",
+    "shadowDesc": "तीव्र, शांत, सटीक",
+    "sageLabel": "संत",
+    "sageDesc": "धैर्यवान, बुद्धिमान, ज़मीन से जुड़ा हुआ",
+    "maverickLabel": "मनमौजी",
+    "maverickDesc": "रचनात्मक, साहसी, अपरंपरागत"
+  },
+  "leaderboard": {
+    "title": "लीडरबोर्ड",
+    "rankedOne": "{count} शिक्षार्थी को स्थान दिया गया",
+    "rankedOther": "{count} शिक्षार्थियों को स्थान दिया गया",
+    "empty": "अभी तक कोई रैंक प्राप्त शिक्षार्थी नहीं",
+    "emptyCta": "पहले बनें - कुछ फ़्लैशकार्ड हल करें और आप यहां दिखाई देंगे।",
+    "tabLevel": "स्तर",
+    "tabSolved": "कार्ड हल किये गये",
+    "tabMastered": "महारत हासिल",
+    "tabStreak": "धारी",
+    "statXp": "एक्सपी",
+    "statCards": "कार्ड",
+    "statMastered": "महारत हासिल",
+    "statStreak": "धारी",
+    "howXp": "फ़्लैशकार्ड की समीक्षा करके, अवधारणाओं में महारत हासिल करके और दैनिक स्ट्रीक्स रखकर XP अर्जित करें।",
+    "pickToShow": "यहां दिखाने के लिए {settings} में अपना उपयोगकर्ता नाम और शैली चुनें।",
+    "settingsLink": "सेटिंग्स"
+  },
+  "subjects": {
+    "title": "विषयों",
+    "empty": "अभी तक कोई विषय नहीं.",
+    "emptyHint": "आरंभ करने के लिए स्रोत फ़ाइल के साथ {cmd} चलाएँ।",
+    "sessionsCount": "{completed}/{total} सत्र",
+    "conceptsMastered": "{mastered}/{total} अवधारणाओं में महारत हासिल",
+    "mastered": "{mastered}/{total} में महारत हासिल है"
+  },
+  "session": {
+    "mastery": "प्रभुत्व",
+    "conceptsLabel": "अवधारणाओं",
+    "conceptsDesc": "इस सत्र में प्रत्येक अवधारणा के लिए स्पष्टीकरण",
+    "cheatsheetLabel": "प्रवंचक पत्रक",
+    "cheatsheetDesc": "सत्र ढांचे से उत्पन्न त्वरित-संदर्भ सारांश",
+    "graphLabel": "संकल्पना ग्राफ",
+    "graphDesc": "अवधारणाओं के बीच पूर्वापेक्षित संबंध",
+    "phase2": "2 चरण",
+    "reviewLabel": "समीक्षा",
+    "reviewDesc": "फ़्लैशकार्ड समीक्षा - {due} अभी देय है",
+    "analyticsLabel": "एनालिटिक्स",
+    "analyticsDesc": "प्रति अवधारणा महारत स्कोर"
+  },
+  "cheatsheet": {
+    "title": "प्रवंचक पत्रक",
+    "empty": "इस सत्र के लिए अभी तक कोई चीट शीट नहीं है।"
+  },
+  "concepts": {
+    "title": "अवधारणाओं",
+    "requires": "आवश्यक है: {names}",
+    "noExplanation": "अभी तक कोई स्पष्टीकरण उत्पन्न नहीं हुआ.",
+    "unseen": "अगोचर"
+  },
+  "review": {
+    "title": "समीक्षा",
+    "noCards": "अभी तक कोई फ़्लैशकार्ड नहीं. अभ्यास उत्पन्न करने के लिए बीज स्क्रिप्ट चलाएँ।",
+    "chooseAnswer": "एक उत्तर चुनें",
+    "next": "अगला →",
+    "tapReveal": "प्रकट करने के लिए टैप करें · स्थान",
+    "tapRevealHint": "प्रकट करने के लिए कार्ड टैप करें या स्पेस दबाएँ",
+    "sessionComplete": "सत्र पूरा ✓",
+    "noCardsDue": "अभी कोई कार्ड देय नहीं है.",
+    "practiceAhead": "शेड्यूल से पहले {count} कार्ड का अभ्यास करें",
+    "again": "दोबारा",
+    "hard": "मुश्किल",
+    "good": "अच्छा",
+    "easy": "आसान"
+  },
+  "analytics": {
+    "title": "एनालिटिक्स",
+    "attempts": "{count} प्रयास",
+    "correct": "{pct}% सही",
+    "dueNow": "अभी बकाया है",
+    "nextReview": "अगली समीक्षा {days}d में",
+    "notReviewed": "अभी तक समीक्षा नहीं की गई"
+  }
+}

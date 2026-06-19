@@ -16,6 +16,7 @@ export default async function SettingsPage() {
       initialName={meta.displayName ?? user.firstName ?? ""}
       initialAvatar={meta.avatar ?? "owl"}
       initialStyle={meta.style ?? "scholar"}
+      initialLanguage={meta.language ?? "en"}
     />
   )
 }

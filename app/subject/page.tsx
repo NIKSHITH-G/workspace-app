@@ -2,9 +2,11 @@ import Link from "next/link"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
 import TopNav from "@/app/TopNav"
+import { getT } from "@/lib/i18n/server"
 
 export default async function SubjectsPage() {
   await connection()
+  const t = await getT()
   const subjects = await db.subject.findMany({
     include: {
       sessions: {
@@ -18,12 +20,12 @@ export default async function SubjectsPage() {
   if (subjects.length === 0) {
     return (
       <div className="min-h-screen bg-[#080810] text-white flex flex-col">
-        <TopNav crumbs={[{ label: "Subjects" }]} />
+        <TopNav crumbs={[{ label: t("subjects.title") }]} />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center space-y-3">
-            <p className="text-zinc-400 text-sm">No subjects yet.</p>
+            <p className="text-zinc-400 text-sm">{t("subjects.empty")}</p>
             <p className="text-zinc-600 text-xs">
-              Run <code className="text-zinc-400">npm run seed</code> with a source file to get started.
+              {t("subjects.emptyHint", { cmd: "npm run seed" })}
             </p>
           </div>
         </div>
@@ -33,9 +35,9 @@ export default async function SubjectsPage() {
 
   return (
     <div className="min-h-screen bg-[#080810] text-white">
-      <TopNav crumbs={[{ label: "Subjects" }]} />
+      <TopNav crumbs={[{ label: t("subjects.title") }]} />
       <div className="max-w-4xl mx-auto px-6 py-12">
-        <h1 className="text-2xl font-semibold tracking-tight mb-8">Subjects</h1>
+        <h1 className="text-2xl font-semibold tracking-tight mb-8">{t("subjects.title")}</h1>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {subjects.map((subject) => {
@@ -57,9 +59,9 @@ export default async function SubjectsPage() {
                   {subject.name}
                 </h2>
                 <div className="flex gap-4 text-xs text-zinc-500">
-                  <span>{completedSessions}/{subject.sessionCount} sessions</span>
+                  <span>{t("subjects.sessionsCount", { completed: completedSessions, total: subject.sessionCount })}</span>
                   {totalConcepts > 0 && (
-                    <span>{masteredConcepts}/{totalConcepts} concepts mastered</span>
+                    <span>{t("subjects.conceptsMastered", { mastered: masteredConcepts, total: totalConcepts })}</span>
                   )}
                 </div>
                 {totalConcepts > 0 && (

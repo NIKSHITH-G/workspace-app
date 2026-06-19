@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx scripts/seed.ts",
+    "i18n:ui": "tsx scripts/translate-ui.ts",
     "seed:python": "bash scripts/seed-python.sh",
     "seed:python-static": "tsx scripts/seed-python-static.ts",
     "generate:mcq": "tsx scripts/generate-mcq.ts",

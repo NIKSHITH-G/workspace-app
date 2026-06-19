@@ -1,0 +1,140 @@
+{
+  "common": {
+    "back": "בְּחֲזָרָה",
+    "saving": "חִסָכוֹן…",
+    "active": "פָּעִיל",
+    "you": "אַתָה",
+    "home": "בַּיִת"
+  },
+  "nav": {
+    "subjects": "נושאים",
+    "concepts": "מושגים",
+    "session": "מפגש {index}"
+  },
+  "home": {
+    "tagline": "לשלוט בכל דבר",
+    "signInToSave": "היכנס כדי לשמור התקדמות",
+    "signIn": "היכנס",
+    "setupProfile": "הגדר את הפרופיל שלך",
+    "pickUsernameStyle": "בחר שם משתמש וסגנון ←",
+    "ranks": "דרגות",
+    "quickAccess": "לחץ על 1-4 לגישה מהירה"
+  },
+  "settings": {
+    "title": "הגדרות",
+    "subtitle": "התאם אישית את הזהות MODO שלך",
+    "username": "שם משתמש",
+    "usernamePlaceholder": "בחר את הידית שלך",
+    "usernameHint": "זה השם שמופיע בלוח המובילים.",
+    "avatar": "גִלגוּל",
+    "style": "סִגְנוֹן",
+    "language": "שָׂפָה",
+    "save": "שמור שינויים",
+    "saved": "✓ נשמר - חוזר..."
+  },
+  "onboarding": {
+    "nameTitle": "איך אנחנו צריכים לקרוא לך?",
+    "nameSubtitle": "השם שלך בתוך MODO",
+    "namePlaceholder": "הכנס את שמך…",
+    "avatarTitle": "בחר את הדמות שלך",
+    "avatarSubtitle": "זה מייצג אותך ב- MODO",
+    "styleTitle": "בחר את הסגנון שלך",
+    "styleSubtitle": "זה מעצב את חווית MODO שלך",
+    "continue": "המשך →",
+    "entering": "נכנס MODO...",
+    "enter": "הכנס MODO →"
+  },
+  "avatars": {
+    "owl": "יַנשׁוּף",
+    "fox": "שׁוּעָל",
+    "wolf": "זְאֵב",
+    "dragon": "דְרָקוֹן",
+    "cat": "חָתוּל",
+    "robot": "רוֹבּוֹט"
+  },
+  "styles": {
+    "scholarLabel": "המלומד",
+    "scholarDesc": "רגוע, מתודי, יסודי",
+    "warriorLabel": "הלוחם",
+    "warriorDesc": "נועז, מהיר, בלתי פוסק",
+    "shadowLabel": "הצל",
+    "shadowDesc": "חד, שקט, מדויק",
+    "sageLabel": "החכם",
+    "sageDesc": "סבלני, חכם, מקורקע",
+    "maverickLabel": "המאבריק",
+    "maverickDesc": "יצירתי, נועז, לא שגרתי"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "rankedOne": "{count} לומד מדורג",
+    "rankedOther": "{count} לומדים מדורגים",
+    "empty": "עדיין אין לומדים מדורגים",
+    "emptyCta": "היה הראשון - פתור כמה כרטיסיות ותופיע כאן.",
+    "tabLevel": "רָמָה",
+    "tabSolved": "קלפים נפתרו",
+    "tabMastered": "מאסטר",
+    "tabStreak": "פַּס",
+    "statXp": "XP",
+    "statCards": "קלפים",
+    "statMastered": "שולט",
+    "statStreak": "פַּס",
+    "howXp": "הרווח XP על ידי סקירת כרטיסי פלאש, שליטה במושגים ושמירה על פסים יומיים.",
+    "pickToShow": "בחר את שם המשתמש והסגנון שלך ב-{settings} כדי להופיע כאן.",
+    "settingsLink": "הגדרות"
+  },
+  "subjects": {
+    "title": "נושאים",
+    "empty": "עדיין אין נושאים.",
+    "emptyHint": "הפעל את {cmd} עם קובץ מקור כדי להתחיל.",
+    "sessionsCount": "{completed}/{total} מפגשים",
+    "conceptsMastered": "{mastered}/{total} מושגים שולטים",
+    "mastered": "{mastered}/{total} שולט"
+  },
+  "session": {
+    "mastery": "שְׁלִיטָה",
+    "conceptsLabel": "מושגים",
+    "conceptsDesc": "הסברים לכל מושג במפגש זה",
+    "cheatsheetLabel": "Cheat Sheet",
+    "cheatsheetDesc": "סיכום עזר מהיר שנוצר משלד הפגישה",
+    "graphLabel": "גרף מושגים",
+    "graphDesc": "קשרים מוקדמים בין מושגים",
+    "phase2": "שלב 2",
+    "reviewLabel": "סְקִירָה",
+    "reviewDesc": "סקירת כרטיס פלאש - {due} מועדת כעת",
+    "analyticsLabel": "אנליטיקס",
+    "analyticsDesc": "ציוני שליטה לכל מושג"
+  },
+  "cheatsheet": {
+    "title": "Cheat Sheet",
+    "empty": "אין עדיין דף רמאות לסשן הזה."
+  },
+  "concepts": {
+    "title": "מושגים",
+    "requires": "דורש: {names}",
+    "noExplanation": "עדיין לא נוצר הסבר.",
+    "unseen": "סָמוּי"
+  },
+  "review": {
+    "title": "סְקִירָה",
+    "noCards": "עדיין אין כרטיסי פלאש. הפעל את סקריפט ה-Seed כדי ליצור תרגילים.",
+    "chooseAnswer": "בחר תשובה",
+    "next": "הבא →",
+    "tapReveal": "הקש כדי לחשוף · שטח",
+    "tapRevealHint": "הקש על כרטיס או הקש על רווח כדי לחשוף",
+    "sessionComplete": "הסשן הושלם ✓",
+    "noCardsDue": "אין כרטיסים לתשלום כרגע.",
+    "practiceAhead": "תרגל {count} קלפים לפני המועד",
+    "again": "שׁוּב",
+    "hard": "קָשֶׁה",
+    "good": "טוֹב",
+    "easy": "קַל"
+  },
+  "analytics": {
+    "title": "אנליטיקס",
+    "attempts": "{count} ניסיונות",
+    "correct": "{pct}% נכון",
+    "dueNow": "בשל כעת",
+    "nextReview": "סקירה הבאה בעוד {days}ד",
+    "notReviewed": "עדיין לא נבדק"
+  }
+}
