@@ -1,8 +1,8 @@
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
 import Markdown from "@/components/Markdown"
-import TopNav from "@/app/TopNav"
 
 export default async function CheatSheetPage(
   props: PageProps<"/subject/[subjectId]/session/[sessionId]/cheatsheet">,
