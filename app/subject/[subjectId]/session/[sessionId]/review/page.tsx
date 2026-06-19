@@ -1,12 +1,12 @@
 import Link from "next/link"
-import { notFound, redirect } from "next/navigation"
-import { auth } from "@clerk/nextjs/server"
+import { notFound } from "next/navigation"
 import { db } from "@/lib/db"
 import FlashcardReview from "./FlashcardReview"
 import { connection } from "next/server"
 import { getT } from "@/lib/i18n/server"
 import { getLocale } from "@/lib/i18n/locale"
 import { localize } from "@/lib/i18n/localizeContent"
+import { requireStudentId } from "@/lib/access"
 
 export default async function ReviewPage(
   props: PageProps<"/subject/[subjectId]/session/[sessionId]/review">,
@@ -14,9 +14,7 @@ export default async function ReviewPage(
   await connection()
   const t = await getT()
   const { subjectId, sessionId } = await props.params
-  const { userId } = await auth()
-  if (!userId) redirect("/sign-in")
-  const studentId = userId
+  const studentId = await requireStudentId()
 
   const session = await db.session.findUnique({
     where: { id: sessionId },

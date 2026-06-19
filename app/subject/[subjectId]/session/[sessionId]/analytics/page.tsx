@@ -1,9 +1,9 @@
 import Link from "next/link"
-import { notFound, redirect } from "next/navigation"
-import { auth } from "@clerk/nextjs/server"
+import { notFound } from "next/navigation"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
 import { getT } from "@/lib/i18n/server"
+import { requireStudentId } from "@/lib/access"
 
 export default async function AnalyticsPage(
   props: PageProps<"/subject/[subjectId]/session/[sessionId]/analytics">,
@@ -11,9 +11,7 @@ export default async function AnalyticsPage(
   await connection()
   const t = await getT()
   const { subjectId, sessionId } = await props.params
-  const { userId } = await auth()
-  if (!userId) redirect("/sign-in")
-  const studentId = userId
+  const studentId = await requireStudentId()
 
   const session = await db.session.findUnique({
     where: { id: sessionId },

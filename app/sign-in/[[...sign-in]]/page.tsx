@@ -1,6 +1,7 @@
 import { SignIn } from "@clerk/nextjs"
 import Link from "next/link"
 import ModoTitle from "@/app/ModoTitle"
+import { continueAsGuest } from "../actions"
 
 export default function SignInPage() {
   return (
@@ -49,9 +50,11 @@ export default function SignInPage() {
           Create account
         </Link>
         <span className="opacity-30">·</span>
-        <Link href="/" className="hover:text-white transition-colors flex items-center gap-1">
-          Browse as guest <span className="opacity-60">→</span>
-        </Link>
+        <form action={continueAsGuest}>
+          <button type="submit" className="hover:text-white transition-colors flex items-center gap-1">
+            Continue as guest <span className="opacity-60">→</span>
+          </button>
+        </form>
       </div>
 
     </div>

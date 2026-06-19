@@ -13,7 +13,9 @@ export async function submitAttempt(
   sessionId: string,
 ) {
   const { userId } = await auth()
-  if (!userId) throw new Error("Not authenticated")
+  // Guests are stateless — they can review cards, but nothing is persisted
+  // (no attempts, no mastery, no leaderboard). Silently skip the write.
+  if (!userId) return
   const studentId = userId
 
   // Validate client-supplied grading inputs — these drive SM-2 + XP/leaderboard,

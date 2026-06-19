@@ -1,10 +1,20 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
+import { NextResponse } from "next/server"
+import { GUEST_COOKIE } from "@/lib/guestCookie"
 
-const isPublic = createRouteMatcher(["/", "/sign-in(.*)", "/sign-up(.*)", "/leaderboard"])
+// Only the auth screens are truly public — you must sign in OR choose
+// "Continue as guest" before reaching anything else (no silent guest spawn).
+const isPublic = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)"])
 
 export const proxy = clerkMiddleware(async (auth, req) => {
-  if (!isPublic(req)) {
-    await auth.protect()
+  if (isPublic(req)) return
+
+  const { userId } = await auth()
+  const isGuest = req.cookies.get(GUEST_COOKIE)?.value === "1"
+
+  // Allow signed-in users and explicit guests; send everyone else to sign-in.
+  if (!userId && !isGuest) {
+    return NextResponse.redirect(new URL("/sign-in", req.url))
   }
 })
 
