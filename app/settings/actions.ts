@@ -6,6 +6,7 @@ import { cookies } from "next/headers"
 import { sanitizeProfile } from "@/lib/profile"
 import { LOCALE_COOKIE } from "@/lib/i18n/config"
 import { THEME_COOKIE } from "@/lib/currentUser"
+import { db } from "@/lib/db"
 
 export async function saveSettings(formData: FormData) {
   const { userId } = await auth()
@@ -27,6 +28,13 @@ export async function saveSettings(formData: FormData) {
       language,
       displayName,
     },
+  })
+
+  // Mirror into the local DB so the leaderboard reads profiles without hitting Clerk.
+  await db.profile.upsert({
+    where: { userId },
+    create: { userId, displayName, avatar, style },
+    update: { displayName, avatar, style },
   })
 
   // Cookies so SSR reflects language + theme on the next request without a Clerk call.

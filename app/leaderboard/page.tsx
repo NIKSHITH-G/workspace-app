@@ -1,4 +1,4 @@
-import { auth, clerkClient } from "@clerk/nextjs/server"
+import { auth } from "@clerk/nextjs/server"
 import { unstable_cache } from "next/cache"
 import { db } from "@/lib/db"
 import { connection } from "next/server"
@@ -51,22 +51,18 @@ export default async function LeaderboardPage() {
 
   const stats = await getStudentStats()
 
-  // ── map ids → Clerk users for username / avatar / style (dynamic, uncached) ──
+  // ── map ids → profiles from the LOCAL DB (was a US-region Clerk API call) ──
   const userById = new Map<string, { username: string; avatar: string; style: string }>()
   if (stats.length > 0) {
-    try {
-      const client = await clerkClient()
-      const { data: users } = await client.users.getUserList({
-        userId: stats.map((s) => s.id),
-        limit: 200,
+    const profiles = await db.profile.findMany({
+      where: { userId: { in: stats.map((s) => s.id) } },
+    })
+    for (const p of profiles) {
+      userById.set(p.userId, {
+        username: p.displayName || "Anonymous",
+        avatar: p.avatar,
+        style: p.style,
       })
-      for (const u of users) {
-        const meta = (u.publicMetadata ?? {}) as Record<string, string>
-        const username = meta.displayName || u.username || u.firstName || "Anonymous"
-        userById.set(u.id, { username, avatar: meta.avatar ?? "owl", style: meta.style ?? "scholar" })
-      }
-    } catch (err) {
-      console.error("[leaderboard] clerk getUserList failed:", err)
     }
   }
 

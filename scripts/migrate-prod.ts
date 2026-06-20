@@ -50,6 +50,49 @@ async function ensureContentTranslation(db: Client) {
   console.log("  ✓ ContentTranslation table + unique index")
 }
 
+async function ensureProfile(db: Client) {
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS "Profile" (
+      "userId" TEXT NOT NULL PRIMARY KEY,
+      "displayName" TEXT,
+      "avatar" TEXT NOT NULL DEFAULT 'owl',
+      "style" TEXT NOT NULL DEFAULT 'scholar',
+      "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )`)
+  console.log("  ✓ Profile table")
+}
+
+// One-time backfill: mirror every existing Clerk user into the local Profile
+// table so the leaderboard (which now reads Profile, not Clerk) isn't empty.
+async function backfillProfiles(db: Client) {
+  if (!process.env.CLERK_SECRET_KEY) {
+    console.log("  · no CLERK_SECRET_KEY — skipping profile backfill")
+    return
+  }
+  const { createClerkClient } = await import("@clerk/backend")
+  const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY })
+  let offset = 0
+  let total = 0
+  for (;;) {
+    const { data } = await clerk.users.getUserList({ limit: 100, offset })
+    if (data.length === 0) break
+    for (const u of data) {
+      const meta = (u.publicMetadata ?? {}) as Record<string, string>
+      const displayName = meta.displayName || u.username || u.firstName || null
+      await db.execute({
+        sql: `INSERT INTO "Profile" ("userId","displayName","avatar","style","updatedAt")
+              VALUES (?,?,?,?,CURRENT_TIMESTAMP)
+              ON CONFLICT("userId") DO UPDATE SET
+                "displayName"=excluded."displayName","avatar"=excluded."avatar","style"=excluded."style"`,
+        args: [u.id, displayName, meta.avatar ?? "owl", meta.style ?? "scholar"],
+      })
+      total++
+    }
+    offset += data.length
+  }
+  console.log(`  ✓ backfilled ${total} profile(s) from Clerk`)
+}
+
 async function seedCatalog(db: Client) {
   for (const s of CATALOG) {
     await db.execute({
@@ -74,7 +117,9 @@ async function main() {
   const db = createClient({ url, authToken: process.env.TURSO_AUTH_TOKEN })
   await addMissingSubjectColumns(db)
   await ensureContentTranslation(db)
+  await ensureProfile(db)
   await seedCatalog(db)
+  await backfillProfiles(db)
   console.log("[migrate-prod] done.")
 }
 
