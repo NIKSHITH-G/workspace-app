@@ -20,7 +20,7 @@ const CATALOG = [
   { slug: "python", name: "Python for AI", description: "Programming foundations for ML", category: "Programming", emoji: "🐍", status: "published", order: 1 },
   { slug: "database", name: "Database Systems", description: "Relational & query fundamentals", category: "Systems", emoji: "🗄️", status: "coming_soon", order: 2 },
   { slug: "architecture", name: "Computer Architecture & Networks", description: "Systems from silicon to protocol", category: "Systems", emoji: "🖥️", status: "coming_soon", order: 3 },
-  { slug: "maths", name: "Mathematical Foundations", description: "Linear algebra, probability, statistics", category: "Math", emoji: "📐", status: "coming_soon", order: 4 },
+  { slug: "maths", name: "Mathematical Foundations", description: "Linear algebra, probability, statistics", category: "Math", emoji: "📐", status: "published", order: 4 },
 ]
 
 async function addMissingSubjectColumns(db: Client) {

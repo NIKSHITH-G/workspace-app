@@ -1456,6 +1456,16 @@ async function main() {
     })
     console.log(`\n📚 Subject: ${subject.name} (${subject.id})`)
 
+    // `--if-empty` (used in the prod build) seeds content only when none exists,
+    // so deploys don't wipe user progress on already-seeded math sessions.
+    if (process.argv.includes("--if-empty")) {
+      const existingCount = await db.session.count({ where: { subjectId: subject.id } })
+      if (existingCount > 0) {
+        console.log(`   ${existingCount} sessions already present — skipping (--if-empty).`)
+        return
+      }
+    }
+
     for (const sessionData of SESSIONS) {
       const existing = await db.session.findUnique({
         where: { subjectId_index: { subjectId: subject.id, index: sessionData.index } },
