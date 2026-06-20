@@ -80,6 +80,17 @@ model Attempt {
   createdAt  DateTime @default(now())
 }
 
+// Denormalised copy of each user's public profile (mirrored from Clerk on
+// settings/onboarding save + backfilled on deploy). Lets the leaderboard read
+// names/avatars from the local DB instead of a US-region Clerk API call.
+model Profile {
+  userId      String   @id
+  displayName String?
+  avatar      String   @default("owl")
+  style       String   @default("scholar")
+  updatedAt   DateTime @updatedAt
+}
+
 // Cache of machine-translated learning content. Each English source string is
 // translated at most once per locale and stored here (see lib/i18n/localizeContent.ts).
 model ContentTranslation {
