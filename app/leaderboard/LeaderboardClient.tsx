@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { motion } from "framer-motion"
 import { useT } from "@/lib/i18n/I18nProvider"
 import AvatarIcon from "@/components/AvatarIcon"
 
@@ -80,19 +81,26 @@ export default function LeaderboardClient({ rows }: { rows: Row[] }) {
     <div className="space-y-5">
       {/* filter tabs */}
       <div className="flex gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.05] w-full">
-        {TABS.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setSort(tab.key)}
-            className="flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap"
-            style={{
-              background: sort === tab.key ? "rgba(255,255,255,0.08)" : "transparent",
-              color: sort === tab.key ? "#fff" : "#71717a",
-            }}
-          >
-            {t(tab.tKey)}
-          </button>
-        ))}
+        {TABS.map((tab) => {
+          const active = sort === tab.key
+          return (
+            <button
+              key={tab.key}
+              onClick={() => setSort(tab.key)}
+              className="relative flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap"
+              style={{ color: active ? "#fff" : "#71717a" }}
+            >
+              {active && (
+                <motion.div
+                  layoutId="lbTabIndicator"
+                  className="absolute inset-0 rounded-lg bg-white/[0.08]"
+                  transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                />
+              )}
+              <span className="relative z-10">{t(tab.tKey)}</span>
+            </button>
+          )
+        })}
       </div>
 
       {/* ranked list */}
