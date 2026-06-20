@@ -139,6 +139,14 @@
     "correct": "{pct}% נכון",
     "dueNow": "בשל כעת",
     "nextReview": "סקירה הבאה בעוד {days}ד",
-    "notReviewed": "עדיין לא נבדק"
+    "notReviewed": "עדיין לא נבדק",
+    "mastery": "שְׁלִיטָה",
+    "masteredLabel": "מאסטר",
+    "due": "בשל",
+    "accuracy": "דִיוּק",
+    "statusNew": "חָדָשׁ",
+    "statusLearning": "לְמִידָה",
+    "statusMastered": "מאסטר",
+    "reviewDue": "{count} בשל - בדוק עכשיו →"
   }
 }

@@ -139,6 +139,14 @@
     "correct": "{pct}% correct",
     "dueNow": "due now",
     "nextReview": "next review in {days}d",
-    "notReviewed": "not reviewed yet"
+    "notReviewed": "not reviewed yet",
+    "mastery": "Mastery",
+    "masteredLabel": "Mastered",
+    "due": "Due",
+    "accuracy": "Accuracy",
+    "statusNew": "New",
+    "statusLearning": "Learning",
+    "statusMastered": "Mastered",
+    "reviewDue": "{count} due — review now →"
   }
 }

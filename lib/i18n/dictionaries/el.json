@@ -139,6 +139,14 @@
     "correct": "{pct}% σωστό",
     "dueNow": "οφειλεται τωρα",
     "nextReview": "επόμενη κριτική σε {days}d",
-    "notReviewed": "δεν έχει αναθεωρηθεί ακόμα"
+    "notReviewed": "δεν έχει αναθεωρηθεί ακόμα",
+    "mastery": "Μαεστρία",
+    "masteredLabel": "Mastered",
+    "due": "Οφειλόμενος",
+    "accuracy": "Ακρίβεια",
+    "statusNew": "Νέος",
+    "statusLearning": "Μάθηση",
+    "statusMastered": "Mastered",
+    "reviewDue": "{count} λήγει — αναθεωρήστε τώρα →"
   }
 }

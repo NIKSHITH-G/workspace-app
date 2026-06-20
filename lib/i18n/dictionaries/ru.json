@@ -139,6 +139,14 @@
     "correct": "{pct}% верно",
     "dueNow": "срок погашения сейчас",
     "nextReview": "следующий обзор через {days}d",
-    "notReviewed": "еще не проверено"
+    "notReviewed": "еще не проверено",
+    "mastery": "Мастерство",
+    "masteredLabel": "Освоен",
+    "due": "Должный",
+    "accuracy": "Точность",
+    "statusNew": "Новый",
+    "statusLearning": "Обучение",
+    "statusMastered": "Освоен",
+    "reviewDue": "{count} срок — просмотреть сейчас →"
   }
 }

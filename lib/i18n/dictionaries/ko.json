@@ -139,6 +139,14 @@
     "correct": "{pct}% 정확함",
     "dueNow": "지금 마감",
     "nextReview": "{days}d의 다음 리뷰",
-    "notReviewed": "아직 검토되지 않음"
+    "notReviewed": "아직 검토되지 않음",
+    "mastery": "지배",
+    "masteredLabel": "마스터",
+    "due": "로 인한",
+    "accuracy": "정확성",
+    "statusNew": "새로운",
+    "statusLearning": "학습",
+    "statusMastered": "마스터",
+    "reviewDue": "{count} 마감 — 지금 검토 →"
   }
 }

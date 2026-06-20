@@ -139,6 +139,14 @@
     "correct": "{pct}% صحيح",
     "dueNow": "مستحق الآن",
     "nextReview": "المراجعة التالية في {days}d",
-    "notReviewed": "لم تتم مراجعتها بعد"
+    "notReviewed": "لم تتم مراجعتها بعد",
+    "mastery": "إتقان",
+    "masteredLabel": "يتقن",
+    "due": "حق",
+    "accuracy": "دقة",
+    "statusNew": "جديد",
+    "statusLearning": "تعلُّم",
+    "statusMastered": "يتقن",
+    "reviewDue": "{count} مستحق - قم بالمراجعة الآن →"
   }
 }

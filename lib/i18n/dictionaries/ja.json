@@ -139,6 +139,14 @@
     "correct": "{pct}% 正解",
     "dueNow": "今期限",
     "nextReview": "次のレビューは{days}日後",
-    "notReviewed": "まだレビューされていません"
+    "notReviewed": "まだレビューされていません",
+    "mastery": "マスタリー",
+    "masteredLabel": "マスター済み",
+    "due": "期限",
+    "accuracy": "正確さ",
+    "statusNew": "新しい",
+    "statusLearning": "学ぶ",
+    "statusMastered": "マスター済み",
+    "reviewDue": "{count} 期限 — 今すぐレビュー →"
   }
 }

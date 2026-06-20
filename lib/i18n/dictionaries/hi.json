@@ -139,6 +139,14 @@
     "correct": "{pct}% सही",
     "dueNow": "अभी बकाया है",
     "nextReview": "अगली समीक्षा {days}d में",
-    "notReviewed": "अभी तक समीक्षा नहीं की गई"
+    "notReviewed": "अभी तक समीक्षा नहीं की गई",
+    "mastery": "प्रभुत्व",
+    "masteredLabel": "महारत हासिल",
+    "due": "देय",
+    "accuracy": "शुद्धता",
+    "statusNew": "नया",
+    "statusLearning": "सीखना",
+    "statusMastered": "महारत हासिल",
+    "reviewDue": "{count} देय - अभी समीक्षा करें →"
   }
 }

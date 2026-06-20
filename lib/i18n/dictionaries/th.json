@@ -139,6 +139,14 @@
     "correct": "{pct}% ถูกต้อง",
     "dueNow": "เนื่องจากตอนนี้",
     "nextReview": "รีวิวครั้งต่อไปใน {days}d",
-    "notReviewed": "ยังไม่ได้ตรวจสอบ"
+    "notReviewed": "ยังไม่ได้ตรวจสอบ",
+    "mastery": "ความเชี่ยวชาญ",
+    "masteredLabel": "เชี่ยวชาญ",
+    "due": "เนื่องจาก",
+    "accuracy": "ความแม่นยำ",
+    "statusNew": "ใหม่",
+    "statusLearning": "การเรียนรู้",
+    "statusMastered": "เชี่ยวชาญ",
+    "reviewDue": "{count} ครบกำหนด — ตรวจสอบตอนนี้ →"
   }
 }

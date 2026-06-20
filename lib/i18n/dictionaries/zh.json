@@ -139,6 +139,14 @@
     "correct": "{pct}% 正确",
     "dueNow": "现在到期",
     "nextReview": "{days}d 的下一次评论",
-    "notReviewed": "尚未审核"
+    "notReviewed": "尚未审核",
+    "mastery": "精通",
+    "masteredLabel": "掌握",
+    "due": "到期的",
+    "accuracy": "准确性",
+    "statusNew": "新的",
+    "statusLearning": "学习",
+    "statusMastered": "掌握",
+    "reviewDue": "{count} 到期 — 立即审核 →"
   }
 }
