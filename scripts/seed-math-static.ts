@@ -1425,7 +1425,9 @@ The contrast — *every edge* (Euler, easy) versus *every vertex* (Hamilton, har
 async function main() {
   let db: PrismaClient
   if (process.env.TURSO_DATABASE_URL) {
-    const { PrismaLibSql } = await import("@prisma/adapter-libsql")
+    // Use the web (HTTP/WS) adapter — the native libsql binary doesn't load on
+    // Vercel (matches lib/db.ts), which is where this runs during the build.
+    const { PrismaLibSql } = await import("@prisma/adapter-libsql/web")
     db = new PrismaClient({
       adapter: new PrismaLibSql({
         url: process.env.TURSO_DATABASE_URL,
