@@ -30,7 +30,9 @@ type Session = {
 // SESSION DATA  (added batch by batch — Weeks 1–12)
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SESSIONS: Session[] = [
+export type { Session, Concept }
+
+export const SESSIONS: Session[] = [
   // ── WEEK 1 — Sets, Functions & Notation (Lectures 1–2) ────────────────────
   {
     index: 1,
@@ -1538,7 +1540,11 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error(err)
-  process.exit(1)
-})
+// Only run when invoked directly (npm run seed:math) — NOT when SESSIONS is
+// imported by migrate-prod for the build-time prod seed.
+if (process.argv[1]?.includes("seed-math-static")) {
+  main().catch((err) => {
+    console.error(err)
+    process.exit(1)
+  })
+}

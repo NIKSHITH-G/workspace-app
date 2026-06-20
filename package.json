@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "tsx scripts/migrate-prod.ts && tsx scripts/seed-math-static.ts --if-empty && next build",
+    "build": "tsx scripts/migrate-prod.ts && next build",
     "postinstall": "prisma generate",
     "start": "next start",
     "lint": "eslint",

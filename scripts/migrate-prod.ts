@@ -7,6 +7,7 @@
 
 import { createClient, type Client } from "@libsql/client/web"
 import { randomUUID } from "node:crypto"
+import { SESSIONS } from "./seed-math-static"
 
 const NEW_SUBJECT_COLUMNS: { name: string; ddl: string }[] = [
   { name: "description", ddl: `ALTER TABLE "Subject" ADD COLUMN "description" TEXT` },
@@ -93,6 +94,60 @@ async function backfillProfiles(db: Client) {
   console.log(`  ✓ backfilled ${total} profile(s) from Clerk`)
 }
 
+// Seed the Mathematical Foundations content ONCE (skips if sessions exist, so
+// deploys never wipe progress). Uses the raw libsql client that's proven to work
+// in the Vercel build — avoids the Prisma driver-adapter entirely.
+async function seedMathContent(db: Client) {
+  const subj = await db.execute(`SELECT "id" FROM "Subject" WHERE "slug"='maths'`)
+  const mathsId = subj.rows[0]?.id as string | undefined
+  if (!mathsId) {
+    console.log("  · maths subject not found — skipping math content")
+    return
+  }
+  const cnt = await db.execute({
+    sql: `SELECT COUNT(*) AS n FROM "Session" WHERE "subjectId"=?`,
+    args: [mathsId],
+  })
+  if (Number(cnt.rows[0].n) > 0) {
+    console.log(`  · maths already seeded (${cnt.rows[0].n} sessions) — skipping`)
+    return
+  }
+
+  const stmts: { sql: string; args: (string | number)[] }[] = []
+  for (const s of SESSIONS) {
+    const sid = randomUUID()
+    stmts.push({
+      sql: `INSERT INTO "Session" ("id","subjectId","index","title","cheatSheet","createdAt") VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)`,
+      args: [sid, mathsId, s.index, s.title, s.cheatSheet],
+    })
+    const cids: Record<string, string> = {}
+    for (const c of s.concepts) {
+      const cid = randomUUID()
+      cids[c.name] = cid
+      stmts.push({
+        sql: `INSERT INTO "Concept" ("id","sessionId","name","explanation","orderIndex","createdAt") VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)`,
+        args: [cid, sid, c.name, c.explanation, c.orderIndex],
+      })
+      stmts.push({
+        sql: `INSERT INTO "Exercise" ("id","conceptId","type","front","back","content","createdAt") VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)`,
+        args: [randomUUID(), cid, "FLASHCARD", c.flashcardFront, c.flashcardBack, "{}"],
+      })
+    }
+    for (const c of s.concepts) {
+      for (const p of c.prerequisites) {
+        if (cids[p]) {
+          stmts.push({
+            sql: `INSERT INTO "ConceptPrereq" ("conceptId","prereqId") VALUES (?,?)`,
+            args: [cids[c.name], cids[p]],
+          })
+        }
+      }
+    }
+  }
+  await db.batch(stmts, "write")
+  console.log(`  ✓ seeded ${SESSIONS.length} math sessions`)
+}
+
 async function seedCatalog(db: Client) {
   for (const s of CATALOG) {
     await db.execute({
@@ -119,6 +174,7 @@ async function main() {
   await ensureContentTranslation(db)
   await ensureProfile(db)
   await seedCatalog(db)
+  await seedMathContent(db)
   await backfillProfiles(db)
   console.log("[migrate-prod] done.")
 }
