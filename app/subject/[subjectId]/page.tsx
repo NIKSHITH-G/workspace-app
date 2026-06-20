@@ -6,6 +6,45 @@ import TopNav from "@/app/TopNav"
 import { getT } from "@/lib/i18n/server"
 import { requireStudentId } from "@/lib/access"
 
+// Circular progress ring with the session number in the centre.
+function SessionRing({
+  index,
+  pct,
+  tone,
+}: {
+  index: number
+  pct: number
+  tone: "locked" | "none" | "progress" | "done"
+}) {
+  const r = 17
+  const circ = 2 * Math.PI * r
+  const stroke =
+    tone === "done" ? "#34d399" : tone === "progress" ? "var(--theme-primary,#6366f1)" : "transparent"
+  const numColor = tone === "locked" ? "#52525b" : "#e4e4e7"
+  return (
+    <svg width="44" height="44" viewBox="0 0 44 44" className="shrink-0">
+      <circle cx="22" cy="22" r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="3" />
+      {pct > 0 && (
+        <circle
+          cx="22"
+          cy="22"
+          r={r}
+          fill="none"
+          stroke={stroke}
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeDasharray={circ}
+          strokeDashoffset={circ * (1 - pct)}
+          transform="rotate(-90 22 22)"
+        />
+      )}
+      <text x="22" y="23" textAnchor="middle" dominantBaseline="middle" fontSize="13" fontFamily="ui-monospace, monospace" fill={numColor}>
+        {index}
+      </text>
+    </svg>
+  )
+}
+
 export default async function SubjectPage(props: PageProps<"/subject/[subjectId]">) {
   await connection()
   const t = await getT()
@@ -16,11 +55,7 @@ export default async function SubjectPage(props: PageProps<"/subject/[subjectId]
     where: { id: subjectId },
     include: {
       sessions: {
-        include: {
-          concepts: {
-            include: { masteryScores: { where: { studentId } } },
-          },
-        },
+        include: { concepts: { include: { masteryScores: { where: { studentId } } } } },
         orderBy: { index: "asc" },
       },
     },
@@ -28,95 +63,87 @@ export default async function SubjectPage(props: PageProps<"/subject/[subjectId]
 
   if (!subject) notFound()
 
+  const allConcepts = subject.sessions.flatMap((s) => s.concepts)
+  const totalConcepts = allConcepts.length
+  const totalMastered = allConcepts.filter((c) => (c.masteryScores[0]?.score ?? 0) >= 0.7).length
+  const overallPct = totalConcepts > 0 ? (totalMastered / totalConcepts) * 100 : 0
+
+  const rows = Array.from({ length: subject.sessionCount }, (_, i) => i + 1).map((idx) => {
+    const session = subject.sessions.find((s) => s.index === idx)
+    const concepts = session?.concepts ?? []
+    const total = concepts.length
+    const mastered = concepts.filter((c) => (c.masteryScores[0]?.score ?? 0) >= 0.7).length
+    const pct = total > 0 ? mastered / total : 0
+    const tone: "locked" | "none" | "progress" | "done" =
+      total === 0 ? "locked" : mastered === total ? "done" : mastered > 0 ? "progress" : "none"
+    return { idx, session, total, mastered, pct, tone }
+  })
+
   return (
     <div className="min-h-screen bg-[#080810] text-white">
       <TopNav crumbs={[{ label: t("nav.subjects"), href: "/subject" }, { label: subject.name }]} />
-      <div className="max-w-4xl mx-auto px-6 py-12">
+      <div className="max-w-2xl mx-auto px-6 py-12">
+        {/* header + overall progress */}
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold tracking-tight">{subject.name}</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{subject.name}</h1>
+          {totalConcepts > 0 && (
+            <div className="mt-4">
+              <div className="flex items-center justify-between text-xs text-zinc-500 mb-1.5">
+                <span>{t("subjects.conceptsMastered", { mastered: totalMastered, total: totalConcepts })}</span>
+                <span className="font-mono">{Math.round(overallPct)}%</span>
+              </div>
+              <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-700"
+                  style={{ width: `${overallPct}%`, background: "var(--theme-primary,#6366f1)" }}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Session heatmap grid */}
-        <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
-          {Array.from({ length: subject.sessionCount }, (_, i) => i + 1).map((idx) => {
-            const session = subject.sessions.find((s) => s.index === idx)
-            const concepts = session?.concepts ?? []
-            const totalC = concepts.length
-            const masteredC = concepts.filter(
-              (c) => (c.masteryScores[0]?.score ?? 0) >= 0.7,
-            ).length
-            const avgScore =
-              totalC > 0
-                ? concepts.reduce(
-                    (sum, c) => sum + (c.masteryScores[0]?.score ?? 0),
-                    0,
-                  ) / totalC
-                : 0
+        {/* session path */}
+        <div className="space-y-2">
+          {rows.map(({ idx, session, total, mastered, pct, tone }) => {
+            const inner = (
+              <>
+                <SessionRing index={idx} pct={pct} tone={tone} />
+                <div className="min-w-0 flex-1">
+                  <p className={`text-sm font-medium truncate ${tone === "locked" ? "text-zinc-600" : "text-zinc-100"}`}>
+                    {session ? session.title : t("home.comingSoon")}
+                  </p>
+                  <p className="text-xs mt-0.5">
+                    {tone === "locked" ? (
+                      <span className="text-zinc-700">{t("session.phase2")}</span>
+                    ) : tone === "done" ? (
+                      <span className="text-emerald-400">{t("subjects.mastered", { mastered, total })} ✓</span>
+                    ) : (
+                      <span className="text-zinc-500">{t("subjects.mastered", { mastered, total })}</span>
+                    )}
+                  </p>
+                </div>
+                {session && (
+                  <span className="text-zinc-600 transition-transform group-hover:translate-x-0.5">›</span>
+                )}
+              </>
+            )
 
-            const heatColor =
-              totalC === 0
-                ? "bg-zinc-900 border-zinc-800"
-                : avgScore >= 0.7
-                ? "bg-emerald-900/60 border-emerald-700"
-                : avgScore >= 0.4
-                ? "bg-yellow-900/50 border-yellow-700"
-                : "bg-red-900/40 border-red-800"
-
+            const base = "flex items-center gap-4 p-3.5 rounded-2xl border"
             if (!session) {
               return (
-                <div
-                  key={idx}
-                  className="aspect-square rounded-lg bg-zinc-900 border border-zinc-800 flex flex-col items-center justify-center gap-1"
-                >
-                  <span className="text-xs text-zinc-600 font-mono">{idx}</span>
+                <div key={idx} className={`${base} border-dashed border-white/[0.06] bg-transparent opacity-60`}>
+                  {inner}
                 </div>
               )
             }
-
             return (
               <Link
                 key={idx}
                 href={`/subject/${subject.id}/session/${session.id}`}
-                className={`aspect-square rounded-lg border flex flex-col items-center justify-center gap-1 transition-opacity hover:opacity-80 ${heatColor}`}
+                className={`${base} group border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-200 active:scale-[0.99]`}
+                style={{ borderColor: tone === "done" ? "rgba(52,211,153,0.25)" : undefined }}
               >
-                <span className="text-xs text-zinc-400 font-mono">{idx}</span>
-                {totalC > 0 && (
-                  <span className="text-[10px] text-zinc-500">
-                    {masteredC}/{totalC}
-                  </span>
-                )}
-              </Link>
-            )
-          })}
-        </div>
-
-        {/* Session list */}
-        <div className="mt-10 space-y-2">
-          {subject.sessions.map((session) => {
-            const totalC = session.concepts.length
-            const masteredC = session.concepts.filter(
-              (c) => (c.masteryScores[0]?.score ?? 0) >= 0.7,
-            ).length
-
-            return (
-              <Link
-                key={session.id}
-                href={`/subject/${subject.id}/session/${session.id}`}
-                className="flex items-center justify-between px-4 py-3 rounded-lg bg-zinc-900 border border-zinc-800 hover:border-zinc-600 transition-colors group"
-              >
-                <div className="flex items-center gap-4">
-                  <span className="text-xs text-zinc-600 font-mono w-4 text-right">
-                    {session.index}
-                  </span>
-                  <span className="text-sm font-medium text-zinc-200 group-hover:text-white transition-colors">
-                    {session.title}
-                  </span>
-                </div>
-                {totalC > 0 && (
-                  <span className="text-xs text-zinc-500">
-                    {t("subjects.mastered", { mastered: masteredC, total: totalC })}
-                  </span>
-                )}
+                {inner}
               </Link>
             )
           })}
