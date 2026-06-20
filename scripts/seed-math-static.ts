@@ -167,9 +167,11 @@ For \`f(x) = x²\` with codomain ℝ, the **image** is \`[0, ∞)\` — squares 
 
 Whether an inverse exists is governed by two properties:
 
-- **Injective** (one-to-one): distinct inputs give distinct outputs — \`x₁ ≠ x₂ ⟹ f(x₁) ≠ f(x₂)\`. No output is "reused".
-- **Surjective** (onto): every codomain element is hit — the image equals the whole codomain.
-- **Bijective**: both injective and surjective.
+| property | meaning | fails when |
+|---|---|---|
+| **Injective** (1-to-1) | distinct inputs → distinct outputs | two inputs share an output |
+| **Surjective** (onto) | image = whole codomain | some output is never hit |
+| **Bijective** | both injective **and** surjective | either of the above fails |
 
 The key theorem: **f has an inverse if and only if it is bijective.** Injectivity lets you reverse the arrow unambiguously (each output came from one input); surjectivity guarantees every \`y ∈ Y\` has something to map back to. For instance \`f(x) = x²\` on ℝ is neither (−2 and 2 share an output, and negatives are never hit), but restricted to \`f : [0, ∞) → [0, ∞)\` it becomes bijective with inverse \`√x\`.`,
         flashcardFront: `Why is \`f : ℝ → ℝ\`, \`f(x) = x²\` not invertible, but \`f : [0,∞) → [0,∞)\`, \`f(x) = x²\` is? Connect this to injective/surjective.`,
@@ -1220,12 +1222,18 @@ Linearity: $E[aX+b]=aE[X]+b$ and $E[X+Y]=E[X]+E[Y]$ (always).
 $$\\operatorname{Var}(X)=E\\big[(X-E[X])^{2}\\big]=E[X^{2}]-(E[X])^{2},\\qquad \\sigma=\\sqrt{\\operatorname{Var}(X)}.$$
 $\\operatorname{Var}(aX+b)=a^{2}\\operatorname{Var}(X)$.
 
-**Discrete distributions**
-- **Uniform** on $\\{1,\\dots,n\\}$: each value prob $1/n$.
-- **Binomial** $B(n,p)$ — number of successes in $n$ independent trials: $P(X=k)=\\binom{n}{k}p^{k}(1-p)^{n-k}$, $E[X]=np$, $\\operatorname{Var}=np(1-p)$.
+**Key distributions**
+
+| distribution | models | mean | variance |
+|---|---|---|---|
+| **Uniform** $\\{1..n\\}$ | one of $n$ equally likely values | $\\tfrac{n+1}{2}$ | $\\tfrac{n^2-1}{12}$ |
+| **Binomial** $B(n,p)$ | # successes in $n$ trials | $np$ | $np(1-p)$ |
+| **Normal** $N(\\mu,\\sigma^2)$ | bell curve (continuous) | $\\mu$ | $\\sigma^2$ |
+
+Binomial pmf: $P(X=k)=\\binom{n}{k}p^{k}(1-p)^{n-k}$.
 
 **Continuous RVs** — described by a density $f(x)\\ge0$ with $\\int f=1$; probabilities are **areas**: $P(a\\le X\\le b)=\\int_a^b f(x)\\,dx$.
-- **Normal** $N(\\mu,\\sigma^{2})$ — the bell curve; mean $\\mu$, sd $\\sigma$.`,
+✅ Normal **68–95–99.7 rule**: ~68% within $1\\sigma$, ~95% within $2\\sigma$, ~99.7% within $3\\sigma$ of the mean.`,
     concepts: [
       {
         name: "Random Variables and Expected Value",
