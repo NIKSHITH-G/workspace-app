@@ -8,7 +8,8 @@
  */
 
 import path from "node:path"
-import { PrismaClient } from "../lib/generated/prisma/client"
+// NOTE: PrismaClient is imported lazily inside main() so that other modules
+// (migrate-prod) can import SESSIONS without pulling in the Prisma engine.
 
 type Concept = {
   name: string
@@ -1425,7 +1426,8 @@ The contrast — *every edge* (Euler, easy) versus *every vertex* (Hamilton, har
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function main() {
-  let db: PrismaClient
+  const { PrismaClient } = await import("../lib/generated/prisma/client")
+  let db: InstanceType<typeof PrismaClient>
   if (process.env.TURSO_DATABASE_URL) {
     // Use the web (HTTP/WS) adapter — the native libsql binary doesn't load on
     // Vercel (matches lib/db.ts), which is where this runs during the build.
