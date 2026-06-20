@@ -18,6 +18,85 @@ type Concept = {
   explanation: string
   flashcardFront: string
   flashcardBack: string
+  // MCQ (parity with Python): exactly 4 options, `answer` must match one of them.
+  // When present, the card renders as multiple-choice; flashcardBack is the rationale.
+  options?: string[]
+  answer?: string
+}
+
+// MCQ questions for Weeks 2–12, keyed by concept name. `q` renders as Markdown
+// (KaTeX ok); options/answer are PLAIN TEXT (rendered verbatim in buttons).
+// Week 1 uses inline options on its concepts; everything resolves via cardFor().
+const MCQ: Record<string, { q: string; options: string[]; answer: string }> = {
+  // ── Week 2 ──
+  "Exponential Functions": { q: "For an exponential $f(x)=b\\,a^{x}$ with $b>0$, why does it have **no zeroes**?", options: ["aˣ is always positive, so f is never zero", "Because a < 0", "Because b = 0", "Because it is a straight line"], answer: "aˣ is always positive, so f is never zero" },
+  "Logarithmic Functions": { q: "What is the domain of $\\log_a(x)$?", options: ["x > 0", "all real x", "x ≥ 0", "x ≠ 0"], answer: "x > 0" },
+  "Power-Law Functions": { q: "A power law $y=b\\,x^{a}$ becomes a straight line on which plot?", options: ["log-log", "semi-log (log-lin)", "linear", "lin-log"], answer: "log-log" },
+  "Choosing a Model: Log-Log and Semi-Log Plots": { q: "A dataset is a straight line on a **semi-log** ($x$, $\\ln y$) plot. Which model fits?", options: ["Exponential", "Power law", "Logarithmic", "Linear"], answer: "Exponential" },
+  "Derivatives: Slope and Basic Rules": { q: "What is $\\dfrac{d}{dx}x^{n}$?", options: ["n·xⁿ⁻¹", "xⁿ⁺¹/(n+1)", "n·xⁿ", "xⁿ⁻¹"], answer: "n·xⁿ⁻¹" },
+  "Product Rule, Chain Rule and Higher Derivatives": { q: "By the **product rule**, $(fg)'$ equals:", options: ["f′g + fg′", "f′g′", "f′g − fg′", "f′ + g′"], answer: "f′g + fg′" },
+  // ── Week 3 ──
+  "Stationary Points and the First-Derivative Test": { q: "A **stationary point** of f is a point where:", options: ["f′(x) = 0", "f(x) = 0", "f″(x) = 0", "f(x) = 1"], answer: "f′(x) = 0" },
+  "The Second-Derivative Test": { q: "At a stationary point $x_0$, if $f''(x_0)>0$, the point is a:", options: ["local minimum", "local maximum", "saddle point", "inflection point"], answer: "local minimum" },
+  "Solving Optimisation Word Problems": { q: "When optimising on a closed interval, besides stationary points you must also check the:", options: ["endpoints of the interval", "y-intercept", "second derivative only", "average value"], answer: "endpoints of the interval" },
+  "Least Squares and the Residual Sum of Squares": { q: "The line of best fit is the one that minimises the:", options: ["sum of squared residuals", "sum of the residuals", "single largest residual", "number of data points"], answer: "sum of squared residuals" },
+  // ── Week 4 ──
+  "Antiderivatives and Indefinite Integrals": { q: "$\\int x^{n}\\,dx$ (for $n\\neq -1$) equals:", options: ["xⁿ⁺¹/(n+1) + C", "n·xⁿ⁻¹ + C", "xⁿ⁻¹ + C", "xⁿ/n + C"], answer: "xⁿ⁺¹/(n+1) + C" },
+  "The Definite Integral and Total Change": { q: "By the Fundamental Theorem of Calculus, $\\int_a^b f(x)\\,dx = $ (where $F'=f$):", options: ["F(b) − F(a)", "F(a) − F(b)", "f(b) − f(a)", "F(b) + F(a)"], answer: "F(b) − F(a)" },
+  "Vectors in Euclidean Space": { q: "The length $\\|\\mathbf v\\|$ of $\\mathbf v=(3,4)$ is:", options: ["5", "7", "12", "25"], answer: "5" },
+  "The Dot Product": { q: "If $\\mathbf u\\cdot\\mathbf v=0$ for non-zero vectors, they are:", options: ["perpendicular", "parallel", "equal", "opposite"], answer: "perpendicular" },
+  "Introduction to Matrices": { q: "Two matrices can be **added** only when they have:", options: ["the same dimensions", "matching inner dimensions", "square shape", "a non-zero determinant"], answer: "the same dimensions" },
+  // ── Week 5 ──
+  "Matrix Multiplication": { q: "The product $AB$ is defined only when:", options: ["columns of A = rows of B", "A and B are the same size", "both are square", "rows of A = rows of B"], answer: "columns of A = rows of B" },
+  "Linear Systems and Gaussian Elimination": { q: "Which is **not** a valid elementary row operation?", options: ["Multiply a row by 0", "Swap two rows", "Multiply a row by a non-zero number", "Add a multiple of one row to another"], answer: "Multiply a row by 0" },
+  "The Inverse of a Matrix": { q: "A square matrix $A$ is invertible **if and only if**:", options: ["det A ≠ 0", "det A = 0", "A is symmetric", "A has a zero row"], answer: "det A ≠ 0" },
+  // ── Week 6 ──
+  "Eigenvalues and Eigenvectors": { q: "A non-zero vector $\\mathbf x$ is an eigenvector of $A$ (eigenvalue $\\lambda$) when:", options: ["Ax = λx", "Ax = 0", "Ax = x + λ", "A = λx"], answer: "Ax = λx" },
+  "Finding Eigenvalues: the Characteristic Equation": { q: "Eigenvalues are found by solving:", options: ["det(A − λI) = 0", "det(A) = 0", "Ax = 0", "A − λI = 0"], answer: "det(A − λI) = 0" },
+  "Finding Eigenvectors": { q: "Given eigenvalue $\\lambda$, its eigenvectors are the non-zero solutions of:", options: ["(A − λI)x = 0", "Ax = 0", "det(A − λI) = 0", "Ax = I"], answer: "(A − λI)x = 0" },
+  "Eigendecomposition and Matrix Powers": { q: "If $A=PDP^{-1}$, then $A^{n}$ equals:", options: ["P Dⁿ P⁻¹", "Pⁿ D P⁻¹", "P D P⁻ⁿ", "Pⁿ Dⁿ P⁻ⁿ"], answer: "P Dⁿ P⁻¹" },
+  // ── Week 7 ──
+  "Binary Relations": { q: "A **function** is a binary relation in which:", options: ["each input relates to exactly one output", "each input relates to many outputs", "no input relates to any output", "inputs equal outputs"], answer: "each input relates to exactly one output" },
+  "Circles, Ellipses and Plotting Regions": { q: "Which is the equation of a **circle** of radius $r$ centred at $(h,k)$?", options: ["(x−h)² + (y−k)² = r²", "x²/a² + y²/b² = 1", "y = (x−h)² + k", "(x−h) + (y−k) = r"], answer: "(x−h)² + (y−k)² = r²" },
+  "Multivariate Functions": { q: "A **level set** (contour) of $f(x,y)$ is the set of points where:", options: ["f(x, y) = c (a constant)", "f(x, y) = 0", "x = y", "the gradient is zero"], answer: "f(x, y) = c (a constant)" },
+  "Partial Derivatives and the Gradient": { q: "To compute the partial derivative $f_x$, you differentiate while treating:", options: ["all other variables as constants", "x as a constant", "the whole function as constant", "y as the variable"], answer: "all other variables as constants" },
+  // ── Week 8 ──
+  "First-Order Approximation and Stationary Points in 2D": { q: "A stationary point of $f(x,y)$ requires:", options: ["fx = 0 and fy = 0", "fx = 0 or fy = 0", "f = 0", "fxx = 0"], answer: "fx = 0 and fy = 0" },
+  "The Hessian and Classifying Stationary Points": { q: "At a 2-D stationary point, $\\det(H)<0$ indicates a:", options: ["saddle point", "local minimum", "local maximum", "global minimum"], answer: "saddle point" },
+  "Finding Global Extrema in Two Variables": { q: "To find a **global** extremum over a region, you must also examine the:", options: ["boundary of the region", "interior points only", "origin only", "gradient's length"], answer: "boundary of the region" },
+  // ── Week 9 ──
+  "The Multiplication, Addition and Complement Rules": { q: "A meal with 3 starters **and** 4 mains gives how many combinations?", options: ["12", "7", "34", "1"], answer: "12" },
+  "Permutations and the Four Types of Selection": { q: "How many ways can 3 of 8 runners take gold, silver and bronze?", options: ["336", "56", "512", "24"], answer: "336" },
+  "Combinations and Binomial Coefficients": { q: "$\\binom{n}{r}$ counts the number of:", options: ["unordered selections of r from n", "ordered selections of r from n", "arrangements of all n items", "subsets of any size"], answer: "unordered selections of r from n" },
+  "Inclusion–Exclusion and the Pigeonhole Principle": { q: "For two sets, $|A\\cup B|$ equals:", options: ["|A| + |B| − |A ∩ B|", "|A| + |B|", "|A| + |B| + |A ∩ B|", "|A| · |B|"], answer: "|A| + |B| − |A ∩ B|" },
+  // ── Week 10 ──
+  "Probability Basics and Axioms": { q: "Rolling two fair dice, $P(\\text{sum}=7)$ is:", options: ["1/6", "1/12", "7/36", "1/2"], answer: "1/6" },
+  "Independence": { q: "Events A and B are **independent** exactly when:", options: ["P(A ∩ B) = P(A)·P(B)", "P(A ∩ B) = 0", "P(A) = P(B)", "A ∪ B is the whole sample space"], answer: "P(A ∩ B) = P(A)·P(B)" },
+  "Conditional Probability": { q: "The conditional probability $P(A\\mid B)$ is defined as:", options: ["P(A ∩ B) / P(B)", "P(A) · P(B)", "P(A ∩ B) / P(A)", "P(A) / P(B)"], answer: "P(A ∩ B) / P(B)" },
+  "Bayes' Theorem and the Law of Total Probability": { q: "A test is 99% accurate but the disease is rare (1%). After a positive result, $P(\\text{disease})$ is:", options: ["much lower than 99%", "about 99%", "exactly 99%", "100%"], answer: "much lower than 99%" },
+  // ── Week 11 ──
+  "Random Variables and Expected Value": { q: "The expected value of one fair six-sided die is:", options: ["3.5", "3", "6", "1"], answer: "3.5" },
+  "Variance and Standard Deviation": { q: "Which expression gives the variance of X?", options: ["E[X²] − (E[X])²", "E[X] − E[X²]", "(E[X])² − E[X²]", "√E[X]"], answer: "E[X²] − (E[X])²" },
+  "Discrete Distributions: Uniform and Binomial": { q: "For a Binomial $B(n,p)$, the mean $E[X]$ is:", options: ["np", "np(1−p)", "p/n", "n/p"], answer: "np" },
+  "Continuous Random Variables and the Normal Distribution": { q: "By the 68–95–99.7 rule, about 95% of a normal's values lie within:", options: ["2σ of the mean", "1σ of the mean", "3σ of the mean", "the mean exactly"], answer: "2σ of the mean" },
+  // ── Week 12 ──
+  "Graphs: Vertices, Edges and Degree": { q: "The Handshake Lemma says the sum of all vertex degrees equals:", options: ["2 × (number of edges)", "the number of edges", "the number of vertices", "twice the number of vertices"], answer: "2 × (number of edges)" },
+  "Walks, Paths, Cycles and Connectivity": { q: "A **path** is a walk that:", options: ["repeats no vertex", "repeats no edge but may repeat vertices", "starts and ends at the same vertex", "uses every edge"], answer: "repeats no vertex" },
+  "Trees": { q: "A tree on $n$ vertices has exactly how many edges?", options: ["n − 1", "n", "n + 1", "2n"], answer: "n − 1" },
+  "Adjacency Matrices, Euler and Hamilton": { q: "A connected graph has an **Euler circuit** (uses every edge once) iff:", options: ["every vertex has even degree", "every vertex has odd degree", "it has no cycles", "it is a tree"], answer: "every vertex has even degree" },
+}
+
+// Resolve a concept to its card fields. MCQ (map or inline week-1 options) →
+// multiple-choice; otherwise a flip card.
+export function cardFor(c: Concept): { front: string; back: string; content: string } {
+  const m = MCQ[c.name]
+  if (m && m.options.length === 4) {
+    return { front: m.q, back: c.flashcardBack, content: JSON.stringify({ options: m.options, correctOption: m.answer }) }
+  }
+  if (c.options && c.options.length === 4 && c.answer) {
+    return { front: c.flashcardFront, back: c.flashcardBack, content: JSON.stringify({ options: c.options, correctOption: c.answer }) }
+  }
+  return { front: c.flashcardFront, back: c.flashcardBack, content: "{}" }
 }
 
 type Session = {
@@ -101,7 +180,9 @@ We write \`x ∈ A\` when x is an element of A, and \`x ∉ A\` when it is not. 
 Some sets appear constantly: the empty set \`∅\` (no elements), the naturals \`ℕ = {0, 1, 2, …}\` (in this unit 0 is a natural number), the integers \`ℤ\`, and the reals \`ℝ\`. These nest neatly: \`ℕ ⊆ ℤ ⊆ ℝ\`.
 
 In data science, sets are the language for collections of items, categories, or events — and the operations above describe combining, filtering and excluding those collections.`,
-        flashcardFront: `Is \`{a, b, c} = {c, a, b, b}\`? And what are \`{1,2,3} ∩ {3,4}\`, \`{1,2,3} ∪ {3,4}\`, and \`{1,2,3} \\ {3,4}\`?`,
+        flashcardFront: `Which set equals \`{1, 2, 3} \\ {3, 4}\` (set difference)?`,
+        options: ["{1, 2}", "{1, 2, 3, 4}", "{3}", "{1, 2, 3}"],
+        answer: "{1, 2}",
         flashcardBack: `Yes — they are the **same set**. A set is unordered and its elements are distinct, so reordering and repeating elements changes nothing: \`{a,b,c} = {c,a,b,b}\`.
 
 For the operations: \`{1,2,3} ∩ {3,4} = {3}\` (common elements), \`{1,2,3} ∪ {3,4} = {1,2,3,4}\` (everything from either, with 3 listed once), and \`{1,2,3} \\ {3,4} = {1,2}\` (elements of the first that are not in the second — note 4 plays no role here because difference only removes, it never adds).`,
@@ -120,7 +201,9 @@ For the operations: \`{1,2,3} ∩ {3,4} = {3}\` (common elements), \`{1,2,3} ∪
 - \`[a, ∞) = {x ∈ ℝ : x ≥ a}\` and \`(−∞, b] = {x ∈ ℝ : x ≤ b}\` — unbounded.
 
 The bracket style is the whole message: **square** means the endpoint is **in** the set, **round** means it is **out**. Note \`∞\` is not a number, so it always gets a round bracket.`,
-        flashcardFront: `Write \`{x ∈ ℝ : 2 ≤ x < 5}\` as an interval. Why is the bracket different at each end?`,
+        flashcardFront: `Which interval is \`{x ∈ ℝ : 2 ≤ x < 5}\`?`,
+        options: ["[2, 5)", "(2, 5]", "[2, 5]", "(2, 5)"],
+        answer: "[2, 5)",
         flashcardBack: `It is \`[2, 5)\`. The **square** bracket at 2 means 2 is included (the condition is \`2 ≤ x\`, so x can equal 2). The **round** bracket at 5 means 5 is excluded (the condition is \`x < 5\`, strictly less, so 5 is not in the set). The bracket style directly encodes whether the inequality at that end is "≤/≥" (closed, square) or "</>" (open, round). This is a half-open interval — common when you want "from 2 up to but not including 5".`,
       },
       {
@@ -137,7 +220,9 @@ The bracket style is the whole message: **square** means the endpoint is **in** 
 The letter under the symbol (here \`x\`) is the **index**: it runs through every integer from the bottom value to the top value, and you add (Σ) or multiply (Π) the resulting terms. For example \`Σ (i=1 to 7) (2i − 1) = 1 + 3 + 5 + 7 + 9 + 11 + 13 = 49\`, and \`Π (i=1 to 4) i = 1·2·3·4 = 24\`.
 
 You can also sum/multiply over the elements of a set: \`Σ_{x ∈ S} f(x)\`. Two conventions are worth memorising because they keep formulas consistent: the **empty sum is 0** and the **empty product is 1** (the "do nothing" value for each operation). This notation underpins almost everything later — averages, dot products, variance and probabilities are all sums in disguise.`,
-        flashcardFront: `Expand \`Σ (x=1 to 3) ax\` and \`Π (y=4 to 5) (1/y)\`. What do an empty sum and an empty product equal?`,
+        flashcardFront: `What do the **empty sum** and the **empty product** equal, respectively?`,
+        options: ["0 and 1", "1 and 0", "0 and 0", "1 and 1"],
+        answer: "0 and 1",
         flashcardBack: `\`Σ (x=1 to 3) ax = a·1 + a·2 + a·3 = a + 2a + 3a = 6a\` — the index x takes the values 1, 2, 3 and each term is \`ax\`. (If instead the term were \`aˣ\` it would be \`a + a² + a³\`; read the expression carefully.)
 
 \`Π (y=4 to 5) (1/y) = (1/4)·(1/5) = 1/20\`.
@@ -155,7 +240,9 @@ The **image** \`f(X) = {f(x) : x ∈ X}\` is the set of values actually hit — 
 The **zeroes** (or *roots*) of \`f\` are the inputs where the output is zero: \`{x ∈ X : f(x) = 0}\`. Graphically these are exactly the points where the curve crosses (or touches) the x-axis. For example \`f(x) = (x − 1)(x + 2)\` has zeroes at \`x = 1\` and \`x = −2\`, and \`f(x) = x² − 1\` has zeroes at \`x = ±1\`.
 
 Functions are the backbone of modelling in data science: we *describe data with a function* to make predictions, and *describe cost or error with a function* to optimise.`,
-        flashcardFront: `What three things make up a function \`f : X → Y\`? How can the image differ from the codomain, using \`f : ℝ → ℝ\`, \`f(x) = x²\`?`,
+        flashcardFront: `For \`f : ℝ → ℝ\` with \`f(x) = x²\`, what is the **image** of f?`,
+        options: ["[0, ∞)", "ℝ", "(0, ∞)", "(−∞, 0]"],
+        answer: "[0, ∞)",
         flashcardBack: `A function is a **domain** X, a **codomain** Y, and a **rule** that gives each \`x ∈ X\` exactly one \`f(x) ∈ Y\`. "Exactly one" is essential: an input can't map to two outputs.
 
 For \`f(x) = x²\` with codomain ℝ, the **image** is \`[0, ∞)\` — squares are never negative — which is a *proper subset* of the codomain ℝ. So the codomain is "where outputs are allowed to live" (ℝ), while the image is "where they actually land" (the non-negative reals). They coincide only when every codomain value is hit, i.e. when the function is surjective.`,
@@ -177,7 +264,14 @@ Whether an inverse exists is governed by two properties:
 | **Bijective** | both injective **and** surjective | either of the above fails |
 
 The key theorem: **f has an inverse if and only if it is bijective.** Injectivity lets you reverse the arrow unambiguously (each output came from one input); surjectivity guarantees every \`y ∈ Y\` has something to map back to. For instance \`f(x) = x²\` on ℝ is neither (−2 and 2 share an output, and negatives are never hit), but restricted to \`f : [0, ∞) → [0, ∞)\` it becomes bijective with inverse \`√x\`.`,
-        flashcardFront: `Why is \`f : ℝ → ℝ\`, \`f(x) = x²\` not invertible, but \`f : [0,∞) → [0,∞)\`, \`f(x) = x²\` is? Connect this to injective/surjective.`,
+        flashcardFront: `Why is \`f : ℝ → ℝ\`, \`f(x) = x²\` **not** invertible?`,
+        options: [
+          "It is neither injective nor surjective",
+          "It is injective but not surjective",
+          "It is surjective but not injective",
+          "It has too many zeroes",
+        ],
+        answer: "It is neither injective nor surjective",
         flashcardBack: `On all of ℝ, \`x²\` fails **both** conditions. It is **not injective**: \`f(−2) = f(2) = 4\`, so two distinct inputs share an output and you couldn't decide which one \`f⁻¹(4)\` should return. It is **not surjective** onto ℝ either: negative numbers are never outputs, so there's nothing to map them back to.
 
 Restricting to \`[0, ∞) → [0, ∞)\` fixes both. With only non-negative inputs, each output comes from exactly one input (**injective**), and every non-negative target is achieved (**surjective**) — so the function is **bijective** and has the inverse \`f⁻¹(x) = √x\`. This is exactly why "f is invertible ⟺ f is bijective": you need uniqueness of the input (injective) and existence of an input for every output (surjective).`,
@@ -191,7 +285,14 @@ Restricting to \`[0, ∞) → [0, ∞)\` fixes both. With only non-negative inpu
 Intuition: a convex function "holds water" (curves upward, like \`f(x) = x²\` or \`f(x) = 2ˣ\`), while a concave function "spills water" (curves downward, like \`f(x) = −x²\` or \`f(x) = log x\`). A **straight line is both** convex and concave, since every chord lies exactly on the graph.
 
 This matters enormously for **optimisation**, which is the heart of much of machine learning. A convex function has a single "valley" with no false bottoms, so any local minimum is automatically the **global** minimum — making it easy and reliable to minimise. Concave functions have the same guarantee for maxima. Much of the effort in designing learning algorithms goes into setting up a convex cost function precisely so that minimisation is tractable.`,
-        flashcardFront: `State the chord test for a **convex** function, and explain why convexity is so useful for optimisation.`,
+        flashcardFront: `A function is **convex** if, for any two points on its graph, the straight line (chord) between them lies…`,
+        options: [
+          "entirely above or on the graph",
+          "entirely below or on the graph",
+          "tangent to the graph everywhere",
+          "always below the x-axis",
+        ],
+        answer: "entirely above or on the graph",
         flashcardBack: `**Chord test:** a function is convex if, for any two points on its graph, the straight line between them lies **entirely above or on** the graph (concave is the mirror image — chord below the graph). Equivalently, a convex graph curves upward / "holds water".
 
 It's prized in optimisation because a convex function has **no local minima other than the global one** — there's a single valley with no misleading dips. So a downhill search can't get stuck in a bad local minimum; wherever you stop is the true best. This is why so many machine-learning cost functions are deliberately designed to be convex: it makes finding the optimal parameters reliable and efficient. (The analogous statement holds for concave functions and maxima.)`,
@@ -1512,12 +1613,14 @@ async function main() {
         })
         conceptIdMap[c.name] = created.id
 
+        const card = cardFor(c)
         await db.exercise.create({
           data: {
             conceptId: created.id,
             type: "FLASHCARD",
-            front: c.flashcardFront,
-            back: c.flashcardBack,
+            front: card.front,
+            back: card.back,
+            content: card.content,
           },
         })
       }

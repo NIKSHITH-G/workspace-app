@@ -7,7 +7,7 @@
 
 import { createClient, type Client } from "@libsql/client/web"
 import { randomUUID } from "node:crypto"
-import { SESSIONS } from "./seed-math-static"
+import { SESSIONS, cardFor } from "./seed-math-static"
 
 const NEW_SUBJECT_COLUMNS: { name: string; ddl: string }[] = [
   { name: "description", ddl: `ALTER TABLE "Subject" ADD COLUMN "description" TEXT` },
@@ -109,8 +109,33 @@ async function seedMathContent(db: Client) {
     args: [mathsId],
   })
   if (Number(cnt.rows[0].n) > 0) {
-    console.log(`  · maths already seeded (${cnt.rows[0].n} sessions) — skipping`)
-    return
+    // Already seeded — only re-seed if the content is the OLD flip format (no MCQ
+    // options), as a one-time upgrade to MCQ. If it's already MCQ, leave it alone.
+    const sample = await db.execute({
+      sql: `SELECT e."content" AS content FROM "Exercise" e
+            JOIN "Concept" c ON c.id = e."conceptId"
+            JOIN "Session" s ON s.id = c."sessionId"
+            WHERE s."subjectId"=? LIMIT 1`,
+      args: [mathsId],
+    })
+    const isMcq = String(sample.rows[0]?.content ?? "").includes('"options"')
+    if (isMcq) {
+      console.log(`  · maths already seeded as MCQ — skipping`)
+      return
+    }
+    console.log(`  ⟳ upgrading maths to MCQ — clearing old flip-card content…`)
+    const sub = `(SELECT c.id FROM "Concept" c JOIN "Session" s ON s.id=c."sessionId" WHERE s."subjectId"=?)`
+    await db.batch(
+      [
+        { sql: `DELETE FROM "Attempt" WHERE "exerciseId" IN (SELECT id FROM "Exercise" WHERE "conceptId" IN ${sub})`, args: [mathsId] },
+        { sql: `DELETE FROM "Exercise" WHERE "conceptId" IN ${sub}`, args: [mathsId] },
+        { sql: `DELETE FROM "MasteryScore" WHERE "conceptId" IN ${sub}`, args: [mathsId] },
+        { sql: `DELETE FROM "ConceptPrereq" WHERE "conceptId" IN ${sub} OR "prereqId" IN ${sub}`, args: [mathsId, mathsId] },
+        { sql: `DELETE FROM "Concept" WHERE "sessionId" IN (SELECT id FROM "Session" WHERE "subjectId"=?)`, args: [mathsId] },
+        { sql: `DELETE FROM "Session" WHERE "subjectId"=?`, args: [mathsId] },
+      ],
+      "write",
+    )
   }
 
   const stmts: { sql: string; args: (string | number)[] }[] = []
@@ -128,9 +153,10 @@ async function seedMathContent(db: Client) {
         sql: `INSERT INTO "Concept" ("id","sessionId","name","explanation","orderIndex","createdAt") VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)`,
         args: [cid, sid, c.name, c.explanation, c.orderIndex],
       })
+      const card = cardFor(c)
       stmts.push({
         sql: `INSERT INTO "Exercise" ("id","conceptId","type","front","back","content","createdAt") VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)`,
-        args: [randomUUID(), cid, "FLASHCARD", c.flashcardFront, c.flashcardBack, "{}"],
+        args: [randomUUID(), cid, "FLASHCARD", card.front, card.back, card.content],
       })
     }
     for (const c of s.concepts) {
