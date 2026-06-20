@@ -2,14 +2,17 @@
 
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import remarkMath from "remark-math"
+import rehypeKatex from "rehype-katex"
 import rehypeHighlight from "rehype-highlight"
 import "highlight.js/styles/github-dark.css"
+import "katex/dist/katex.min.css"
 
 export default function Markdown({ children }: { children: string }) {
   return (
     <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeHighlight]}
+      remarkPlugins={[remarkGfm, remarkMath]}
+      rehypePlugins={[rehypeKatex, rehypeHighlight]}
       components={{
         h1: ({ children }) => (
           <h1 className="text-lg font-semibold text-white mt-6 mb-2">{children}</h1>
