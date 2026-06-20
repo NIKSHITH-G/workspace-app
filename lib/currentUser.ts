@@ -1,7 +1,10 @@
 import "server-only"
 import { cache } from "react"
+import { cookies } from "next/headers"
 import { currentUser } from "@clerk/nextjs/server"
 import { getTheme, type Theme } from "@/lib/themes"
+
+export const THEME_COOKIE = "theme"
 
 /**
  * Clerk's `currentUser()` makes a network request to Clerk's Backend API.
@@ -17,8 +20,17 @@ export const getUser = cache(async () => {
   }
 })
 
-/** Resolved theme for the current user (also deduped per request). */
+/**
+ * Resolved theme for the current request. Reads the `theme` cookie first (set on
+ * settings/onboarding save) so the common path needs NO Clerk Backend API call —
+ * which matters because this runs in the root layout AND <TopNav> on every page.
+ * Falls back to `currentUser()` only when the cookie is absent (e.g. an existing
+ * user who hasn't re-saved settings yet), so nothing regresses.
+ */
 export const getUserTheme = cache(async (): Promise<Theme> => {
+  const styleCookie = (await cookies()).get(THEME_COOKIE)?.value
+  if (styleCookie) return getTheme(styleCookie)
+
   const user = await getUser()
   const meta = (user?.publicMetadata ?? {}) as Record<string, string>
   return getTheme(meta.style)

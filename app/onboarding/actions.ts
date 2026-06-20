@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import { sanitizeProfile } from "@/lib/profile"
 import { LOCALE_COOKIE } from "@/lib/i18n/config"
+import { THEME_COOKIE } from "@/lib/currentUser"
 
 export async function completeOnboarding(formData: FormData) {
   const { userId } = await auth()
@@ -28,11 +29,10 @@ export async function completeOnboarding(formData: FormData) {
     },
   })
 
-  ;(await cookies()).set(LOCALE_COOKIE, language, {
-    maxAge: 60 * 60 * 24 * 365,
-    path: "/",
-    sameSite: "lax",
-  })
+  const cookieStore = await cookies()
+  const opts = { maxAge: 60 * 60 * 24 * 365, path: "/", sameSite: "lax" as const }
+  cookieStore.set(LOCALE_COOKIE, language, opts)
+  cookieStore.set(THEME_COOKIE, style, opts)
 
   redirect("/")
 }

@@ -46,9 +46,21 @@ export default async function Home() {
   const [subjectRows, masteryRows, attempts] = await Promise.all([
     db.subject.findMany({
       orderBy: [{ order: "asc" }, { createdAt: "asc" }],
-      include: {
+      // select only what the catalog needs — avoid pulling every session's full
+      // cheatSheet markdown and concept text just to compute progress counts.
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        description: true,
+        category: true,
+        status: true,
         sessions: {
-          include: { concepts: { include: { masteryScores: { where: { studentId } } } } },
+          select: {
+            concepts: {
+              select: { masteryScores: { where: { studentId }, select: { score: true } } },
+            },
+          },
         },
       },
     }),
