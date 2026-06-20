@@ -100,12 +100,12 @@ export default function SettingsClient({ theme, initialName, initialAvatar, init
         {/* Language */}
         <section className="space-y-3">
           <label className="text-xs text-zinc-500 tracking-widest uppercase font-mono">{t("settings.language")}</label>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          <div className="flex flex-wrap justify-center gap-2">
             {LOCALES.map(code => (
               <button
                 key={code}
                 onClick={() => setLanguage(code)}
-                className="px-3 py-2.5 rounded-xl border text-sm transition-all duration-150 text-left"
+                className="px-4 py-2.5 rounded-xl border text-sm transition-all duration-150"
                 style={{
                   borderColor: language === code ? `${accentHex}88` : "rgba(255,255,255,0.06)",
                   background: language === code ? `${accentHex}18` : "rgba(255,255,255,0.03)",
@@ -125,7 +125,8 @@ export default function SettingsClient({ theme, initialName, initialAvatar, init
               <button
                 key={a.id}
                 onClick={() => setAvatar(a.id)}
-                className="aspect-square rounded-xl border flex items-center justify-center transition-all duration-150"
+                aria-label={t(a.tKey)}
+                className="group relative aspect-square rounded-xl border flex items-center justify-center transition-all duration-150"
                 style={{
                   borderColor: avatar === a.id ? `${accentHex}88` : "rgba(255,255,255,0.06)",
                   background: avatar === a.id ? `${accentHex}18` : "rgba(255,255,255,0.03)",
@@ -134,6 +135,10 @@ export default function SettingsClient({ theme, initialName, initialAvatar, init
                 }}
               >
                 <AvatarIcon id={a.id} size={26} />
+                {/* hover label so the chosen avatar is identifiable */}
+                <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 z-10 whitespace-nowrap rounded-md border border-white/10 bg-zinc-900 px-2 py-1 text-[10px] text-zinc-200 opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100">
+                  {t(a.tKey)}
+                </span>
               </button>
             ))}
           </div>
