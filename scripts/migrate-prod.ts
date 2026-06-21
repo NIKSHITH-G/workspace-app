@@ -9,6 +9,7 @@ import { createClient, type Client } from "@libsql/client/web"
 import { randomUUID } from "node:crypto"
 import { SESSIONS, cardFor } from "./seed-math-static"
 import { SESSIONS as DB_SESSIONS, cardFor as dbCardFor } from "./seed-db-static"
+import { SESSIONS as ARCH_SESSIONS, cardFor as archCardFor } from "./seed-arch-static"
 
 const NEW_SUBJECT_COLUMNS: { name: string; ddl: string }[] = [
   { name: "description", ddl: `ALTER TABLE "Subject" ADD COLUMN "description" TEXT` },
@@ -21,7 +22,7 @@ const NEW_SUBJECT_COLUMNS: { name: string; ddl: string }[] = [
 const CATALOG = [
   { slug: "python", name: "Python for AI", description: "Programming foundations for ML", category: "Programming", emoji: "🐍", status: "published", order: 1 },
   { slug: "database", name: "Database Systems", description: "Relational & query fundamentals", category: "Systems", emoji: "🗄️", status: "published", order: 2 },
-  { slug: "architecture", name: "Computer Architecture & Networks", description: "Systems from silicon to protocol", category: "Systems", emoji: "🖥️", status: "coming_soon", order: 3 },
+  { slug: "architecture", name: "Computer Architecture & Networks", description: "Systems from silicon to protocol", category: "Systems", emoji: "🖥️", status: "published", order: 3 },
   { slug: "maths", name: "Mathematical Foundations", description: "Linear algebra, probability, statistics", category: "Math", emoji: "📐", status: "published", order: 4 },
 ]
 
@@ -175,30 +176,42 @@ async function seedMathContent(db: Client) {
   console.log(`  ✓ seeded ${SESSIONS.length} math sessions`)
 }
 
-// Seed the Database Systems content ONCE (skips if sessions already exist, so
-// deploys never wipe progress). Same raw-libsql approach as seedMathContent.
-async function seedDbContent(db: Client) {
-  const subj = await db.execute(`SELECT "id" FROM "Subject" WHERE "slug"='database'`)
-  const dbId = subj.rows[0]?.id as string | undefined
-  if (!dbId) {
-    console.log("  · database subject not found — skipping db content")
+// Static-seed concept shape shared by the DB/arch static seed modules (each
+// module's Concept is a superset of this — the card-specific fields are read
+// only by its own cardFor, so the helper stays generic over the concept type).
+type SeedConcept = { name: string; explanation: string; orderIndex: number; prerequisites: string[] }
+type SeedSession<C extends SeedConcept> = { index: number; title: string; cheatSheet: string; concepts: C[] }
+
+// Seed a subject's content ONCE (skips if sessions already exist, so deploys
+// never wipe progress). Same raw-libsql approach as seedMathContent, generalised
+// so each new hand-authored subject just supplies its slug + sessions + cardFor.
+async function seedSubjectContent<C extends SeedConcept>(
+  db: Client,
+  slug: string,
+  sessions: SeedSession<C>[],
+  cardForFn: (c: C) => { front: string; back: string; content: string },
+) {
+  const subj = await db.execute({ sql: `SELECT "id" FROM "Subject" WHERE "slug"=?`, args: [slug] })
+  const subjectId = subj.rows[0]?.id as string | undefined
+  if (!subjectId) {
+    console.log(`  · ${slug} subject not found — skipping content`)
     return
   }
   const cnt = await db.execute({
     sql: `SELECT COUNT(*) AS n FROM "Session" WHERE "subjectId"=?`,
-    args: [dbId],
+    args: [subjectId],
   })
   if (Number(cnt.rows[0].n) > 0) {
-    console.log(`  · database already seeded — skipping`)
+    console.log(`  · ${slug} already seeded — skipping`)
     return
   }
 
   const stmts: { sql: string; args: (string | number)[] }[] = []
-  for (const s of DB_SESSIONS) {
+  for (const s of sessions) {
     const sid = randomUUID()
     stmts.push({
       sql: `INSERT INTO "Session" ("id","subjectId","index","title","cheatSheet","createdAt") VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)`,
-      args: [sid, dbId, s.index, s.title, s.cheatSheet],
+      args: [sid, subjectId, s.index, s.title, s.cheatSheet],
     })
     const cids: Record<string, string> = {}
     for (const c of s.concepts) {
@@ -208,7 +221,7 @@ async function seedDbContent(db: Client) {
         sql: `INSERT INTO "Concept" ("id","sessionId","name","explanation","orderIndex","createdAt") VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)`,
         args: [cid, sid, c.name, c.explanation, c.orderIndex],
       })
-      const card = dbCardFor(c)
+      const card = cardForFn(c)
       stmts.push({
         sql: `INSERT INTO "Exercise" ("id","conceptId","type","front","back","content","createdAt") VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)`,
         args: [randomUUID(), cid, "FLASHCARD", card.front, card.back, card.content],
@@ -226,7 +239,7 @@ async function seedDbContent(db: Client) {
     }
   }
   await db.batch(stmts, "write")
-  console.log(`  ✓ seeded ${DB_SESSIONS.length} database sessions`)
+  console.log(`  ✓ seeded ${sessions.length} ${slug} sessions`)
 }
 
 async function seedCatalog(db: Client) {
@@ -256,7 +269,8 @@ async function main() {
   await ensureProfile(db)
   await seedCatalog(db)
   await seedMathContent(db)
-  await seedDbContent(db)
+  await seedSubjectContent(db, "database", DB_SESSIONS, dbCardFor)
+  await seedSubjectContent(db, "architecture", ARCH_SESSIONS, archCardFor)
   await backfillProfiles(db)
   console.log("[migrate-prod] done.")
 }
