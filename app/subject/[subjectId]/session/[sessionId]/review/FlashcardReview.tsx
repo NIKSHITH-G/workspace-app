@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { submitAttempt } from "./actions"
 import Markdown from "@/components/Markdown"
 import { useT } from "@/lib/i18n/I18nProvider"
+import { xpForAttempt } from "@/lib/xp"
 
 type Card = {
   exerciseId: string
@@ -244,6 +245,14 @@ export default function FlashcardReview({ cards, subjectId, sessionId }: Props) 
   const [current, setCurrent] = useState(0)
   const [done, setDone] = useState(false)
   const [isPending, startTransition] = useTransition()
+  // floating "+XP" pops on each answer
+  const [pops, setPops] = useState<{ id: number; xp: number; correct: boolean }[]>([])
+
+  const popXp = (quality: number) => {
+    const id = Date.now() + Math.random()
+    setPops((p) => [...p, { id, xp: xpForAttempt(quality), correct: quality >= 3 }])
+    setTimeout(() => setPops((p) => p.filter((x) => x.id !== id)), 1000)
+  }
 
   if (queue.length === 0 || done) {
     return (
@@ -271,6 +280,7 @@ export default function FlashcardReview({ cards, subjectId, sessionId }: Props) 
   }
 
   const handleMCQResult = (correct: boolean) => {
+    popXp(correct ? 4 : 1)
     startTransition(async () => {
       await submitAttempt(card.exerciseId, correct ? 4 : 1, null, subjectId, sessionId)
       advance()
@@ -278,6 +288,7 @@ export default function FlashcardReview({ cards, subjectId, sessionId }: Props) 
   }
 
   const handleFlipRate = (quality: number) => {
+    popXp(quality)
     startTransition(async () => {
       await submitAttempt(card.exerciseId, quality, null, subjectId, sessionId)
       advance()
@@ -285,7 +296,22 @@ export default function FlashcardReview({ cards, subjectId, sessionId }: Props) 
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {/* floating +XP feedback */}
+      <div className="pointer-events-none absolute left-1/2 top-20 z-30">
+        {pops.map((p) => (
+          <motion.div
+            key={p.id}
+            initial={{ opacity: 0, y: 8, scale: 0.7 }}
+            animate={{ opacity: [0, 1, 1, 0], y: [8, -18, -44, -70], scale: [0.7, 1.15, 1, 1] }}
+            transition={{ duration: 1, times: [0, 0.15, 0.65, 1], ease: "easeOut" }}
+            className="absolute -translate-x-1/2 whitespace-nowrap text-2xl font-black"
+            style={{ color: p.correct ? "#34d399" : "#fbbf24", textShadow: "0 2px 14px rgba(0,0,0,0.55)" }}
+          >
+            +{p.xp} XP
+          </motion.div>
+        ))}
+      </div>
       {/* Progress bar */}
       <div className="flex items-center gap-3">
         <div className="flex-1 h-1 bg-zinc-800 rounded-full overflow-hidden">

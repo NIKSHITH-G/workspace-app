@@ -52,6 +52,15 @@ export type XpBreakdown = {
   currentStreak: number
 }
 
+/** XP earned for a single review attempt of the given SM-2 quality (0–5).
+ * Mirrors the per-attempt logic in computeXp so the UI can show it instantly. */
+export function xpForAttempt(quality: number): number {
+  const correct = quality >= 3
+  if (!correct) return XP.wrongBase
+  const qBonus = Math.max(0, Math.min(quality - 3, 2)) * XP.qualityBonusPerPoint
+  return XP.correctBase + qBonus
+}
+
 /** Compute a student's total XP from their attempts + count of mastered concepts. */
 export function computeXp(attempts: AttemptLite[], masteredCount: number): XpBreakdown {
   let fromReviews = 0
