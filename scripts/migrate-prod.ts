@@ -8,6 +8,7 @@
 import { createClient, type Client } from "@libsql/client/web"
 import { randomUUID } from "node:crypto"
 import { SESSIONS, cardFor } from "./seed-math-static"
+import { SESSIONS as DB_SESSIONS, cardFor as dbCardFor } from "./seed-db-static"
 
 const NEW_SUBJECT_COLUMNS: { name: string; ddl: string }[] = [
   { name: "description", ddl: `ALTER TABLE "Subject" ADD COLUMN "description" TEXT` },
@@ -19,7 +20,7 @@ const NEW_SUBJECT_COLUMNS: { name: string; ddl: string }[] = [
 
 const CATALOG = [
   { slug: "python", name: "Python for AI", description: "Programming foundations for ML", category: "Programming", emoji: "🐍", status: "published", order: 1 },
-  { slug: "database", name: "Database Systems", description: "Relational & query fundamentals", category: "Systems", emoji: "🗄️", status: "coming_soon", order: 2 },
+  { slug: "database", name: "Database Systems", description: "Relational & query fundamentals", category: "Systems", emoji: "🗄️", status: "published", order: 2 },
   { slug: "architecture", name: "Computer Architecture & Networks", description: "Systems from silicon to protocol", category: "Systems", emoji: "🖥️", status: "coming_soon", order: 3 },
   { slug: "maths", name: "Mathematical Foundations", description: "Linear algebra, probability, statistics", category: "Math", emoji: "📐", status: "published", order: 4 },
 ]
@@ -174,6 +175,60 @@ async function seedMathContent(db: Client) {
   console.log(`  ✓ seeded ${SESSIONS.length} math sessions`)
 }
 
+// Seed the Database Systems content ONCE (skips if sessions already exist, so
+// deploys never wipe progress). Same raw-libsql approach as seedMathContent.
+async function seedDbContent(db: Client) {
+  const subj = await db.execute(`SELECT "id" FROM "Subject" WHERE "slug"='database'`)
+  const dbId = subj.rows[0]?.id as string | undefined
+  if (!dbId) {
+    console.log("  · database subject not found — skipping db content")
+    return
+  }
+  const cnt = await db.execute({
+    sql: `SELECT COUNT(*) AS n FROM "Session" WHERE "subjectId"=?`,
+    args: [dbId],
+  })
+  if (Number(cnt.rows[0].n) > 0) {
+    console.log(`  · database already seeded — skipping`)
+    return
+  }
+
+  const stmts: { sql: string; args: (string | number)[] }[] = []
+  for (const s of DB_SESSIONS) {
+    const sid = randomUUID()
+    stmts.push({
+      sql: `INSERT INTO "Session" ("id","subjectId","index","title","cheatSheet","createdAt") VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)`,
+      args: [sid, dbId, s.index, s.title, s.cheatSheet],
+    })
+    const cids: Record<string, string> = {}
+    for (const c of s.concepts) {
+      const cid = randomUUID()
+      cids[c.name] = cid
+      stmts.push({
+        sql: `INSERT INTO "Concept" ("id","sessionId","name","explanation","orderIndex","createdAt") VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)`,
+        args: [cid, sid, c.name, c.explanation, c.orderIndex],
+      })
+      const card = dbCardFor(c)
+      stmts.push({
+        sql: `INSERT INTO "Exercise" ("id","conceptId","type","front","back","content","createdAt") VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP)`,
+        args: [randomUUID(), cid, "FLASHCARD", card.front, card.back, card.content],
+      })
+    }
+    for (const c of s.concepts) {
+      for (const p of c.prerequisites) {
+        if (cids[p]) {
+          stmts.push({
+            sql: `INSERT INTO "ConceptPrereq" ("conceptId","prereqId") VALUES (?,?)`,
+            args: [cids[c.name], cids[p]],
+          })
+        }
+      }
+    }
+  }
+  await db.batch(stmts, "write")
+  console.log(`  ✓ seeded ${DB_SESSIONS.length} database sessions`)
+}
+
 async function seedCatalog(db: Client) {
   for (const s of CATALOG) {
     await db.execute({
@@ -201,6 +256,7 @@ async function main() {
   await ensureProfile(db)
   await seedCatalog(db)
   await seedMathContent(db)
+  await seedDbContent(db)
   await backfillProfiles(db)
   console.log("[migrate-prod] done.")
 }
