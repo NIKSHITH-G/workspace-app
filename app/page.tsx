@@ -103,7 +103,7 @@ export default async function Home() {
     <div className="min-h-screen bg-[#080810] text-white flex flex-col overflow-hidden">
       {/* ── nav bar ── */}
       <nav
-        className="relative z-30 flex items-center justify-between gap-4 px-5 py-3 border-b border-white/[0.05]"
+        className="relative z-30 flex items-center justify-between gap-3 sm:gap-4 px-4 sm:px-5 py-3 border-b border-white/[0.05]"
         style={{ minHeight: 60 }}
       >
         {/* left: character info */}
@@ -127,7 +127,7 @@ export default async function Home() {
             {/* name + class + level */}
             <div className="flex flex-col" style={{ gap: 3 }}>
               <div className="flex items-center" style={{ gap: 7 }}>
-                <span className="text-xs font-bold text-white tracking-wide leading-none truncate" style={{ maxWidth: 140 }}>{displayName}</span>
+                <span className="text-xs font-bold text-white tracking-wide leading-none truncate max-w-[90px] sm:max-w-[140px]">{displayName}</span>
                 <span
                   className="font-mono leading-none shrink-0"
                   style={{ fontSize: 9, padding: "2px 5px", borderRadius: 4, color: theme.primaryHex, border: `1px solid ${theme.primaryHex}44`, background: `${theme.primaryHex}11` }}
@@ -185,7 +185,7 @@ export default async function Home() {
         )}
 
         {/* right: leaderboard + user */}
-        <div className="flex items-center gap-3.5">
+        <div className="flex items-center gap-3.5 shrink-0">
           <Link
             href="/leaderboard"
             className="flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 transition-colors"
