@@ -2,13 +2,14 @@ import { ImageResponse } from "next/og"
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 
-// Baloo 2 — a rounded, friendly display face — bundled so the lettermark renders
-// with real weight + smooth letterforms. Read at build time (icons are
-// force-static), so there's no runtime/network dependency.
-const baloo = readFileSync(join(process.cwd(), "app/fonts/Baloo2-Bold.ttf"))
+// Sharp geometric font (Poppins ExtraBold), bundled so the lettermark renders
+// with real weight. Read at build time (icons are force-static) — no runtime
+// network dependency.
+const poppins = readFileSync(join(process.cwd(), "app/fonts/Poppins-ExtraBold.ttf"))
 
-// MODO app-icon — rounded "squircle" gradient tile with the wordmark laid out as
-// a true 2×2 grid (fixed columns) so M sits over D and O sits over O.
+// MODO app-icon — a DARK rounded "squircle" tile (matches the app's theme) with
+// the wordmark laid out as a true 2×2 grid (M over D, O over O) in sharp letters
+// filled with the indigo→violet brand gradient.
 export function renderIcon(size: number) {
   const cell = Math.round(size * 0.28)
   const rowH = Math.round(size * 0.3)
@@ -24,6 +25,9 @@ export function renderIcon(size: number) {
         justifyContent: "center",
         fontSize: f,
         lineHeight: 1,
+        backgroundImage: "linear-gradient(140deg, #818cf8 0%, #c084fc 100%)",
+        backgroundClip: "text",
+        color: "transparent",
       }}
     >
       {ch}
@@ -39,7 +43,7 @@ export function renderIcon(size: number) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#07070f",
+          background: "#000000",
         }}
       >
         <div
@@ -51,9 +55,9 @@ export function renderIcon(size: number) {
             alignItems: "center",
             justifyContent: "center",
             borderRadius: Math.round(size * 0.22),
-            background: "linear-gradient(140deg, #6366f1 0%, #a855f7 100%)",
-            color: "#ffffff",
-            fontFamily: "Baloo",
+            background: "linear-gradient(150deg, #15151f 0%, #0a0a12 100%)",
+            border: `${Math.max(1, Math.round(size * 0.008))}px solid rgba(129,140,248,0.18)`,
+            fontFamily: "Poppins",
             fontWeight: 800,
           }}
         >
@@ -71,7 +75,7 @@ export function renderIcon(size: number) {
     {
       width: size,
       height: size,
-      fonts: [{ name: "Baloo", data: baloo, weight: 800, style: "normal" }],
+      fonts: [{ name: "Poppins", data: poppins, weight: 800, style: "normal" }],
     },
   )
 }
