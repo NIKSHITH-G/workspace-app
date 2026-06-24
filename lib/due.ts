@@ -18,11 +18,14 @@ export type DueCard = {
   sessionId: string
 }
 
-// A concept's flashcard is "due" when there's no mastery row yet (never studied)
-// or its next-review time has arrived. Mastery is per-concept, so all of a
-// concept's cards share its due-ness.
-function isConceptDue(nextReview: Date | null | undefined, now: number): boolean {
-  return !nextReview || new Date(nextReview).getTime() <= now
+// A concept's flashcard is "due for review" only once it has been STUDIED (a
+// mastery row exists) AND its next-review time has arrived. Cards never studied
+// are NOT included here on purpose: Study Today is a global cross-subject queue,
+// so brand-new cards from subjects the user hasn't started must not flood it —
+// you begin a subject from the catalog, and from then on its due cards appear.
+// (Mastery is per-concept, so all of a concept's cards share its due-ness.)
+function isDueForReview(nextReview: Date | null | undefined, now: number): boolean {
+  return !!nextReview && new Date(nextReview).getTime() <= now
 }
 
 /** Lightweight count of due flashcards across all published subjects (for the home CTA). */
@@ -49,7 +52,7 @@ export async function countDueCards(studentId: string): Promise<number> {
     for (const sess of s.sessions)
       for (const c of sess.concepts) {
         if (c.exercises.length === 0) continue
-        if (isConceptDue(c.masteryScores[0]?.nextReview, now)) due += c.exercises.length
+        if (isDueForReview(c.masteryScores[0]?.nextReview, now)) due += c.exercises.length
       }
   return due
 }
@@ -84,7 +87,7 @@ export async function getDueQueue(studentId: string, locale: Locale): Promise<Du
   for (const subject of subjects) {
     for (const session of subject.sessions) {
       for (const concept of session.concepts) {
-        if (!isConceptDue(concept.masteryScores[0]?.nextReview, now)) continue
+        if (!isDueForReview(concept.masteryScores[0]?.nextReview, now)) continue
         for (const ex of concept.exercises) {
           // MCQ data, if present in the content JSON
           let options: string[] | undefined
