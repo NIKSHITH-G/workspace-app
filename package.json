@@ -18,7 +18,8 @@
     "seed:arch": "tsx scripts/seed-arch-static.ts",
     "generate:mcq": "tsx scripts/generate-mcq.ts",
     "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "seed:leaderboard": "tsx scripts/seed-leaderboard.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.104.2",

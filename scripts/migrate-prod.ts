@@ -10,6 +10,11 @@ import { randomUUID } from "node:crypto"
 import { SESSIONS, cardFor } from "./seed-math-static"
 import { SESSIONS as DB_SESSIONS, cardFor as dbCardFor } from "./seed-db-static"
 import { SESSIONS as ARCH_SESSIONS, cardFor as archCardFor } from "./seed-arch-static"
+import { buildSeedPlan } from "./seed-leaderboard-data"
+
+// Prisma stores SQLite/libsql DateTime as ISO-8601 text with a +00:00 offset
+// (not a trailing "Z"); match that so seeded dates parse back correctly.
+const tsLit = (d: Date) => d.toISOString().replace("Z", "+00:00")
 
 const NEW_SUBJECT_COLUMNS: { name: string; ddl: string }[] = [
   { name: "description", ddl: `ALTER TABLE "Subject" ADD COLUMN "description" TEXT` },
@@ -242,6 +247,49 @@ async function seedSubjectContent<C extends SeedConcept>(
   console.log(`  ✓ seeded ${sessions.length} ${slug} sessions`)
 }
 
+// One-time "pre-merit" leaderboard: a handful of believable demo learners with
+// recent, varied activity so a brand-new board isn't empty. Tagged seed_* for
+// easy removal. Skips if already seeded (so it never duplicates on redeploys).
+async function seedLeaderboard(db: Client) {
+  const existing = await db.execute(`SELECT COUNT(*) AS n FROM "Profile" WHERE "userId" LIKE 'seed_%'`)
+  if (Number(existing.rows[0].n) > 0) {
+    console.log("  · leaderboard demo learners already present — skipping")
+    return
+  }
+  const ex = await db.execute(`SELECT "id" FROM "Exercise" WHERE "type"='FLASHCARD'`)
+  const co = await db.execute(`SELECT "id" FROM "Concept"`)
+  const exerciseIds = ex.rows.map((r) => String(r.id))
+  const conceptIds = co.rows.map((r) => String(r.id))
+  if (exerciseIds.length === 0 || conceptIds.length === 0) {
+    console.log("  · no content to attach demo activity to — skipping leaderboard seed")
+    return
+  }
+
+  const plan = buildSeedPlan({ exerciseIds, conceptIds })
+  const now = tsLit(new Date())
+  const stmts: { sql: string; args: (string | number | null)[] }[] = []
+  for (const p of plan.profiles) {
+    stmts.push({
+      sql: `INSERT INTO "Profile" ("userId","displayName","avatar","style","updatedAt") VALUES (?,?,?,?,?)`,
+      args: [p.userId, p.displayName, p.avatar, p.style, now],
+    })
+  }
+  for (const m of plan.mastery) {
+    stmts.push({
+      sql: `INSERT INTO "MasteryScore" ("id","conceptId","studentId","score","repetitions","easeFactor","interval","nextReview","updatedAt") VALUES (?,?,?,?,?,?,?,?,?)`,
+      args: [m.id, m.conceptId, m.studentId, m.score, m.repetitions, m.easeFactor, m.interval, tsLit(m.nextReview), now],
+    })
+  }
+  for (const a of plan.attempts) {
+    stmts.push({
+      sql: `INSERT INTO "Attempt" ("id","exerciseId","studentId","quality","confidence","correct","createdAt") VALUES (?,?,?,?,?,?,?)`,
+      args: [a.id, a.exerciseId, a.studentId, a.quality, null, a.correct ? 1 : 0, tsLit(a.createdAt)],
+    })
+  }
+  await db.batch(stmts, "write")
+  console.log(`  ✓ seeded ${plan.profiles.length} demo learners (${plan.attempts.length} attempts, ${plan.mastery.length} mastery)`)
+}
+
 async function seedCatalog(db: Client) {
   for (const s of CATALOG) {
     await db.execute({
@@ -272,6 +320,7 @@ async function main() {
   await seedSubjectContent(db, "database", DB_SESSIONS, dbCardFor)
   await seedSubjectContent(db, "architecture", ARCH_SESSIONS, archCardFor)
   await backfillProfiles(db)
+  await seedLeaderboard(db)
   console.log("[migrate-prod] done.")
 }
 
