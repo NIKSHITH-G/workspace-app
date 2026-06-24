@@ -4,7 +4,15 @@ import { GUEST_COOKIE } from "@/lib/guestCookie"
 
 // Only the auth screens are truly public — you must sign in OR choose
 // "Continue as guest" before reaching anything else (no silent guest spawn).
-const isPublic = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)"])
+// PWA assets (offline fallback, generated icons) must also be reachable without
+// auth so the service worker can precache them and they load when signed out.
+const isPublic = createRouteMatcher([
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/offline",
+  "/icons(.*)",
+  "/apple-icon(.*)",
+])
 
 export const proxy = clerkMiddleware(async (auth, req) => {
   if (isPublic(req)) return

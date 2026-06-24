@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { getUserTheme } from "@/lib/currentUser";
@@ -6,6 +6,7 @@ import { getLocale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { dirFor } from "@/lib/i18n/config";
 import { I18nProvider } from "@/lib/i18n/I18nProvider";
+import ServiceWorkerRegister from "./ServiceWorkerRegister";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,6 +25,17 @@ export const metadata: Metadata = {
     template: "%s | MODO",
   },
   description: "Master anything.",
+  applicationName: "MODO",
+  // Installable PWA: standalone iOS launch + matching home-screen title.
+  appleWebApp: {
+    capable: true,
+    title: "MODO",
+    statusBarStyle: "black-translucent",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#080810",
 };
 
 export default async function RootLayout({
@@ -47,6 +59,7 @@ export default async function RootLayout({
       style={themeVars as React.CSSProperties}
     >
       <body className="min-h-full flex flex-col bg-[#080810] text-white">
+        <ServiceWorkerRegister />
         <I18nProvider locale={locale} dict={dict}>
           <ClerkProvider afterSignOutUrl="/sign-in">{children}</ClerkProvider>
         </I18nProvider>
