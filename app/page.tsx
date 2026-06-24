@@ -11,6 +11,7 @@ import { computeXp, levelProgress } from "@/lib/xp"
 import { getT } from "@/lib/i18n/server"
 import { getLocale } from "@/lib/i18n/locale"
 import { localize } from "@/lib/i18n/localizeContent"
+import { countDueCards } from "@/lib/due"
 import AvatarIcon from "@/components/AvatarIcon"
 
 function TrophyIcon() {
@@ -43,7 +44,7 @@ export default async function Home() {
   const locale = await getLocale()
   const studentId = user?.id ?? "__none__"
 
-  const [subjectRows, masteryRows, attempts] = await Promise.all([
+  const [subjectRows, masteryRows, attempts, dueCount] = await Promise.all([
     db.subject.findMany({
       orderBy: [{ order: "asc" }, { createdAt: "asc" }],
       // select only what the catalog needs — avoid pulling every session's full
@@ -70,6 +71,7 @@ export default async function Home() {
     user
       ? db.attempt.findMany({ where: { studentId: user.id }, select: { correct: true, quality: true, createdAt: true } })
       : Promise.resolve([]),
+    countDueCards(studentId),
   ])
 
   // Build the localized, DB-driven catalog (name/description translated per locale).
@@ -219,6 +221,32 @@ export default async function Home() {
             {t("home.tagline")}
           </p>
         </div>
+
+        {/* Study Today — one daily queue of all due cards across subjects */}
+        {dueCount > 0 && (
+          <Link
+            href="/today"
+            className="relative z-10 mb-8 group flex items-center gap-3 rounded-2xl px-5 py-3 transition-transform hover:scale-[1.02]"
+            style={{
+              background: `linear-gradient(135deg, ${theme.primaryHex}26, ${theme.primaryHex}0d)`,
+              border: `1px solid ${theme.primaryHex}55`,
+            }}
+          >
+            <span
+              className="flex items-center justify-center shrink-0"
+              style={{ width: 34, height: 34, borderRadius: 9, fontSize: 17, background: `${theme.primaryHex}22` }}
+            >
+              ⚡
+            </span>
+            <span className="flex flex-col leading-tight">
+              <span className="text-sm font-semibold text-white">{t("today.cta")}</span>
+              <span className="text-[11px]" style={{ color: theme.primaryHex }}>
+                {t("today.due", { count: dueCount })}
+              </span>
+            </span>
+            <span className="ml-1 text-zinc-400 transition-transform group-hover:translate-x-0.5">→</span>
+          </Link>
+        )}
 
         {/* subject catalog — searchable, scales to any number of subjects */}
         <div className="relative z-10 w-full flex flex-col items-center">

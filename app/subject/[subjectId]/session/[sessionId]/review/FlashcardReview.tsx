@@ -16,6 +16,10 @@ type Card = {
   // MCQ fields — present when options are seeded
   options?: string[]      // all 4 options (correct + 3 distractors)
   correctOption?: string  // the correct option text
+  // Owning subject/session — set in the cross-subject "Study Today" queue so each
+  // attempt revalidates its own session page. Falls back to the page-level props.
+  subjectId?: string
+  sessionId?: string
 }
 
 type Props = {
@@ -282,7 +286,7 @@ export default function FlashcardReview({ cards, subjectId, sessionId }: Props) 
   const handleMCQResult = (correct: boolean) => {
     popXp(correct ? 4 : 1)
     startTransition(async () => {
-      await submitAttempt(card.exerciseId, correct ? 4 : 1, null, subjectId, sessionId)
+      await submitAttempt(card.exerciseId, correct ? 4 : 1, null, card.subjectId ?? subjectId, card.sessionId ?? sessionId)
       advance()
     })
   }
@@ -290,7 +294,7 @@ export default function FlashcardReview({ cards, subjectId, sessionId }: Props) 
   const handleFlipRate = (quality: number) => {
     popXp(quality)
     startTransition(async () => {
-      await submitAttempt(card.exerciseId, quality, null, subjectId, sessionId)
+      await submitAttempt(card.exerciseId, quality, null, card.subjectId ?? subjectId, card.sessionId ?? sessionId)
       advance()
     })
   }

@@ -24,6 +24,15 @@
     "noResults": "No courses match \"{query}\"",
     "searchHint": "press / to search"
   },
+  "today": {
+    "cta": "Study Today",
+    "due": "{count} cards due across your subjects",
+    "title": "Study Today",
+    "subtitle": "{count} cards due",
+    "allCaught": "You're all caught up!",
+    "allCaughtSub": "Nothing's due right now — come back later, or jump into a subject to learn something new.",
+    "browse": "Browse subjects →"
+  },
   "settings": {
     "title": "Settings",
     "subtitle": "Customize your MODO identity",
