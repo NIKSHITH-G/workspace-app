@@ -20,6 +20,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  // Resolves relative OG/canonical URLs to absolute ones on the live domain.
+  // Override per-environment with NEXT_PUBLIC_SITE_URL if the primary host changes.
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://themodo.in"),
   title: {
     default: "MODO",
     template: "%s | MODO",
