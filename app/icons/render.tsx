@@ -10,9 +10,9 @@ const baloo = readFileSync(join(process.cwd(), "app/fonts/Baloo2-Bold.ttf"))
 // MODO app-icon — rounded "squircle" gradient tile with the wordmark laid out as
 // a true 2×2 grid (fixed columns) so M sits over D and O sits over O.
 export function renderIcon(size: number) {
-  const cell = Math.round(size * 0.235)
-  const rowH = Math.round(size * 0.25)
-  const f = Math.round(size * 0.28)
+  const cell = Math.round(size * 0.28)
+  const rowH = Math.round(size * 0.3)
+  const f = Math.round(size * 0.34)
 
   const Letter = (ch: string) => (
     <div
