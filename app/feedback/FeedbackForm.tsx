@@ -4,7 +4,15 @@ import { useState, useTransition } from "react"
 import Link from "next/link"
 import { submitFeedback } from "./actions"
 
+const CATEGORIES = [
+  { id: "Idea", emoji: "💡" },
+  { id: "Bug", emoji: "🐞" },
+  { id: "Subject", emoji: "📚" },
+  { id: "Other", emoji: "💬" },
+]
+
 export default function FeedbackForm() {
+  const [category, setCategory] = useState<string | null>(null)
   const [message, setMessage] = useState("")
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -12,7 +20,7 @@ export default function FeedbackForm() {
 
   if (sent) {
     return (
-      <div className="text-center space-y-3 py-8">
+      <div className="text-center space-y-3 py-6">
         <div className="text-4xl" aria-hidden>
           🙌
         </div>
@@ -27,29 +35,52 @@ export default function FeedbackForm() {
 
   const submit = () => {
     setError(null)
+    const body = category ? `[${category}] ${message.trim()}` : message.trim()
     start(async () => {
-      const res = await submitFeedback(message)
+      const res = await submitFeedback(body)
       if (res.ok) setSent(true)
       else setError(res.error ?? "Something went wrong.")
     })
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
+      {/* category chips */}
+      <div className="flex flex-wrap gap-2">
+        {CATEGORIES.map((c) => {
+          const active = category === c.id
+          return (
+            <button
+              key={c.id}
+              onClick={() => setCategory(active ? null : c.id)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                active ? "text-white border-transparent" : "text-zinc-400 border-white/[0.1] hover:text-white hover:border-white/25"
+              }`}
+              style={active ? { background: "linear-gradient(135deg,#6366f1,#a855f7)" } : undefined}
+            >
+              <span className="mr-1">{c.emoji}</span>
+              {c.id}
+            </button>
+          )
+        })}
+      </div>
+
       <textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         maxLength={2000}
         rows={6}
         placeholder="What's working, what's confusing, what would you love to see? Bugs, ideas, subjects you want — anything."
-        className="w-full rounded-xl bg-zinc-900 border border-zinc-800 px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors resize-none"
+        className="w-full rounded-xl bg-white/[0.03] border border-white/[0.08] px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.04] transition-colors resize-none"
       />
+
       {error && <p className="text-xs text-red-400">{error}</p>}
+
       <button
         onClick={submit}
         disabled={pending || message.trim().length < 3}
         className="w-full py-3 rounded-xl text-sm font-semibold text-white transition-transform hover:scale-[1.01] disabled:opacity-40 disabled:hover:scale-100"
-        style={{ background: "var(--theme-primary,#6366f1)" }}
+        style={{ background: "linear-gradient(135deg,#6366f1,#a855f7)", boxShadow: "0 8px 30px rgba(99,102,241,0.30)" }}
       >
         {pending ? "Sending…" : "Send feedback"}
       </button>
