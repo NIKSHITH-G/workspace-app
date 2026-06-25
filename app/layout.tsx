@@ -28,12 +28,12 @@ export const metadata: Metadata = {
     template: "%s | MODO",
   },
   description:
-    "MODO is a spaced-repetition flashcard app to master Python, math, databases and computer architecture — learn it once and remember it for good.",
+    "MODO is a spaced-repetition flashcard app to master any subject — from programming and databases to math and beyond. Learn it once and remember it for good.",
   applicationName: "MODO",
-  keywords: ["flashcards", "spaced repetition", "study app", "Python", "databases", "learn"],
+  keywords: ["flashcards", "spaced repetition", "study app", "learn any subject", "memorization"],
   openGraph: {
     title: "MODO — Study smarter",
-    description: "Spaced-repetition flashcards that actually stick. Learn Python, math, databases and more.",
+    description: "Spaced-repetition flashcards that actually stick — learn any subject and remember it for good.",
     siteName: "MODO",
     type: "website",
   },

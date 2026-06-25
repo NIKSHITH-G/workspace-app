@@ -125,8 +125,9 @@ export default async function Landing() {
             Flashcards that actually <span style={{ color: "#a5b4fc" }}>stick</span>.
           </h1>
           <p className="mt-5 text-zinc-400 text-base sm:text-lg max-w-xl leading-relaxed">
-            MODO uses <span className="text-zinc-200 font-medium">spaced repetition</span> to help you learn Python, math,
-            databases and computer architecture — and actually remember it, instead of cramming and forgetting.
+            MODO uses <span className="text-zinc-200 font-medium">spaced repetition</span> to help you learn
+            <span className="text-zinc-200 font-medium"> any subject</span> — and actually remember it, instead of
+            cramming and forgetting.
           </p>
 
           <div className="mt-9 flex flex-col sm:flex-row items-center gap-3">
