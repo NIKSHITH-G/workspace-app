@@ -30,3 +30,38 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(fetch(request).catch(() => caches.match(OFFLINE_URL)))
   }
 })
+
+// ── Web Push ────────────────────────────────────────────────────────────────
+// Show the notification the server sent (title/body/url payload).
+self.addEventListener("push", (event) => {
+  let data = { title: "MODO", body: "You have cards to review.", url: "/today" }
+  try {
+    if (event.data) data = { ...data, ...event.data.json() }
+  } catch {}
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: "/icons/192",
+      badge: "/icons/192",
+      data: { url: data.url || "/today" },
+      vibrate: [80, 40, 80],
+    }),
+  )
+})
+
+// Focus an existing tab (or open one) at the notification's URL when tapped.
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close()
+  const url = (event.notification.data && event.notification.data.url) || "/today"
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
+      for (const c of clientList) {
+        if ("focus" in c) {
+          c.navigate(url)
+          return c.focus()
+        }
+      }
+      return self.clients.openWindow(url)
+    }),
+  )
+})

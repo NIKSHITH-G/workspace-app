@@ -7,6 +7,18 @@ datasource db {
   provider = "sqlite"
 }
 
+// Web Push subscription — one row per browser/device a user enables notifications on.
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
 model Subject {
   id           String    @id @default(cuid())
   name         String

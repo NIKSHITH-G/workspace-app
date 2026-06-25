@@ -13,6 +13,7 @@ const isPublic = createRouteMatcher([
   "/offline",
   "/icons(.*)",
   "/apple-icon(.*)",
+  "/api/cron(.*)", // cron jobs authenticate with CRON_SECRET, not a user session
 ])
 
 export const proxy = clerkMiddleware(async (auth, req) => {

@@ -58,6 +58,21 @@ async function ensureContentTranslation(db: Client) {
   console.log("  ✓ ContentTranslation table + unique index")
 }
 
+async function ensurePushSubscription(db: Client) {
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS "PushSubscription" (
+      "id" TEXT NOT NULL PRIMARY KEY,
+      "userId" TEXT NOT NULL,
+      "endpoint" TEXT NOT NULL,
+      "p256dh" TEXT NOT NULL,
+      "auth" TEXT NOT NULL,
+      "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )`)
+  await db.execute(`CREATE UNIQUE INDEX IF NOT EXISTS "PushSubscription_endpoint_key" ON "PushSubscription"("endpoint")`)
+  await db.execute(`CREATE INDEX IF NOT EXISTS "PushSubscription_userId_idx" ON "PushSubscription"("userId")`)
+  console.log("  ✓ PushSubscription table")
+}
+
 async function ensureProfile(db: Client) {
   await db.execute(`
     CREATE TABLE IF NOT EXISTS "Profile" (
@@ -315,6 +330,7 @@ async function main() {
   await addMissingSubjectColumns(db)
   await ensureContentTranslation(db)
   await ensureProfile(db)
+  await ensurePushSubscription(db)
   await seedCatalog(db)
   await seedMathContent(db)
   await seedSubjectContent(db, "database", DB_SESSIONS, dbCardFor)

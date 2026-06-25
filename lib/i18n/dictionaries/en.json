@@ -31,7 +31,10 @@
     "subtitle": "{count} cards due",
     "allCaught": "You're all caught up!",
     "allCaughtSub": "Nothing's due right now — come back later, or jump into a subject to learn something new.",
-    "browse": "Browse subjects →"
+    "browse": "Browse subjects →",
+    "goal": "Daily goal",
+    "goalProgress": "{done} / {total} reviews today",
+    "goalDone": "Daily goal complete! 🎉"
   },
   "settings": {
     "title": "Settings",
@@ -43,7 +46,8 @@
     "style": "Style",
     "language": "Language",
     "save": "Save Changes",
-    "saved": "✓ Saved — returning…"
+    "saved": "✓ Saved — returning…",
+    "notifications": "Notifications"
   },
   "onboarding": {
     "nameTitle": "What should we call you?",

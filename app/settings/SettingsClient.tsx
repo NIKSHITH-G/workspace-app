@@ -8,6 +8,7 @@ import { type Theme } from "@/lib/themes"
 import { useT } from "@/lib/i18n/I18nProvider"
 import { LOCALE_META, LOCALES } from "@/lib/i18n/config"
 import AvatarIcon from "@/components/AvatarIcon"
+import NotificationToggle from "@/components/NotificationToggle"
 
 const AVATARS = [
   { id: "owl",    tKey: "avatars.owl" },
@@ -204,6 +205,12 @@ export default function SettingsClient({ theme, initialName, initialAvatar, init
               </motion.button>
             ))}
           </div>
+        </section>
+
+        {/* Notifications */}
+        <section className="space-y-3">
+          <label className="text-xs text-zinc-500 tracking-widest uppercase font-mono">{t("settings.notifications")}</label>
+          <NotificationToggle />
         </section>
 
         {/* Save */}

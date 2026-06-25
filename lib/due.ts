@@ -28,6 +28,16 @@ function isDueForReview(nextReview: Date | null | undefined, now: number): boole
   return !!nextReview && new Date(nextReview).getTime() <= now
 }
 
+/** Default number of reviews that counts as "done for today". */
+export const DAILY_GOAL = 20
+
+/** How many cards the student has already reviewed today (UTC) — drives the daily goal. */
+export async function countTodayReviews(studentId: string): Promise<number> {
+  const now = new Date()
+  const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0))
+  return db.attempt.count({ where: { studentId, createdAt: { gte: startOfDay } } })
+}
+
 /** Lightweight count of due flashcards across all published subjects (for the home CTA). */
 export async function countDueCards(studentId: string): Promise<number> {
   const now = Date.now()
