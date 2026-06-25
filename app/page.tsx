@@ -13,6 +13,7 @@ import { getLocale } from "@/lib/i18n/locale"
 import { localize } from "@/lib/i18n/localizeContent"
 import { countDueCards } from "@/lib/due"
 import { getAccess } from "@/lib/access"
+import { exitGuest } from "./sign-in/actions"
 import Landing from "./Landing"
 import AvatarIcon from "@/components/AvatarIcon"
 
@@ -206,9 +207,17 @@ export default async function Home() {
           {user ? (
             <UserButton />
           ) : (
-            <Link href="/sign-in" className="text-xs text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-600 px-3 py-1.5 rounded-lg transition-all">
-              {t("home.signIn")}
-            </Link>
+            <>
+              {/* guests can leave guest mode → back to the landing page */}
+              <form action={exitGuest}>
+                <button type="submit" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors" title="Exit guest mode">
+                  {t("home.exit")}
+                </button>
+              </form>
+              <Link href="/sign-in" className="text-xs text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-600 px-3 py-1.5 rounded-lg transition-all">
+                {t("home.signIn")}
+              </Link>
+            </>
           )}
         </div>
       </nav>

@@ -62,7 +62,7 @@ export default async function Landing() {
               className="px-6 py-3 rounded-xl text-sm font-semibold text-white transition-transform hover:scale-[1.03] w-full sm:w-auto text-center"
               style={{ background: `linear-gradient(135deg, ${ACCENT}, #a855f7)`, boxShadow: "0 8px 30px rgba(99,102,241,0.35)" }}
             >
-              Start learning — free
+              Get started
             </Link>
             <form action={continueAsGuest}>
               <button
@@ -73,7 +73,6 @@ export default async function Landing() {
               </button>
             </form>
           </div>
-          <p className="mt-4 text-xs text-zinc-600">No credit card. Works on your phone. Free.</p>
         </div>
       </header>
 
@@ -151,7 +150,7 @@ export default async function Landing() {
             className="inline-block mt-7 px-7 py-3 rounded-xl text-sm font-semibold text-white transition-transform hover:scale-[1.03]"
             style={{ background: `linear-gradient(135deg, ${ACCENT}, #a855f7)`, boxShadow: "0 8px 30px rgba(99,102,241,0.35)" }}
           >
-            Get started — it's free
+            Get started
           </Link>
         </div>
       </section>

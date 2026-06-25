@@ -13,3 +13,9 @@ export async function continueAsGuest() {
   })
   redirect("/")
 }
+
+/** Leave guest mode: clear the marker cookie so "/" shows the landing page again. */
+export async function exitGuest() {
+  ;(await cookies()).delete(GUEST_COOKIE)
+  redirect("/")
+}
