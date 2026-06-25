@@ -270,9 +270,10 @@ export default function DocsPage() {
 
           <Section id="account" icon="🔐" title="Your account & data">
             <ul className="list-disc pl-5 space-y-1.5">
-              <li className={li}>Sign in with email or Google to save everything — authentication is handled securely by Clerk.</li>
-              <li className={li}>We store your profile (name, avatar, style), your review attempts and mastery, and — only if you opt in — your notification subscription.</li>
-              <li className={li}>Your XP, levels and streaks are <span className={em}>computed</span> from your attempts, so they&apos;re always accurate and update retroactively.</li>
+              <li className={li}>Sign-in (email or Google) is handled securely by <span className={em}>Clerk</span>. Your email, password and Google login stay with Clerk — MODO only ever sees an anonymous account ID.</li>
+              <li className={li}>We store the <span className={em}>username</span> you choose, your avatar and style, your review history and mastery, and — only if you opt in — your notification subscription.</li>
+              <li className={li}>We do <span className={em}>not</span> store your email address, password, or any payment details.</li>
+              <li className={li}>Your XP, levels and streaks are <span className={em}>computed</span> from your review history, so they&apos;re always accurate and update retroactively.</li>
               <li className={li}>Guests are never tracked — nothing is saved until you sign in.</li>
             </ul>
           </Section>
