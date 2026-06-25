@@ -73,6 +73,17 @@ async function ensurePushSubscription(db: Client) {
   console.log("  ✓ PushSubscription table")
 }
 
+async function ensureFeedback(db: Client) {
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS "Feedback" (
+      "id" TEXT NOT NULL PRIMARY KEY,
+      "userId" TEXT,
+      "message" TEXT NOT NULL,
+      "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )`)
+  console.log("  ✓ Feedback table")
+}
+
 async function ensureProfile(db: Client) {
   await db.execute(`
     CREATE TABLE IF NOT EXISTS "Profile" (
@@ -331,6 +342,7 @@ async function main() {
   await ensureContentTranslation(db)
   await ensureProfile(db)
   await ensurePushSubscription(db)
+  await ensureFeedback(db)
   await seedCatalog(db)
   await seedMathContent(db)
   await seedSubjectContent(db, "database", DB_SESSIONS, dbCardFor)

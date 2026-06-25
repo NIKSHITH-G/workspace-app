@@ -199,8 +199,9 @@ export default async function Landing() {
             <span className="font-bold text-zinc-400">MODO</span> · study smarter
           </span>
           <div className="flex items-center gap-5">
+            <Link href="/docs" className="hover:text-zinc-300 transition-colors">Docs</Link>
+            <Link href="/feedback" className="hover:text-zinc-300 transition-colors">Feedback</Link>
             <Link href="/sign-in" className="hover:text-zinc-300 transition-colors">Sign in</Link>
-            <Link href="/sign-up" className="hover:text-zinc-300 transition-colors">Get started</Link>
           </div>
         </div>
       </footer>

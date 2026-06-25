@@ -19,6 +19,14 @@ model PushSubscription {
   @@index([userId])
 }
 
+// User feedback submitted from the /feedback page (userId null = anonymous/guest).
+model Feedback {
+  id        String   @id @default(cuid())
+  userId    String?
+  message   String
+  createdAt DateTime @default(now())
+}
+
 model Subject {
   id           String    @id @default(cuid())
   name         String

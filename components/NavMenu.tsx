@@ -61,6 +61,12 @@ export default function NavMenu({ isGuest }: { isGuest: boolean }) {
           <Link href="/leaderboard" className={item} onClick={() => setOpen(false)}>
             {t("leaderboard.title")}
           </Link>
+          <Link href="/docs" className={item} onClick={() => setOpen(false)}>
+            {t("home.docs")}
+          </Link>
+          <Link href="/feedback" className={item} onClick={() => setOpen(false)}>
+            {t("home.feedback")}
+          </Link>
 
           {isGuest ? (
             <>
