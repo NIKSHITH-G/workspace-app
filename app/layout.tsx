@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   applicationName: "MODO",
   keywords: ["flashcards", "spaced repetition", "study app", "Python", "databases", "learn"],
   openGraph: {
-    title: "MODO — Master anything",
+    title: "MODO — Study smarter",
     description: "Spaced-repetition flashcards that actually stick. Learn Python, math, databases and more.",
     siteName: "MODO",
     type: "website",

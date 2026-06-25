@@ -46,7 +46,7 @@ export default async function Landing() {
         />
         <div className="relative z-10 flex flex-col items-center">
           <ModoTitle />
-          <p className="text-zinc-600 text-[11px] tracking-[0.34em] uppercase mt-3 font-light">master anything</p>
+          <p className="text-zinc-600 text-[11px] tracking-[0.34em] uppercase mt-3 font-light">study smarter</p>
 
           <h1 className="mt-8 text-4xl sm:text-5xl font-black tracking-tight max-w-2xl leading-[1.08]">
             Flashcards that actually <span style={{ color: "#a5b4fc" }}>stick</span>.
@@ -157,7 +157,7 @@ export default async function Landing() {
 
       <footer className="relative z-10 mt-auto border-t border-white/[0.06] px-6 py-6 text-center">
         <p className="text-xs text-zinc-600">
-          <span className="font-bold text-zinc-400">MODO</span> · master anything ·{" "}
+          <span className="font-bold text-zinc-400">MODO</span> · study smarter ·{" "}
           <Link href="/sign-in" className="hover:text-zinc-300 transition-colors">
             Sign in
           </Link>

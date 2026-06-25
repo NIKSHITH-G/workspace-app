@@ -24,7 +24,7 @@ export default function SignInPage() {
       <Link href="/" className="relative z-10 mb-8 text-center block transition-opacity hover:opacity-80" title="Back to home">
         <ModoTitle />
         <p className="text-zinc-600 text-[10px] tracking-[0.35em] uppercase mt-2 font-light">
-          master anything
+          study smarter
         </p>
       </Link>
 

@@ -4,7 +4,7 @@ import type { MetadataRoute } from "next"
 // run standalone (no browser chrome). Next auto-injects <link rel="manifest">.
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "MODO — Master anything",
+    name: "MODO — Study smarter",
     short_name: "MODO",
     description: "Spaced-repetition flashcards to master any subject — at your own pace.",
     start_url: "/",
