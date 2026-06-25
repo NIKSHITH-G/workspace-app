@@ -3,14 +3,17 @@ import { db } from "@/lib/db"
 import { connection } from "next/server"
 import TopNav from "@/app/TopNav"
 import { getT } from "@/lib/i18n/server"
+import { requireStudentId } from "@/lib/access"
 
 export default async function SubjectsPage() {
   await connection()
   const t = await getT()
+  const studentId = await requireStudentId()
   const subjects = await db.subject.findMany({
     include: {
       sessions: {
-        include: { concepts: { include: { masteryScores: true } } },
+        // only THIS student's mastery — otherwise other users' (incl. seed) scores leak in
+        include: { concepts: { include: { masteryScores: { where: { studentId } } } } },
         orderBy: { index: "asc" },
       },
     },
