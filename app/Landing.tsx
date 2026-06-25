@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { db } from "@/lib/db"
 import ModoTitle from "./ModoTitle"
+import LandingTabs from "./LandingTabs"
 import { continueAsGuest } from "./sign-in/actions"
 
 const ACCENT = "#6366f1" // fixed brand indigo — signed-out visitors have no theme yet
@@ -76,65 +77,8 @@ export default async function Landing() {
         </div>
       </header>
 
-      {/* subjects */}
-      <section className="relative z-10 px-6 pb-20 max-w-4xl mx-auto w-full">
-        <p className="text-center text-zinc-500 text-xs uppercase tracking-[0.25em] mb-6">Learn real subjects</p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {subjects.map((s) => (
-            <div
-              key={s.id}
-              className="rounded-2xl border border-white/[0.07] bg-white/[0.02] px-4 py-5 flex flex-col items-center text-center gap-2"
-            >
-              <span className="text-3xl">{s.emoji ?? "📘"}</span>
-              <span className="text-sm font-medium text-zinc-200 leading-snug">{s.name}</span>
-              {s.category && <span className="text-[10px] uppercase tracking-wider text-zinc-600">{s.category}</span>}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* how it works */}
-      <section className="relative z-10 px-6 pb-20 max-w-4xl mx-auto w-full">
-        <h2 className="text-center text-2xl font-bold tracking-tight mb-10">How MODO works</h2>
-        <div className="grid sm:grid-cols-3 gap-4">
-          {[
-            { icon: "📚", title: "Learn", body: "Bite-size concepts with clear explanations and cheat sheets — no fluff." },
-            { icon: "🔁", title: "Review", body: "Spaced repetition resurfaces each card right before you'd forget it." },
-            { icon: "🏆", title: "Master", body: "Earn XP, build streaks, and climb the leaderboard as it sticks for good." },
-          ].map((step, i) => (
-            <div key={i} className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6">
-              <div className="text-3xl mb-3">{step.icon}</div>
-              <h3 className="font-semibold text-zinc-100 mb-1.5">
-                <span style={{ color: ACCENT }} className="font-mono text-xs mr-2">
-                  0{i + 1}
-                </span>
-                {step.title}
-              </h3>
-              <p className="text-sm text-zinc-500 leading-relaxed">{step.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* features */}
-      <section className="relative z-10 px-6 pb-20 max-w-4xl mx-auto w-full">
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {[
-            ["🧠", "Spaced repetition", "Proven SM-2 scheduling"],
-            ["✅", "Smart flashcards", "Multiple-choice & flip cards"],
-            ["🔥", "Streaks & XP", "Stay motivated daily"],
-            ["📊", "Leaderboard", "Compete with other learners"],
-            ["📱", "Installable app", "Add to home screen, works offline"],
-            ["🌍", "10 languages", "Study in your language"],
-          ].map(([icon, title, body], i) => (
-            <div key={i} className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-4">
-              <div className="text-xl mb-2">{icon}</div>
-              <div className="text-sm font-medium text-zinc-200">{title}</div>
-              <div className="text-xs text-zinc-600 mt-0.5">{body}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* tabbed: Subjects · How it works · Features */}
+      <LandingTabs subjects={subjects} />
 
       {/* final CTA */}
       <section className="relative z-10 px-6 pb-24 text-center">
