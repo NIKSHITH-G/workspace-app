@@ -1,6 +1,7 @@
 import { SignUp } from "@clerk/nextjs"
 import Link from "next/link"
 import ModoTitle from "@/app/ModoTitle"
+import { continueAsGuest } from "@/app/sign-in/actions"
 
 export default function SignUpPage() {
   return (
@@ -18,12 +19,12 @@ export default function SignUpPage() {
       <div className="absolute inset-0 pointer-events-none"
         style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)", backgroundSize: "64px 64px" }} />
 
-      <div className="relative z-10 mb-8 text-center">
+      <Link href="/" className="relative z-10 mb-8 text-center block transition-opacity hover:opacity-80" title="Back to home">
         <ModoTitle />
         <p className="text-zinc-600 text-[10px] tracking-[0.35em] uppercase mt-2 font-light">
           master anything
         </p>
-      </div>
+      </Link>
 
       <div className="relative z-10 w-full flex justify-center clerk-dark-override">
         <SignUp
@@ -48,9 +49,11 @@ export default function SignUpPage() {
           Already have an account
         </Link>
         <span className="opacity-30">·</span>
-        <Link href="/" className="hover:text-white transition-colors flex items-center gap-1">
-          Browse as guest <span className="opacity-60">→</span>
-        </Link>
+        <form action={continueAsGuest}>
+          <button type="submit" className="hover:text-white transition-colors flex items-center gap-1">
+            Continue as guest <span className="opacity-60">→</span>
+          </button>
+        </form>
       </div>
 
     </div>
