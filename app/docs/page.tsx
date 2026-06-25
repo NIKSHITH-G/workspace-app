@@ -15,14 +15,20 @@ const SECTIONS = [
   { id: "study", icon: "🃏", title: "Studying", label: "Studying" },
   { id: "srs", icon: "🔁", title: "Spaced repetition & mastery", label: "Spaced repetition" },
   { id: "today", icon: "📅", title: "Study Today & daily goal", label: "Study Today" },
+  { id: "analytics", icon: "📊", title: "Analytics", label: "Analytics" },
   { id: "xp", icon: "⚡", title: "XP & levels", label: "XP & levels" },
   { id: "streaks", icon: "🔥", title: "Streaks", label: "Streaks" },
   { id: "leaderboard", icon: "🏆", title: "Leaderboard", label: "Leaderboard" },
+  { id: "shortcuts", icon: "⌨️", title: "Keyboard shortcuts", label: "Keyboard shortcuts" },
   { id: "notifications", icon: "🔔", title: "Notifications", label: "Notifications" },
   { id: "language", icon: "🌍", title: "Language", label: "Language" },
-  { id: "profile", icon: "🎨", title: "Profile", label: "Profile" },
+  { id: "profile", icon: "🎨", title: "Profile, avatars & styles", label: "Profile & styles" },
   { id: "install", icon: "📱", title: "Install as an app", label: "Install app" },
   { id: "guest", icon: "👤", title: "Guest mode", label: "Guest mode" },
+  { id: "account", icon: "🔐", title: "Your account & data", label: "Account & data" },
+  { id: "subjects", icon: "📚", title: "Subjects & requests", label: "Subjects & requests" },
+  { id: "tips", icon: "✨", title: "Tips for studying", label: "Tips for studying" },
+  { id: "faq", icon: "❓", title: "FAQ", label: "FAQ" },
 ]
 
 function IconTile({ emoji }: { emoji: string }) {
@@ -54,6 +60,23 @@ function Tip({ children }: { children: React.ReactNode }) {
       <span aria-hidden>💡</span>
       <div>{children}</div>
     </div>
+  )
+}
+
+function FAQ({ q, children }: { q: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
+      <p className="text-zinc-200 font-medium">{q}</p>
+      <p className="mt-1.5">{children}</p>
+    </div>
+  )
+}
+
+function Kbd({ children }: { children: React.ReactNode }) {
+  return (
+    <kbd className="inline-flex items-center justify-center min-w-[24px] rounded-md border border-white/15 bg-white/[0.06] px-1.5 py-0.5 text-[11px] font-mono text-zinc-200">
+      {children}
+    </kbd>
   )
 }
 
@@ -144,6 +167,15 @@ export default function DocsPage() {
             </ul>
           </Section>
 
+          <Section id="analytics" icon="📊" title="Analytics">
+            <p>Open <span className={em}>Analytics</span> from any session page to see exactly where you stand:</p>
+            <ul className="list-disc pl-5 space-y-1.5">
+              <li className={li}>Session summary — overall <span className={em}>mastery %</span>, concepts mastered, cards due now, and answer <span className={em}>accuracy</span>.</li>
+              <li className={li}>A per-concept breakdown with a status (New / Learning / Mastered), a mastery bar, attempts, accuracy and when it&apos;s next due.</li>
+              <li className={li}>A mini history of your recent answers per concept, so weak spots are easy to spot.</li>
+            </ul>
+          </Section>
+
           <Section id="xp" icon="⚡" title="XP & levels">
             <p>XP is earned as you review and is fully cumulative:</p>
             <div className="rounded-xl border border-white/[0.07] overflow-hidden">
@@ -178,6 +210,20 @@ export default function DocsPage() {
             </p>
           </Section>
 
+          <Section id="shortcuts" icon="⌨️" title="Keyboard shortcuts">
+            <p>Review faster without the mouse:</p>
+            <div className="rounded-xl border border-white/[0.07] overflow-hidden">
+              <table className="w-full text-sm">
+                <tbody className="[&_td]:px-4 [&_td]:py-2.5 [&_tr]:border-b [&_tr]:border-white/[0.05] [&_tr:last-child]:border-0">
+                  <tr><td><Kbd>Space</Kbd></td><td className="text-zinc-500">Reveal a flip card / continue</td></tr>
+                  <tr><td><Kbd>1</Kbd> <Kbd>2</Kbd> <Kbd>3</Kbd> <Kbd>4</Kbd></td><td className="text-zinc-500">Rate a flip card — Again · Hard · Good · Easy</td></tr>
+                  <tr><td><Kbd>Enter</Kbd></td><td className="text-zinc-500">Next card (after answering)</td></tr>
+                  <tr><td><Kbd>/</Kbd></td><td className="text-zinc-500">Focus the subject search on the home screen</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </Section>
+
           <Section id="notifications" icon="🔔" title="Notifications">
             <ul className="list-disc pl-5 space-y-1.5">
               <li className={li}>Go to <span className={em}>Settings → Notifications → Daily reminders</span> and tap <span className={em}>Turn on</span>, then allow the browser prompt.</li>
@@ -193,12 +239,16 @@ export default function DocsPage() {
             </p>
           </Section>
 
-          <Section id="profile" icon="🎨" title="Profile">
+          <Section id="profile" icon="🎨" title="Profile, avatars & styles">
             <p>
               In <span className={em}>Settings</span> you can set your <span className={em}>username</span> (shown on the
-              leaderboard), choose an <span className={em}>avatar</span>, and pick a <span className={em}>style</span> — which
+              leaderboard), pick an <span className={em}>avatar</span>, and choose a <span className={em}>style</span> that
               recolors your whole MODO experience with an accent theme.
             </p>
+            <ul className="list-disc pl-5 space-y-1.5">
+              <li className={li}><span className={em}>Avatars:</span> Owl, Fox, Wolf, Dragon, Cat, Robot.</li>
+              <li className={li}><span className={em}>Styles:</span> Scholar (blue), Warrior (orange), Shadow (purple), Sage (green), Maverick (gold) — each sets your accent color across the app.</li>
+            </ul>
           </Section>
 
           <Section id="install" icon="📱" title="Install as an app">
@@ -216,6 +266,61 @@ export default function DocsPage() {
               tracked — no progress, XP, streaks or leaderboard. Use <span className={em}>Exit</span> in the menu to leave
               guest mode and return to the landing page.
             </p>
+          </Section>
+
+          <Section id="account" icon="🔐" title="Your account & data">
+            <ul className="list-disc pl-5 space-y-1.5">
+              <li className={li}>Sign in with email or Google to save everything — authentication is handled securely by Clerk.</li>
+              <li className={li}>We store your profile (name, avatar, style), your review attempts and mastery, and — only if you opt in — your notification subscription.</li>
+              <li className={li}>Your XP, levels and streaks are <span className={em}>computed</span> from your attempts, so they&apos;re always accurate and update retroactively.</li>
+              <li className={li}>Guests are never tracked — nothing is saved until you sign in.</li>
+            </ul>
+          </Section>
+
+          <Section id="subjects" icon="📚" title="Subjects & requests">
+            <p>
+              Subjects are hand-crafted — each is a full set of weekly sessions with original explanations and flashcards,
+              and the catalog grows over time. Progress is tracked separately for every subject you start.
+            </p>
+            <p>
+              Want something we don&apos;t have yet?{" "}
+              <Link href="/feedback" className="text-indigo-300 hover:text-indigo-200 underline underline-offset-2">
+                Request a subject
+              </Link>{" "}
+              (pick the 📚 Subject tag) and tell us what you&apos;re studying.
+            </p>
+          </Section>
+
+          <Section id="tips" icon="✨" title="Tips for studying">
+            <ul className="list-disc pl-5 space-y-1.5">
+              <li className={li}><span className={em}>Review daily.</span> Short, regular sessions beat occasional cramming — that&apos;s the whole point of spaced repetition.</li>
+              <li className={li}><span className={em}>Rate honestly.</span> On flip cards, don&apos;t mark &quot;Easy&quot; if you guessed — accurate ratings make the schedule work.</li>
+              <li className={li}><span className={em}>Clear Study Today first.</span> Knock out due reviews before learning new cards, so nothing slips.</li>
+              <li className={li}><span className={em}>Keep the streak.</span> Even a few cards a day keeps momentum — and bonus XP — going.</li>
+            </ul>
+          </Section>
+
+          <Section id="faq" icon="❓" title="FAQ">
+            <div className="space-y-3">
+              <FAQ q="Why does a subject show no progress?">
+                Progress is per-person — a subject stays at zero until you&apos;ve studied its cards. Other learners&apos;
+                progress never affects yours.
+              </FAQ>
+              <FAQ q="My progress didn't save.">
+                You&apos;re probably browsing as a guest. Sign in (it&apos;s free) and your reviews start saving immediately.
+              </FAQ>
+              <FAQ q="I turned on notifications but got nothing.">
+                Reminders only fire when you actually have cards due. Also check that your browser allowed notifications,
+                and on iPhone make sure MODO is installed to your home screen.
+              </FAQ>
+              <FAQ q="Can I study offline?">
+                Installed, MODO opens offline with a friendly screen — but reviewing needs a connection so your progress
+                can be saved.
+              </FAQ>
+              <FAQ q="How do I change my name or avatar?">
+                Open <span className={em}>Settings</span> — you can change your username, avatar, style and language any time.
+              </FAQ>
+            </div>
           </Section>
 
           {/* CTA */}
