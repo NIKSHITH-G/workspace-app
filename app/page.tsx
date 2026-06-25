@@ -1,4 +1,3 @@
-import { UserButton } from "@clerk/nextjs"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getUser } from "@/lib/currentUser"
@@ -13,32 +12,9 @@ import { getLocale } from "@/lib/i18n/locale"
 import { localize } from "@/lib/i18n/localizeContent"
 import { countDueCards } from "@/lib/due"
 import { getAccess } from "@/lib/access"
-import { exitGuest } from "./sign-in/actions"
 import Landing from "./Landing"
 import AvatarIcon from "@/components/AvatarIcon"
-
-function TrophyIcon() {
-  return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-      <path d="M4 22h16" />
-      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
-    </svg>
-  )
-}
-
-function ExitIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-      <polyline points="16 17 21 12 16 7" />
-      <line x1="21" y1="12" x2="9" y2="12" />
-    </svg>
-  )
-}
+import NavMenu from "@/components/NavMenu"
 
 export default async function Home() {
   await connection()
@@ -204,37 +180,8 @@ export default async function Home() {
           </Link>
         )}
 
-        {/* right: leaderboard + user */}
-        <div className="flex items-center gap-3.5 shrink-0">
-          <Link
-            href="/leaderboard"
-            className="flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 transition-colors"
-            title="Leaderboard"
-          >
-            <TrophyIcon />
-            <span className="text-[11px] font-mono tracking-wide hidden sm:inline">{t("home.ranks")}</span>
-          </Link>
-          {user ? (
-            <UserButton />
-          ) : (
-            <>
-              {/* guests can leave guest mode → back to the landing page */}
-              <form action={exitGuest} className="flex">
-                <button
-                  type="submit"
-                  className="flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 transition-colors"
-                  title="Exit guest mode"
-                >
-                  <ExitIcon />
-                  <span className="text-[11px] font-mono tracking-wide hidden sm:inline">{t("home.exit")}</span>
-                </button>
-              </form>
-              <Link href="/sign-in" className="text-xs text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-600 px-3 py-1.5 rounded-lg transition-all">
-                {t("home.signIn")}
-              </Link>
-            </>
-          )}
-        </div>
+        {/* right: hamburger menu (leaderboard + sign-in/exit or settings/sign-out) */}
+        <NavMenu isGuest={!user} />
       </nav>
 
       {/* ── hero + grid ── */}
