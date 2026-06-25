@@ -7,6 +7,7 @@ import { GUEST_COOKIE } from "@/lib/guestCookie"
 // PWA assets (offline fallback, generated icons) must also be reachable without
 // auth so the service worker can precache them and they load when signed out.
 const isPublic = createRouteMatcher([
+  "/", // public marketing landing — the page itself shows the app to signed-in users/guests
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/offline",

@@ -12,6 +12,8 @@ import { getT } from "@/lib/i18n/server"
 import { getLocale } from "@/lib/i18n/locale"
 import { localize } from "@/lib/i18n/localizeContent"
 import { countDueCards } from "@/lib/due"
+import { getAccess } from "@/lib/access"
+import Landing from "./Landing"
 import AvatarIcon from "@/components/AvatarIcon"
 
 function TrophyIcon() {
@@ -29,6 +31,11 @@ function TrophyIcon() {
 
 export default async function Home() {
   await connection()
+
+  // Signed-out visitors (and crawlers) get the public marketing page; only
+  // signed-in users and explicit guests see the app dashboard below.
+  const access = await getAccess()
+  if (!access.studentId) return <Landing />
 
   const t = await getT()
   const user = await getUser()

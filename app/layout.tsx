@@ -27,8 +27,16 @@ export const metadata: Metadata = {
     default: "MODO",
     template: "%s | MODO",
   },
-  description: "Master anything.",
+  description:
+    "MODO is a spaced-repetition flashcard app to master Python, math, databases and computer architecture — learn it once and remember it for good.",
   applicationName: "MODO",
+  keywords: ["flashcards", "spaced repetition", "study app", "Python", "databases", "learn"],
+  openGraph: {
+    title: "MODO — Master anything",
+    description: "Spaced-repetition flashcards that actually stick. Learn Python, math, databases and more.",
+    siteName: "MODO",
+    type: "website",
+  },
   // Installable PWA: standalone iOS launch + matching home-screen title.
   appleWebApp: {
     capable: true,
