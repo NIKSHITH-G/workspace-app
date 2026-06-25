@@ -16,8 +16,8 @@ export default function FeedbackPage() {
         >
           MODO
         </Link>
-        <Link href="/docs" className="text-sm text-zinc-400 hover:text-white transition-colors">
-          Docs
+        <Link href="/help" className="text-sm text-zinc-400 hover:text-white transition-colors">
+          Help
         </Link>
       </nav>
 
@@ -53,9 +53,9 @@ export default function FeedbackPage() {
           </div>
 
           <p className="text-[11px] text-zinc-700 mt-5 text-center">
-            Looking for how something works? See the{" "}
-            <Link href="/docs" className="text-zinc-500 hover:text-zinc-300 underline underline-offset-2">
-              docs
+            Looking for how something works? Visit{" "}
+            <Link href="/help" className="text-zinc-500 hover:text-zinc-300 underline underline-offset-2">
+              Help
             </Link>
             .
           </p>

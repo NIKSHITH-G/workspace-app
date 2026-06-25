@@ -11,7 +11,8 @@ const isPublic = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/offline",
-  "/docs",
+  "/help",
+  "/docs", // legacy → redirects to /help (next.config); kept public so it isn't gated
   "/feedback",
   "/icons(.*)",
   "/apple-icon(.*)",

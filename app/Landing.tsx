@@ -122,7 +122,7 @@ export default async function Landing() {
           <p className="text-zinc-600 text-[11px] tracking-[0.34em] uppercase mt-3 font-light">study smarter</p>
 
           <h1 className="mt-8 text-4xl sm:text-5xl font-black tracking-tight max-w-2xl leading-[1.08]">
-            Flashcards that actually <span style={{ color: "#a5b4fc" }}>stick</span>.
+            Flashcards that actually <span style={{ color: "#a5b4fc" }}>stick</span>
           </h1>
           <p className="mt-5 text-zinc-400 text-base sm:text-lg max-w-xl leading-relaxed">
             MODO uses <span className="text-zinc-200 font-medium">spaced repetition</span> to help you learn
@@ -199,7 +199,7 @@ export default async function Landing() {
             <span className="font-bold text-zinc-400">MODO</span> · study smarter
           </span>
           <div className="flex items-center gap-5">
-            <Link href="/docs" className="hover:text-zinc-300 transition-colors">Docs</Link>
+            <Link href="/help" className="hover:text-zinc-300 transition-colors">Help</Link>
             <Link href="/feedback" className="hover:text-zinc-300 transition-colors">Feedback</Link>
             <Link href="/sign-in" className="hover:text-zinc-300 transition-colors">Sign in</Link>
           </div>

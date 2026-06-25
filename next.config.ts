@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  async redirects() {
+    // /docs was renamed to /help — keep old links working.
+    return [{ source: "/docs", destination: "/help", permanent: true }]
+  },
 };
 
 export default nextConfig;

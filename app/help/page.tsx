@@ -3,7 +3,7 @@ import Link from "next/link"
 import DocsToc from "@/components/DocsToc"
 
 export const metadata: Metadata = {
-  title: "Docs",
+  title: "Help",
   description: "How MODO works — studying, XP, streaks, notifications, languages and more.",
 }
 
@@ -107,7 +107,7 @@ export default function DocsPage() {
           style={{ background: "rgba(99,102,241,0.12)" }}
         />
         <div className="relative z-10">
-          <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-600">Documentation</p>
+          <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-600">Help</p>
           <h1 className="text-4xl font-black tracking-tight mt-3">How MODO works</h1>
           <p className="text-zinc-500 mt-3 text-sm max-w-md mx-auto">
             Everything about studying, XP, streaks, notifications, languages and more.
