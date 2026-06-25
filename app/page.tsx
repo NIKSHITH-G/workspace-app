@@ -30,6 +30,16 @@ function TrophyIcon() {
   )
 }
 
+function ExitIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <polyline points="16 17 21 12 16 7" />
+      <line x1="21" y1="12" x2="9" y2="12" />
+    </svg>
+  )
+}
+
 export default async function Home() {
   await connection()
 
@@ -209,9 +219,14 @@ export default async function Home() {
           ) : (
             <>
               {/* guests can leave guest mode → back to the landing page */}
-              <form action={exitGuest}>
-                <button type="submit" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors" title="Exit guest mode">
-                  {t("home.exit")}
+              <form action={exitGuest} className="flex">
+                <button
+                  type="submit"
+                  className="flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 transition-colors"
+                  title="Exit guest mode"
+                >
+                  <ExitIcon />
+                  <span className="text-[11px] font-mono tracking-wide hidden sm:inline">{t("home.exit")}</span>
                 </button>
               </form>
               <Link href="/sign-in" className="text-xs text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-600 px-3 py-1.5 rounded-lg transition-all">
