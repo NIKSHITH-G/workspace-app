@@ -94,7 +94,7 @@ export default function DocsPage() {
 
       <div className="max-w-5xl mx-auto px-6 py-12 flex gap-10">
         {/* TOC */}
-        <aside className="hidden lg:block w-56 shrink-0">
+        <aside className="hidden md:block w-52 shrink-0">
           <div className="sticky top-24">
             <p className="text-[10px] uppercase tracking-widest text-zinc-600 mb-3 pl-3">On this page</p>
             <DocsToc items={SECTIONS.map((s) => ({ id: s.id, label: s.label }))} />
@@ -212,7 +212,7 @@ export default function DocsPage() {
 
           <Section id="guest" icon="👤" title="Guest mode">
             <p>
-              <span className={em}>Try as guest</span> lets you explore everything without an account. Guests aren&apos;t
+              <span className={em}>Try as guest </span> lets you explore everything without an account. Guests aren&apos;t
               tracked — no progress, XP, streaks or leaderboard. Use <span className={em}>Exit</span> in the menu to leave
               guest mode and return to the landing page.
             </p>
