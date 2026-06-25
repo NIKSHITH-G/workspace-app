@@ -111,12 +111,7 @@ export default function LandingTabs({ subjects }: { subjects: Subject[] }) {
               </span>
               <div className="relative z-10">
                 <IconTile emoji={step.icon} accent={step.accent} size={48} />
-                <h3 className="mt-4 flex items-center gap-2 font-semibold text-base text-zinc-100">
-                  <span className="font-mono text-[11px]" style={{ color: step.accent }}>
-                    0{i + 1}
-                  </span>
-                  {step.title}
-                </h3>
+                <h3 className="mt-4 font-semibold text-base text-zinc-100">{step.title}</h3>
                 <p className="mt-1.5 text-sm text-zinc-500 leading-relaxed">{step.body}</p>
               </div>
             </div>
