@@ -60,8 +60,7 @@ export default async function SessionPage(
       label: t("session.graphLabel"),
       desc: t("session.graphDesc"),
       href: `graph`,
-      available: false,
-      comingSoon: true,
+      available: totalConcepts > 0,
     },
     {
       num: 4,
@@ -119,7 +118,7 @@ export default async function SessionPage(
         <div className="space-y-3">
           {stages.map((stage) => (
             <div key={stage.num}>
-              {stage.available && !stage.comingSoon ? (
+              {stage.available ? (
                 <Link
                   href={`/subject/${subjectId}/session/${sessionId}/${stage.href}`}
                   className="flex items-center gap-4 p-4 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-600 transition-colors group"
@@ -147,14 +146,7 @@ export default async function SessionPage(
                     {stage.num}
                   </span>
                   <div>
-                    <p className="text-sm font-medium text-zinc-500">
-                      {stage.label}
-                      {stage.comingSoon && (
-                        <span className="ml-2 text-[10px] text-zinc-600 font-mono">
-                          {t("session.phase2")}
-                        </span>
-                      )}
-                    </p>
+                    <p className="text-sm font-medium text-zinc-500">{stage.label}</p>
                     <p className="text-xs text-zinc-600 mt-0.5">{stage.desc}</p>
                   </div>
                 </div>
